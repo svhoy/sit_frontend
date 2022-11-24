@@ -6,35 +6,59 @@ export default function Devices() {
     const [message, setMessage] = useState([]);
     const [scanningLog, setScanningLog] = useState([]);
 
-    const ws = new WebSocket("ws://127.0.0.1:5500/ws/ble-scan/");
+    const [ws, setWs] = useState(new WebSocket("ws://127.0.0.1:5500/ws/ble-scan/"));
 
-    ws.onmessage = (event) => {
-        let data = JSON.parse(event.data)
-        
-        if(data.type === "connection_established") {
-            setMessage(data.message)
-            if (data.connected === true) {
-                setIsConnected(true)
+    useEffect(() => {
+        ws.onmessage = function (event) {
+            let data = JSON.parse(event.data)
+            
+            if(data.type === "connection_established") {
+                setMessage(data.message)
+                if (data.connected === true) {
+                    setIsConnected(true)
+                }
+                setScanning(data.scan.state)
             }
+            if(data.type === "scanning_state") {
+                setScanning(data.scan.state)
+                setScanningLog(scanningLog => [scanningLog + data.scan.message + "\n"])
+            }
+        };
+    
+        ws.onclose = function (event) {
+            setMessage(null)
+            setIsConnected(false)
+            setTimeout(() => {
+                setWs(new WebSocket("ws://127.0.0.1:5500/ws/ble-scan/"));
+              }, 1000);
         }
 
-        if(data.type === "scanning_state") {
-            setScanning(true)
-            setScanningLog([...scanningLog, data.message])
-        }
-    };
+        ws.onerror = function (err) {
+            console.error('Socket encountered error: ', err.message, 'Closing socket');
+            setIsConnected(false);
+            ws.close();
+          };
 
-    ws.onclose = (event) => {
-        setMessage(null)
-        setIsConnected(false)
-    }
+        return () => {
+            ws.close();
+            setScanningLog([])
+         };
+    }, [ws])
 
     const startScan = () => {
-        ws.send(
-            JSON.stringify( {
-                scan: true
-            })
-        )
+        setScanningLog([])
+        try {
+            ws.send(
+                JSON.stringify( {
+                    type: "scanning_update",
+                    scan: {
+                        state: true
+                    }
+                })
+            )
+        } catch (error){
+            console.error(error)
+        }
     }
 
 
@@ -52,17 +76,26 @@ export default function Devices() {
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
                     <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                            <button
-                                type='button' 
-                                className={`inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${isScanning ? "opacity-30" : "opacity-100"}`} 
-                                onClick={startScan}
-                                disabled={(!isConnected || isScanning) ? true : false}
-                            >
-                                BLE Mesh Scan
-                            </button>
+                            {(isConnected && !isScanning) ? (
+                                <button
+                                    type='button' 
+                                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
+                                    onClick={startScan}
+                                >
+                                    BLE Mesh Scan
+                                </button>
+                            ):(
+                                <button
+                                    type='button' 
+                                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
+                                    disabled
+                                >
+                                    BLE Test Scan
+                                </button>
+                            )}   
                         </div>
                     <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                        <label for="scanningLog" className="block text-sm font-medium text-gray-700">Scanning Log</label>
+                        <label htmlFor="scanningLog" className="block text-sm font-medium text-gray-700">Scanning Log</label>
                         <div className="mt-1">
                             <textarea 
                                 className="mt-1 block w-full rounded-md border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
