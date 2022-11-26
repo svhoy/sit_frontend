@@ -6,7 +6,7 @@ export default function Devices() {
     const [message, setMessage] = useState([]);
     const [scanningLog, setScanningLog] = useState([]);
 
-    const [ws, setWs] = useState(new WebSocket("ws://127.0.0.1:5500/ws/ble-scan/"));
+    const [ws, setWs] = useState(new WebSocket("ws://127.0.0.1:8000/ws/ble-scan/"));
 
     useEffect(() => {
         ws.onmessage = function (event) {
@@ -21,6 +21,10 @@ export default function Devices() {
             }
             if(data.type === "scanning_state") {
                 setScanning(data.scan.state)
+                console.log(data)
+                if (data.scan.hasOwnProperty('unprovisioned') && data.scan.unprovisioned != null) {
+                    setScanningLog(scanningLog => [scanningLog + data.scan.unprovisioned + "\n"])
+                }
                 setScanningLog(scanningLog => [scanningLog + data.scan.message + "\n"])
             }
         };
@@ -29,7 +33,7 @@ export default function Devices() {
             setMessage(null)
             setIsConnected(false)
             setTimeout(() => {
-                setWs(new WebSocket("ws://127.0.0.1:5500/ws/ble-scan/"));
+                setWs(new WebSocket("ws://127.0.0.1:8000/ws/ble-scan/"));
               }, 1000);
         }
 
