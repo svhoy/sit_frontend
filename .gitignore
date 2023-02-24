@@ -38,6 +38,7 @@ typings/
 .vscode
 
 # Yarn
+.yarn
 .yarn/*
 !.yarn/cache
 !.yarn/patches
