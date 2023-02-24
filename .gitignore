@@ -4,13 +4,7 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.yarn/*
-!.yarn/cache
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
@@ -42,3 +36,12 @@ typings/
 
 # VS Code 
 .vscode
+
+# Yarn
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
