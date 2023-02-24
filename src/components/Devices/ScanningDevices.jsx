@@ -1,55 +1,34 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect} from 'react'
 
-export default function ScanningDevices() {
-    const [isConnected, setIsConnected] = useState(false);
+
+export default function ScanningDevices(props) {
+    const { isConnected, ws, ws_data } = props
     const [isScanning, setScanning] = useState(false);
-    const [message, setMessage] = useState([]);
     const [scanningLog, setScanningLog] = useState([]);
 
-    const [ws, setWs] = useState(new WebSocket("ws://127.0.0.1:8000/ws/ble-scan/"));
+    useEffect(() => {
+        let data = ws_data
+            
+        if(data.type === "connection_established") {
+            setScanning(data.scan.state)
+        }
+        if(data.type === "scanning_state") {
+            setScanning(data.scan.state)
+            if (data.scan.hasOwnProperty('unprovisioned') && data.scan.unprovisioned != null) {
+                setScanningLog(scanningLog => [scanningLog + data.scan.unprovisioned + "\n"])
+            }
+            setScanningLog(scanningLog => [scanningLog + data.scan.message + "\n"])
+        }
+    }, [ws_data])
 
     useEffect(() => {
-        ws.onmessage = function (event) {
-            let data = JSON.parse(event.data)
-            
-            if(data.type === "connection_established") {
-                setMessage(data.message)
-                if (data.connected === true) {
-                    setIsConnected(true)
-                }
-                setScanning(data.scan.state)
-            }
-            if(data.type === "scanning_state") {
-                setScanning(data.scan.state)
-                console.log(data)
-                if (data.scan.hasOwnProperty('unprovisioned') && data.scan.unprovisioned != null) {
-                    setScanningLog(scanningLog => [scanningLog + data.scan.unprovisioned + "\n"])
-                }
-                setScanningLog(scanningLog => [scanningLog + data.scan.message + "\n"])
-            }
-        };
-    
-        ws.onclose = function (event) {
-            setMessage(null)
-            setIsConnected(false)
-            setTimeout(() => {
-                setWs(new WebSocket("ws://127.0.0.1:8000/ws/ble-scan/"));
-              }, 1000);
-        }
-
-        ws.onerror = function (err) {
-            console.error('Socket encountered error: ', err.message, 'Closing socket');
-            setIsConnected(false);
-            ws.close();
-          };
-
-        return () => {
-            ws.close();
+        if(!isConnected) {
             setScanningLog([])
-         };
-    }, [ws])
+        }
+    }, [isConnected])
 
     const startScan = () => {
+        
         setScanningLog([])
         try {
             ws.send(
@@ -74,7 +53,14 @@ export default function ScanningDevices() {
                     <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
                         Scanning for new Devices
                     </h3>
-                    <div>Connection Status: {message}</div>
+                    <div className='grid grid-cols-2 gap-0'>
+                        <div>Connection Status:</div>
+                        {isConnected ? (
+                            <div className='rounded-full w-5 h-5 bg-green-600'></div>
+                        ) : (
+                            <div className='rounded-full w-5 h-5 bg-red-600'></div>
+                        )}
+                    </div>
                 </div>
             </div>
             <div className="mt-5 md:col-span-2 md:mt-0">

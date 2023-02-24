@@ -7,7 +7,7 @@ const useFetch = () => {
     let config = {}
     let {authTokens, setAuthTokens, setUser} = useContext(AuthContext)
 
-    let baseURL = 'http://127.0.0.1:5500'
+    let baseURL = 'http://127.0.0.1:8000'
 
     let originalRequest = async (url, config) => { 
         let data = {}
@@ -21,7 +21,7 @@ const useFetch = () => {
     }
 
     let refreshToken = async (authTokens) => {
-        let response = await fetch('http://127.0.0.1:5500/api/token/refresh/', {
+        let response = await fetch('http://127.0.0.1:8000/api/token/refresh/', {
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
