@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import ProvisioningDevices from './Devices/ProvisioningDevices';
-import ScanningDevices from './Devices/ScanningDevices';
+import ProvisioningDevices from './MeshDevices/ProvisioningDevices';
+import ScanningDevices from './MeshDevices/ScanningDevices';
 
-export default function Devices() {
+export default function MeshDevices() {
     const [isConnected, setIsConnected] = useState(false);
     const [ws_data, setWsData] = useState([])
     
-    const [ws, setWs] = useState(new WebSocket("ws://127.0.0.1:8000/ws/ble-devices/"))
+    const [ws, setWs] = useState(new WebSocket("ws://127.0.0.1:8000/ws/ble-mesh-devices/"))
 
     useEffect(() => {
         if(ws != null) {
@@ -24,7 +24,7 @@ export default function Devices() {
             ws.onclose = function (event) {
                 setIsConnected(false)
                 setTimeout(() => {
-                    setWs(new WebSocket("ws://127.0.0.1:8000/ws/ble-devices/"));
+                    setWs(new WebSocket("ws://127.0.0.1:8000/ws/ble-mesh-devices/"));
                 }, 1000);
             }
 
