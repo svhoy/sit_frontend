@@ -2,7 +2,7 @@ import React, { useState, useEffect} from 'react'
 
 
 export default function ConnectingBleDevices(props) {
-    const { isConnected, ws, ws_data } = props
+    const { isBackendConnected, ws, ws_data } = props
     const [isScanning, setScanning] = useState(false);
     const [connectionLog, setConnectionLog] = useState([]);
 
@@ -53,7 +53,7 @@ export default function ConnectingBleDevices(props) {
                     </h3>
                     <div className='grid grid-cols-2 gap-0'>
                         <div>Server Status:</div>
-                        {isConnected ? (
+                        {isBackendConnected ? (
                             <div className='rounded-full w-5 h-5 bg-green-600'></div>
                         ) : (
                             <div className='rounded-full w-5 h-5 bg-red-600'></div>
@@ -61,7 +61,7 @@ export default function ConnectingBleDevices(props) {
                     </div>
                     <div className='grid grid-cols-2 gap-0'>
                         <div>PI Status:</div>
-                        {isConnected ? (
+                        {isBackendConnected ? (
                             <div className='rounded-full w-5 h-5 bg-green-600'></div>
                         ) : (
                             <div className='rounded-full w-5 h-5 bg-red-600'></div>
@@ -69,7 +69,7 @@ export default function ConnectingBleDevices(props) {
                     </div>
                     <div className='grid grid-cols-2 gap-0'>
                         <div>DWM3001 Status:</div>
-                        {isConnected ? (
+                        {isBackendConnected ? (
                             <div className='rounded-full w-5 h-5 bg-green-600'></div>
                         ) : (
                             <div className='rounded-full w-5 h-5 bg-red-600'></div>
@@ -80,7 +80,7 @@ export default function ConnectingBleDevices(props) {
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
                     <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                            {(isConnected && !isScanning) ? (
+                            {(isBackendConnected && !isScanning) ? (
                                 <button
                                     type='button' 
                                     className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"

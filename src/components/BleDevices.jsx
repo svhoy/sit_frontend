@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Route, Routes } from 'react-router-dom';
 import ConnectingBleDevices from './BleDevices/ConnectingBleDevices';
 
 export default function BleDevices() {
-    const [isConnected, setIsConnected] = useState(false);
+    const [isBackendConnected, setIsBackendConnected] = useState(false);
     const [ws_data, setWsData] = useState([])
     
     const [ws, setWs] = useState(new WebSocket("ws://127.0.0.1:8000/ws/ble-devices/"))
@@ -15,13 +14,13 @@ export default function BleDevices() {
                 setWsData(data)
                 if(data.type === "connection_established") {
                     if (data.connected === true) {
-                        setIsConnected(true)
+                        setIsBackendConnected(true)
                     }
                 }
             };
         
             ws.onclose = function (event) {
-                setIsConnected(false)
+                setIsBackendConnected(false)
                 setTimeout(() => {
                     setWs(new WebSocket("ws://127.0.0.1:8000/ws/ble-devices/"));
                 }, 1000);
@@ -29,12 +28,12 @@ export default function BleDevices() {
 
             ws.onerror = function (err) {
                 console.error('Socket encountered error: ', err.message, 'Closing socket');
-                setIsConnected(false);
+                setIsBackendConnected(false);
                 ws.close();
             };
 
             return () => {
-                setIsConnected(false);
+                setIsBackendConnected(false);
 
             };
         }
@@ -45,7 +44,7 @@ export default function BleDevices() {
         <div className='md:grid md:grid-cols-1 md:gap-10'>
             <div>
                 <ConnectingBleDevices 
-                    isConnected={isConnected}
+                    isBackendConnected={isBackendConnected}
                     ws={ws}
                     ws_data={ws_data}
                 />
