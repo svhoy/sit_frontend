@@ -1,16 +1,28 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import ConnectingBleDevices from './BleDevices/ConnectingBleDevices';
+import AuthContext from '../context/AuthContext';
 
 export default function BleDevices() {
     const [isBackendConnected, setIsBackendConnected] = useState(false);
     const [isGatewayConnected, setIsGatewayConnected] = useState(false);
     const [isUWBDeviceConnected, setIsUWBDeviceConnected] = useState(false);
     const [ws_data, setWsData] = useState([])
-    
+    let {user} = useContext(AuthContext);
+
     const [ws, setWs] = useState(new WebSocket("ws://127.0.0.1:8000/ws/ble-devices/"))
 
     useEffect(() => {
         if(ws != null) {
+            ws.onopen = function (event) {
+                console.log(user.username)
+                ws.send(
+                    JSON.stringify( {
+                        type: "connection_register",
+                        device_id: "Frontend_" + user.username
+                    })
+                )
+            }
+
             ws.onmessage = function (event) {
                 let data = JSON.parse(event.data)
                 setWsData(data)
