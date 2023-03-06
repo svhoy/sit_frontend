@@ -3,6 +3,8 @@ import ConnectingBleDevices from './BleDevices/ConnectingBleDevices';
 
 export default function BleDevices() {
     const [isBackendConnected, setIsBackendConnected] = useState(false);
+    const [isGatewayConnected, setIsGatewayConnected] = useState(false);
+    const [isUWBDeviceConnected, setIsUWBDeviceConnected] = useState(false);
     const [ws_data, setWsData] = useState([])
     
     const [ws, setWs] = useState(new WebSocket("ws://127.0.0.1:8000/ws/ble-devices/"))
@@ -21,6 +23,8 @@ export default function BleDevices() {
         
             ws.onclose = function (event) {
                 setIsBackendConnected(false)
+                setIsGatewayConnected(false)
+                setIsUWBDeviceConnected(false)
                 setTimeout(() => {
                     setWs(new WebSocket("ws://127.0.0.1:8000/ws/ble-devices/"));
                 }, 1000);
@@ -29,12 +33,15 @@ export default function BleDevices() {
             ws.onerror = function (err) {
                 console.error('Socket encountered error: ', err.message, 'Closing socket');
                 setIsBackendConnected(false);
+                setIsGatewayConnected(false)
+                setIsUWBDeviceConnected(false)
                 ws.close();
             };
 
             return () => {
                 setIsBackendConnected(false);
-
+                setIsGatewayConnected(false)
+                setIsUWBDeviceConnected(false)
             };
         }
     }, [ws])
@@ -45,6 +52,8 @@ export default function BleDevices() {
             <div>
                 <ConnectingBleDevices 
                     isBackendConnected={isBackendConnected}
+                    isGatewayConnected={isGatewayConnected}
+                    isUWBDeviceConnected={isUWBDeviceConnected}
                     ws={ws}
                     ws_data={ws_data}
                 />
