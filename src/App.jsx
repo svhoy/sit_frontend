@@ -5,7 +5,8 @@ import { AuthProvider } from './context/AuthContext';
 import NavBar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
-import DevicePage from './pages/DevicePage';
+import MeshDevicePage from './pages/MeshDevicePage';
+import BleDevicePage from './pages/BleDevicePage';
 import SettingsPage from './pages/SettingsPage';
 import LoginPage from './pages/LoginPage';
 
@@ -22,7 +23,8 @@ function App() {
               <Route element={<HomePage/>} path="/" exact/>
               <Route element={<PrivateRoutes />}>
                 <Route element={<DashboardPage/>} path="/dashboard" />
-                <Route element={<DevicePage/>} path="/devices" />
+                <Route element={<BleDevicePage/>} path="/ble-devices" />
+                <Route element={<MeshDevicePage/>} path="/mesh-devices" />
                 <Route element={<SettingsPage/>} path="/settings" />
               </Route>
               <Route element={<LoginPage />} path="/login" />
