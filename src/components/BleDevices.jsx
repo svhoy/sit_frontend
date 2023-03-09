@@ -13,8 +13,8 @@ export default function BleDevices() {
 
     useEffect(() => {
         if(ws != null) {
-            ws.onopen = function (event) {
-                console.log(user.username)
+            ws.onopen = function () {
+                setIsBackendConnected(true)
                 ws.send(
                     JSON.stringify( {
                         type: "connection_register",
@@ -22,7 +22,6 @@ export default function BleDevices() {
                     })
                 )
             }
-
             ws.onmessage = function (event) {
                 let data = JSON.parse(event.data)
                 setWsData(data)
@@ -31,8 +30,31 @@ export default function BleDevices() {
                         setIsBackendConnected(true)
                     }
                 }
+                if(data.type === "connection_ping") {
+                    ws.send(
+                        JSON.stringify( {
+                            type: "connection_ping",
+                            device_id: "Frontend_" + user.username
+                        })
+                    )
+                }
+                if(data.type === "connection_update") {
+                    console.log(data.device_list)
+                    if (data.device_list.includes("PI_Home")) {
+                        setIsGatewayConnected(true)
+                    } else {
+                        setIsGatewayConnected(false)
+                        setIsUWBDeviceConnected(false)
+                    }
+                }
+                if(data.type === "scanning_state" && data.scan.connection === "complete") {
+                    if (data.scan.device_name != "") {
+                        setIsUWBDeviceConnected(true)
+                    } else {
+                        setIsUWBDeviceConnected(false)
+                    }
+                }
             };
-        
             ws.onclose = function (event) {
                 setIsBackendConnected(false)
                 setIsGatewayConnected(false)
@@ -41,7 +63,6 @@ export default function BleDevices() {
                     setWs(new WebSocket("ws://127.0.0.1:8000/ws/ble-devices/"));
                 }, 1000);
             }
-
             ws.onerror = function (err) {
                 console.error('Socket encountered error: ', err.message, 'Closing socket');
                 setIsBackendConnected(false);
@@ -49,7 +70,6 @@ export default function BleDevices() {
                 setIsUWBDeviceConnected(false)
                 ws.close();
             };
-
             return () => {
                 setIsBackendConnected(false);
                 setIsGatewayConnected(false)

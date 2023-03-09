@@ -42,6 +42,22 @@ export default function ConnectingBleDevices(props) {
         }
     }
 
+    const disconnecting = () => {
+        setScanning(false)
+        try {
+            ws.send(
+                JSON.stringify( {
+                    type: "scanning_update",
+                    scan: {
+                        device_name: "DWM3001 Blue",
+                        device_state: "disconnect"
+                    }
+                })
+            )
+        } catch (error){
+            console.error(error)
+        }
+    }
 
     return (
     <>  
@@ -79,25 +95,42 @@ export default function ConnectingBleDevices(props) {
             </div>
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
-                    <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                            {(isBackendConnected && isGatewayConnected && !isUWBDeviceConnected && !isScanning) ? (
-                                <button
-                                    type='button' 
-                                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                                    onClick={startConnecting}
-                                >
-                                    Start connect
-                                </button>
-                            ):(
-                                <button
-                                    type='button' 
-                                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
-                                    disabled
-                                >
-                                    Start Connect
-                                </button>
-                            )}   
-                        </div>
+                    <div className="bg-gray-50 px-1 py-3 text-right sm:px-3">
+                        {(isBackendConnected && isGatewayConnected && isUWBDeviceConnected && !isScanning) ? (
+                            <button
+                                type='button' 
+                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
+                                onClick={disconnecting}
+                            >
+                                Disconnect
+                            </button>
+                        ):(
+                            <button
+                                type='button' 
+                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
+                                disabled
+                            >
+                                Disconnect
+                            </button>
+                        )}   
+                        {(isBackendConnected && isGatewayConnected && !isUWBDeviceConnected && !isScanning) ? (
+                            <button
+                                type='button' 
+                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
+                                onClick={startConnecting}
+                            >
+                                Start connect
+                            </button>
+                        ):(
+                            <button
+                                type='button' 
+                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
+                                disabled
+                            >
+                                Start Connect
+                            </button>
+                        )}   
+                    </div>
                     <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
                         <label htmlFor="connectionLog" className="block text-sm font-medium text-gray-700">Connection Log</label>
                         <div className="mt-1">
