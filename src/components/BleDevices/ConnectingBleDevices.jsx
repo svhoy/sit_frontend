@@ -15,6 +15,9 @@ export default function ConnectingBleDevices(props) {
         } else if(data.type === "scanning_state" && data.scan.state == false) {
             setScanning(false)
             setConnectionLog(connectionLog => [connectionLog + data.scan.message + "\n"])
+        } else if(data.type === "scanning_state" && data.scan.connection == "disconnect") {
+            setScanning(false)
+            setConnectionLog(connectionLog => [connectionLog + data.scan.message + "\n"])
         }
     }, [ws_data])
 
@@ -47,10 +50,11 @@ export default function ConnectingBleDevices(props) {
         try {
             ws.send(
                 JSON.stringify( {
-                    type: "scanning_update",
+                    type: "scanning_state",
                     scan: {
+                        state: false,
                         device_name: "DWM3001 Blue",
-                        device_state: "disconnect"
+                        connection: "disconnect"
                     }
                 })
             )
