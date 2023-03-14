@@ -43,7 +43,6 @@ export default function DistanceMeasurements(props) {
     }
 
     const stopMeasurements = () => {
-        
         try {
             ws.send(
                 JSON.stringify( {
