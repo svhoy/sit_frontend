@@ -1,63 +1,57 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, useRef} from 'react'
+import { CartesianGrid, Legend, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts'
 
 
-export default function ConnectingBleDevices(props) {
-    const { isBackendConnected, isGatewayConnected, isUWBDeviceConnected, ws, ws_data } = props
-    const [isScanning, setScanning] = useState(false);
-    const [connectionLog, setConnectionLog] = useState([]);
+
+export default function DistanceMeasurements(props) {
+    const {isUWBDeviceConnected, ws, ws_data } = props
+    const [distanceMeasurementLog, setDistanceMeasurementLog] = useState([])
+    const [distanceData, setDistanceData] = useState([])
+    const [distancePoints, setdistancePoints] = useState(0)
+    const [measurementIsRunning, setMeasurementIsRunning] = useState(false)
+    const distanceTextarea = useRef()
+
 
     useEffect(() => {
         let data = ws_data
-        if(data.type=== "connection_established"){
-            setScanning(false)
-        } else if (data.type === "scanning_state" && data.scan.state == true) {
-            setConnectionLog(connectionLog => [connectionLog + data.scan.message + "\n"])
-        } else if(data.type === "scanning_state" && data.scan.state == false) {
-            setScanning(false)
-            setConnectionLog(connectionLog => [connectionLog + data.scan.message + "\n"])
-        } else if(data.type === "scanning_state" && data.scan.connection == "disconnect") {
-            setScanning(false)
-            setConnectionLog(connectionLog => [connectionLog + data.scan.message + "\n"])
+        if(data.type === "distance_msg" && data.state === "scanning"){
+            setdistancePoints(distancePoints + 1)
+            setDistanceMeasurementLog(distanceMeasurementLog => [distanceMeasurementLog + data.distance + "m \n"])
+            setDistanceData([...distanceData, {"x": distancePoints, "y": data.distance}])
+            const area = distanceTextarea.current;
+            area.scrollTop = area.scrollHeight;
         }
     }, [ws_data])
 
     useEffect(() => {
-        if(!isBackendConnected || !isGatewayConnected) {
-            setConnectionLog([])
-        }
-    }, [isBackendConnected])
 
-    const startConnecting = () => {
-        setScanning(true)
-        setConnectionLog([])
+    }, [isUWBDeviceConnected])
+
+    const startMeasurements= () => {
         try {
             ws.send(
                 JSON.stringify( {
-                    type: "scanning_state",
-                    scan: {
-                        state: true,
-                        device_name: "DWM3001 Blue"
-                    }
+                    type: "distance_msg",
+                    state: "start",
+                    distance: -1,
                 })
             )
+            setMeasurementIsRunning(true)
         } catch (error){
             console.error(error)
         }
     }
 
-    const disconnecting = () => {
-        setScanning(false)
+    const stopMeasurements = () => {
         try {
             ws.send(
                 JSON.stringify( {
-                    type: "scanning_state",
-                    scan: {
-                        state: false,
-                        device_name: "DWM3001 Blue",
-                        connection: "disconnect"
-                    }
+                    type: "distance_msg",
+                    state: "stop",
+                    distance: -1,
                 })
             )
+            setMeasurementIsRunning(false)
         } catch (error){
             console.error(error)
         }
@@ -69,24 +63,8 @@ export default function ConnectingBleDevices(props) {
             <div className="md:col-span-1">
                 <div className="px-4 sm:px-0">
                     <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
-                        Connect Device
+                        Distance Measurments
                     </h3>
-                    <div className='grid grid-cols-2 gap-0'>
-                        <div>Server Status:</div>
-                        {isBackendConnected ? (
-                            <div className='rounded-full w-5 h-5 bg-green-600'></div>
-                        ) : (
-                            <div className='rounded-full w-5 h-5 bg-red-600'></div>
-                        )}
-                    </div>
-                    <div className='grid grid-cols-2 gap-0'>
-                        <div>PI Status:</div>
-                        {isGatewayConnected ? (
-                            <div className='rounded-full w-5 h-5 bg-green-600'></div>
-                        ) : (
-                            <div className='rounded-full w-5 h-5 bg-red-600'></div>
-                        )}
-                    </div>
                     <div className='grid grid-cols-2 gap-0'>
                         <div>DWM3001 Status:</div>
                         {isUWBDeviceConnected ? (
@@ -100,13 +78,13 @@ export default function ConnectingBleDevices(props) {
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
                     <div className="bg-gray-50 px-1 py-3 text-right sm:px-3">
-                        {(isBackendConnected && isGatewayConnected && isUWBDeviceConnected && !isScanning) ? (
+                        {isUWBDeviceConnected ? (
                             <button
                                 type='button' 
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                                onClick={disconnecting}
+                                onClick={startMeasurements}
                             >
-                                Disconnect
+                                Start Measurements
                             </button>
                         ):(
                             <button
@@ -114,16 +92,16 @@ export default function ConnectingBleDevices(props) {
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
                                 disabled
                             >
-                                Disconnect
+                                Start Measurements
                             </button>
-                        )}   
-                        {(isBackendConnected && isGatewayConnected && !isUWBDeviceConnected && !isScanning) ? (
+                        )}
+                        {isUWBDeviceConnected ? (
                             <button
                                 type='button' 
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                                onClick={startConnecting}
+                                onClick={stopMeasurements}
                             >
-                                Start connect
+                                Stop Measurements
                             </button>
                         ):(
                             <button
@@ -131,23 +109,41 @@ export default function ConnectingBleDevices(props) {
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
                                 disabled
                             >
-                                Start Connect
+                                Stop Measurements
                             </button>
-                        )}   
+                        )} 
                     </div>
                     <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                        <label htmlFor="connectionLog" className="block text-sm font-medium text-gray-700">Connection Log</label>
+                        <label htmlFor="distanceMeasurementLog" className="block text-sm font-medium text-gray-700">Distance Measurements</label>
                         <div className="mt-1">
                             <textarea 
                                 className="mt-1 block w-full rounded-md border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 rows="8"
                                 type='text'
-                                id="connectionLog"
-                                label="Connection Log"
-                                value={connectionLog}
+                                id="distanceMeasurementLog"
+                                ref={distanceTextarea}
+                                label="Distance Measurment Log"
+                                value={distanceMeasurementLog}
                                 margin="normal"
                                 readOnly
                             />
+                            <ScatterChart
+                                width={730}
+                                height={250}
+                                margin={{
+                                    top: 20,
+                                    right: 20,
+                                    bottom: 10,
+                                    left: 10,
+                                }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="x" type="number" name="dataPoints"/>
+                                <YAxis dataKey="y" type="number" name="distance" unit="m" />
+                                <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                                <Legend />
+                                <Scatter name="A school" data={distanceData} fill="#8884d8" />
+                            </ScatterChart>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import ConnectingBleDevices from './BleDevices/ConnectingBleDevices';
+import DistanceMeasurements from './BleDevices/DistanceMeasurements';
 import AuthContext from '../context/AuthContext';
 
 export default function BleDevices() {
@@ -54,6 +55,9 @@ export default function BleDevices() {
                         setIsUWBDeviceConnected(false)
                     }
                 }
+                if(data.type === "scanning_state" && data.scan.connection === "disconnect") {
+                    setIsUWBDeviceConnected(false)
+                }
             };
             ws.onclose = function (event) {
                 setIsBackendConnected(false)
@@ -85,6 +89,11 @@ export default function BleDevices() {
                 <ConnectingBleDevices 
                     isBackendConnected={isBackendConnected}
                     isGatewayConnected={isGatewayConnected}
+                    isUWBDeviceConnected={isUWBDeviceConnected}
+                    ws={ws}
+                    ws_data={ws_data}
+                />
+                <DistanceMeasurements 
                     isUWBDeviceConnected={isUWBDeviceConnected}
                     ws={ws}
                     ws_data={ws_data}
