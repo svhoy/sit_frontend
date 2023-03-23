@@ -94,6 +94,9 @@ export default function NavBar() {
                   </div>
                 </li>
                 <li className="text-gray-200 hover:text-gray-900">
+                  <Link to="/distance">Distance List</Link>
+                </li>
+                <li className="text-gray-200 hover:text-gray-900">
                   <Link to="/settings">Settings</Link>
                 </li>
                 <li className="text-gray-200 hover:text-gray-900">

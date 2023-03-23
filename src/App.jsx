@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
 import MeshDevicePage from './pages/MeshDevicePage';
 import BleDevicePage from './pages/BleDevicePage';
+import DistancePage from './pages/DistancePage';
 import SettingsPage from './pages/SettingsPage';
 import LoginPage from './pages/LoginPage';
 
@@ -25,6 +26,7 @@ function App() {
                 <Route element={<DashboardPage/>} path="/dashboard" />
                 <Route element={<BleDevicePage/>} path="/ble-devices" />
                 <Route element={<MeshDevicePage/>} path="/mesh-devices" />
+                <Route element={<DistancePage/>} path="/distance" />
                 <Route element={<SettingsPage/>} path="/settings" />
               </Route>
               <Route element={<LoginPage />} path="/login" />
