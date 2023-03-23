@@ -23,7 +23,14 @@ export default function UwbSettings() {
 
     if (response.status === 200) {
       setUwbSettingsList(data.results)
-
+      if(data.next) {
+        let nextPage = data.next.match(rexPage)
+        setNextURL(baseURL + nextPage)
+      }
+      if(data.previous) {
+          let previousPage = data.previous.match(rexPage)
+          setNextURL(baseURL + previousPage)
+      }
     }
   }
 
