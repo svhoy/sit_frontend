@@ -24,10 +24,10 @@ function App() {
               <Route element={<HomePage/>} path="/" exact/>
               <Route element={<PrivateRoutes />}>
                 <Route element={<DashboardPage/>} path="/dashboard" />
-                <Route element={<BleDevicePage/>} path="/ble-devices" />
-                <Route element={<MeshDevicePage/>} path="/mesh-devices" />
+                <Route element={<BleDevicePage/>} path="/devices/ble" />
+                <Route element={<MeshDevicePage/>} path="/devices/ble-mesh" />
+                <Route element={<SettingsPage/>} path="/devices/settings" />
                 <Route element={<DistancePage/>} path="/distance" />
-                <Route element={<SettingsPage/>} path="/settings" />
               </Route>
               <Route element={<LoginPage />} path="/login" />
             </Routes>
