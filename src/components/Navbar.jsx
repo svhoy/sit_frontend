@@ -85,10 +85,13 @@ export default function NavBar() {
                   <div className="dropdown-menu z-10 p-3 hidden bg-blue-500 rounded-lg shadow">
                     <ul className="py-2 text-sm">
                       <li className="text-gray-200 hover:text-gray-900">
-                        <Link to="/ble-devices">BLE Devices</Link>
+                        <Link to="/devices/ble">BLE Devices</Link>
                       </li>
                       <li className="text-gray-200 hover:text-gray-900">
-                        <Link to="/mesh-devices">Mesh Devices</Link>
+                        <Link to="/devices/ble-mesh">Mesh Devices</Link>
+                      </li>
+                      <li className="text-gray-200 hover:text-gray-900">
+                        <Link to="/devices/settings">Settings</Link>
                       </li>
                     </ul>
                   </div>
@@ -96,9 +99,7 @@ export default function NavBar() {
                 <li className="text-gray-200 hover:text-gray-900">
                   <Link to="/distance">Distance List</Link>
                 </li>
-                <li className="text-gray-200 hover:text-gray-900">
-                  <Link to="/settings">Settings</Link>
-                </li>
+                
                 <li className="text-gray-200 hover:text-gray-900">
                   <span onClick={logoutUser}>Logout</span>
                 </li>
