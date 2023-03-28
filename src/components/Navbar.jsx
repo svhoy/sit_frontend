@@ -61,9 +61,6 @@ export default function NavBar() {
           }`}
         >
           <ul className="items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0">
-            <li className="text-gray-200 hover:text-gray-900">
-              <Link to="/">Home</Link>
-            </li>
             {user ? (
               <>
                 <li className="text-gray-200 hover:text-gray-900">
@@ -99,13 +96,36 @@ export default function NavBar() {
                 <li className="text-gray-200 hover:text-gray-900">
                   <Link to="/distance">Distance List</Link>
                 </li>
-                
+                <li className='dropdown'>
+                  <button 
+                    className="flex items-center justify-between w-full py-2 pl-3 pr-4 font-medium text-gray-200 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
+                  >
+                    Tests
+                    <svg className="w-4 h-4 ml-1" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path 
+                        fillRule="evenodd" 
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" 
+                        clipRule="evenodd">
+                      </path>
+                    </svg>
+                  </button>
+                  <div className="dropdown-menu z-10 p-3 hidden bg-blue-500 rounded-lg shadow">
+                    <ul className="py-2 text-sm">
+                      <li className="text-gray-200 hover:text-gray-900">
+                        <Link to="/test/static-distance">Static Distance</Link>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
                 <li className="text-gray-200 hover:text-gray-900">
                   <span onClick={logoutUser}>Logout</span>
                 </li>
               </>
             ) : (
               <>
+                <li className="text-gray-200 hover:text-gray-900">
+                  <Link to="/">Home</Link>
+                </li>
                 <li className="text-gray-200 hover:text-gray-900">
                   <Link to="/login">Login</Link>
                 </li>

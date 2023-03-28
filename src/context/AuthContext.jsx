@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
         setAuthTokens(data);
         setUser(jwtDecode(data.access));
         localStorage.setItem('authTokens', JSON.stringify(data));
-        navigate('/');
+        navigate('/dashboard');
     }else{
         alert('Something went wrong!')
     }

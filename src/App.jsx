@@ -10,6 +10,7 @@ import BleDevicePage from './pages/BleDevicePage';
 import DistancePage from './pages/DistancePage';
 import SettingsPage from './pages/SettingsPage';
 import LoginPage from './pages/LoginPage';
+import StaticDistancePage from './pages/StaticDistance';
 
 function App() {
   return (
@@ -22,14 +23,15 @@ function App() {
           <div className="container px-10">
             <Routes>
               <Route element={<HomePage/>} path="/" exact/>
+              <Route element={<LoginPage />} path="/login" />
               <Route element={<PrivateRoutes />}>
                 <Route element={<DashboardPage/>} path="/dashboard" />
                 <Route element={<BleDevicePage/>} path="/devices/ble" />
                 <Route element={<MeshDevicePage/>} path="/devices/ble-mesh" />
                 <Route element={<SettingsPage/>} path="/devices/settings" />
                 <Route element={<DistancePage/>} path="/distance" />
+                <Route element={<StaticDistancePage/>} path="/test/static-distance" />
               </Route>
-              <Route element={<LoginPage />} path="/login" />
             </Routes>
           </div>
         </AuthProvider>
