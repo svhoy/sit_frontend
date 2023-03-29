@@ -10,7 +10,7 @@ import BleDevicePage from './pages/BleDevicePage';
 import DistancePage from './pages/DistancePage';
 import SettingsPage from './pages/SettingsPage';
 import LoginPage from './pages/LoginPage';
-import StaticDistancePage from './pages/StaticDistance';
+import TestSettings from './pages/TestSettings';
 
 function App() {
   return (
@@ -30,7 +30,7 @@ function App() {
                 <Route element={<MeshDevicePage/>} path="/devices/ble-mesh" />
                 <Route element={<SettingsPage/>} path="/devices/settings" />
                 <Route element={<DistancePage/>} path="/distance" />
-                <Route element={<StaticDistancePage/>} path="/test/static-distance" />
+                <Route element={<TestSettings/>} path="/tests/settings" />
               </Route>
             </Routes>
           </div>

@@ -10,6 +10,10 @@ export default function UwbSettings() {
     name: "",
   })
   const [editUwbSettingsId, setEditUwbSettingsId] = useState(null)
+  const [baseURL] = useState('/api/settings/uwb/')
+  const [nextURL, setNextURL] = useState(null)
+  const [previousURL, setPreviousURL] = useState(null)
+  var rexPage = new RegExp('\\?page\=\\d{1,}')
 
 
   let api = useFetch()
@@ -18,20 +22,37 @@ export default function UwbSettings() {
     getUwbSettingsList();
   }, []);
 
-  let getUwbSettingsList = async() => {
-    let {response, data} = await api('/api/settings/uwb/')
+  let getUwbSettingsList = async(url = baseURL) => {
+    let {response, data} = await api(url)
 
     if (response.status === 200) {
-      setUwbSettingsList(data.results)
       if(data.next) {
-        let nextPage = data.next.match(rexPage)
-        setNextURL(baseURL + nextPage)
+          let nextPage = data.next.match(rexPage)
+          setNextURL(baseURL + nextPage)
+      } else {
+          setNextURL(null)
       }
       if(data.previous) {
-          let previousPage = data.previous.match(rexPage)
-          setNextURL(baseURL + previousPage)
+          if(rexPage.test(data.previous)) {
+              let previousPage = data.previous.match(rexPage)
+              setPreviousURL(baseURL + previousPage)
+
+          } else {
+              setPreviousURL(baseURL)
+          }
+      } else {
+          setPreviousURL(null)
       }
+      setdistanceMeasurementsList(data.results)
     }
+  }
+
+  let nextPage = () => {
+    getDistanceMeasurements(nextURL)
+  }
+
+  let previousPage = () => {
+    getDistanceMeasurements(previousURL)
   }
 
   let sendUwbSettings = async(editedUwbSetting) => {
