@@ -100,84 +100,86 @@ export default function DistanceTestsTable({handleTestState}) {
           </div>
         </div>
         <div className="mt-5 md:col-span-2 md:mt-0 md:w-full">
-            <div className="shadow sm:overflow-x sm:rounded-md">
-                <table className="table-auto overflow-scroll max-w-full ">
-                    <thead className="bg-white border-b">
-                        <tr>
-                            <th className="text-sm font-medium text-gray-900 px-3 py-4 text-left">
-                            </th>
-                            <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                            ID
-                            </th>
-                            <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                            Test Name
-                            </th>
-                            <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                            Test Typ
-                            </th>
-                            <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                            Distanz
-                            </th>
-                            <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                            Einheit
-                            </th>
-                            <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                            Minimum Messungen
-                            </th>
-                            <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                            Maximum Messungen
-                            </th>
-                            <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                            Owner
-                            </th>
-                            <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {addTestSettingsList && addTestSettingsList.map((item) => (
-                            <tr key={item.id} className="bg-white border-b odd:bg-gray-100">
-                                <td className="text-sm text-gray-900 font-light px-3 py-4 whitespace-nowrap">
-                                    <input 
-                                        type="checkbox"
-                                        id={item.id}
-                                        checked={checkTest === item.id}
-                                        onChange={toggleSelected(item.id)}
-                                    />
-                                </td>
-                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    {item.id}
-                                </td>
-                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    {item.test_name}
-                                </td>
-                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    {item.test_type}
-                                </td>
-                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    {item.test_distance}
-                                </td>
-                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    {item.test_unit}
-                                </td>
-                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    {item.test_min_measurements}
-                                </td>
-                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    {item.test_max_measurements}
-                                </td>
-                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    {item.user}
-                                </td>
-                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    <button type="button" className="mx-2" onClick={()=> handleDeleteClick(item.id)} title="Löschen">
-                                        <FontAwesomeIcon icon={faTrashCan} />
-                                    </button>
-                                </td>
+            <div className="shadow min-w-full sm:overflow-x-auto sm:rounded-md">
+                <div className='overflow-x-auto'>
+                    <table className="table-auto overflow-scroll min-w-full ">
+                        <thead className="bg-white border-b">
+                            <tr>
+                                <th className="text-sm font-medium text-gray-900 px-3 py-4 text-left">
+                                </th>
+                                <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                ID
+                                </th>
+                                <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                Test Name
+                                </th>
+                                <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                Test Typ
+                                </th>
+                                <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                Distanz
+                                </th>
+                                <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                Einheit
+                                </th>
+                                <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                Minimum Messungen
+                                </th>
+                                <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                Maximum Messungen
+                                </th>
+                                <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                Owner
+                                </th>
+                                <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                </th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {addTestSettingsList && addTestSettingsList.map((item) => (
+                                <tr key={item.id} className="bg-white border-b odd:bg-gray-100">
+                                    <td className="text-sm text-gray-900 font-light px-3 py-4 whitespace-nowrap">
+                                        <input 
+                                            type="checkbox"
+                                            id={item.id}
+                                            checked={checkTest === item.id}
+                                            onChange={toggleSelected(item.id)}
+                                        />
+                                    </td>
+                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        {item.id}
+                                    </td>
+                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        {item.test_name}
+                                    </td>
+                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        {item.test_type}
+                                    </td>
+                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        {item.test_distance}
+                                    </td>
+                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        {item.test_unit}
+                                    </td>
+                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        {item.test_min_measurements}
+                                    </td>
+                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        {item.test_max_measurements}
+                                    </td>
+                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        {item.user}
+                                    </td>
+                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        <button type="button" className="mx-2" onClick={()=> handleDeleteClick(item.id)} title="Löschen">
+                                            <FontAwesomeIcon icon={faTrashCan} />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
                 <div className="mt-5 md:col-span-2 md:mt-1">
                     <div className="shadow sm:overflow-hidden sm:rounded-md">
                         <div className="bg-gray-50 px-1 py-3 text-left sm:px-3">
