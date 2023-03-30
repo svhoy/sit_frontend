@@ -4,7 +4,7 @@ import jwtDecode from 'jwt-decode';
 import { useNavigate  } from 'react-router';
 
 const AuthContext = createContext({
-  loginUser: () => alert('Test'),
+  
 });
 
 export default AuthContext;
