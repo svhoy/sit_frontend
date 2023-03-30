@@ -1,37 +1,44 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, useContext} from 'react'
+import WebSocketContex from '../../context/WebSoketContex';
 
 
-export default function ConnectingBleDevices(props) {
-    const { isBackendConnected, isGatewayConnected, isUWBDeviceConnected, ws, ws_data } = props
+export default function ConnectingBleDevices() {
     const [isScanning, setScanning] = useState(false);
     const [connectionLog, setConnectionLog] = useState([]);
 
-    useEffect(() => {
-        let data = ws_data
-        if(data.type=== "connection_established"){
-            setScanning(false)
-        } else if (data.type === "scanning_state" && data.scan.state == true) {
-            setConnectionLog(connectionLog => [connectionLog + data.scan.message + "\n"])
-        } else if(data.type === "scanning_state" && data.scan.state == false) {
-            setScanning(false)
-            setConnectionLog(connectionLog => [connectionLog + data.scan.message + "\n"])
-        } else if(data.type === "scanning_state" && data.scan.connection == "disconnect") {
-            setScanning(false)
-            setConnectionLog(connectionLog => [connectionLog + data.scan.message + "\n"])
-        }
-    }, [ws_data])
+    const {isReady, isGatewayReady, isUWBReady, message, send} = useContext(WebSocketContex)
 
     useEffect(() => {
-        if(!isBackendConnected || !isGatewayConnected) {
+        if(isReady){
+            if(message.type=== "connection_established"){
+                setScanning(false)
+            } else if (message.type === "scanning_state" && message.scan.state == true) {
+                setConnectionLog(connectionLog => [connectionLog + message.scan.message + "\n"])
+            } else if(message.type === "scanning_state" && message.scan.state == false) {
+                setScanning(false)
+                setConnectionLog(connectionLog => [connectionLog + message.scan.message + "\n"])
+            } else if(message.type === "scanning_state" && message.scan.connection == "disconnect") {
+                setScanning(false)
+                setConnectionLog(connectionLog => [connectionLog + message.scan.message + "\n"])
+            }
+        }
+    }, [isReady, message])
+
+    useEffect(() => {
+        if(!isReady || !isGatewayReady) {
             setConnectionLog([])
         }
-    }, [isBackendConnected])
+    }, [isReady, isGatewayReady])
+
+    useEffect(() => {
+
+    }, [isUWBReady])
 
     const startConnecting = () => {
         setScanning(true)
         setConnectionLog([])
         try {
-            ws.send(
+            send(
                 JSON.stringify( {
                     type: "scanning_state",
                     scan: {
@@ -48,7 +55,7 @@ export default function ConnectingBleDevices(props) {
     const disconnecting = () => {
         setScanning(false)
         try {
-            ws.send(
+            send(
                 JSON.stringify( {
                     type: "scanning_state",
                     scan: {
@@ -73,7 +80,7 @@ export default function ConnectingBleDevices(props) {
                     </h3>
                     <div className='grid grid-cols-2 gap-0'>
                         <div>Server Status:</div>
-                        {isBackendConnected ? (
+                        {isReady ? (
                             <div className='rounded-full w-5 h-5 bg-green-600'></div>
                         ) : (
                             <div className='rounded-full w-5 h-5 bg-red-600'></div>
@@ -81,7 +88,7 @@ export default function ConnectingBleDevices(props) {
                     </div>
                     <div className='grid grid-cols-2 gap-0'>
                         <div>PI Status:</div>
-                        {isGatewayConnected ? (
+                        {isGatewayReady ? (
                             <div className='rounded-full w-5 h-5 bg-green-600'></div>
                         ) : (
                             <div className='rounded-full w-5 h-5 bg-red-600'></div>
@@ -89,7 +96,7 @@ export default function ConnectingBleDevices(props) {
                     </div>
                     <div className='grid grid-cols-2 gap-0'>
                         <div>DWM3001 Status:</div>
-                        {isUWBDeviceConnected ? (
+                        {isUWBReady ? (
                             <div className='rounded-full w-5 h-5 bg-green-600'></div>
                         ) : (
                             <div className='rounded-full w-5 h-5 bg-red-600'></div>
@@ -100,7 +107,7 @@ export default function ConnectingBleDevices(props) {
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
                     <div className="bg-gray-50 px-1 py-3 text-right sm:px-3">
-                        {(isBackendConnected && isGatewayConnected && isUWBDeviceConnected && !isScanning) ? (
+                        {(isReady && isGatewayReady && isUWBReady && !isScanning) ? (
                             <button
                                 type='button' 
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
@@ -117,7 +124,7 @@ export default function ConnectingBleDevices(props) {
                                 Disconnect
                             </button>
                         )}   
-                        {(isBackendConnected && isGatewayConnected && !isUWBDeviceConnected && !isScanning) ? (
+                        {(isReady && isGatewayReady && !isUWBReady && !isScanning) ? (
                             <button
                                 type='button' 
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"

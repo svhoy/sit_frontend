@@ -1,35 +1,37 @@
-import React, { useState, useEffect, useRef} from 'react'
+import React, { useState, useEffect, useRef, useContext} from 'react'
 import { CartesianGrid, Legend, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts'
+import WebSocketContex from '../../context/WebSoketContex'
 
 
 
-export default function DistanceMeasurements(props) {
-    const {isUWBDeviceConnected, ws, ws_data } = props
+export default function DistanceMeasurements() {
     const [distanceMeasurementLog, setDistanceMeasurementLog] = useState([])
     const [distanceData, setDistanceData] = useState([])
     const [distancePoints, setdistancePoints] = useState(0)
     const [measurementIsRunning, setMeasurementIsRunning] = useState(false)
     const distanceTextarea = useRef()
 
+    const {isReady, isUWBReady, message, send} = useContext(WebSocketContex)
 
     useEffect(() => {
-        let data = ws_data
-        if(data.type === "distance_msg" && data.state === "scanning"){
-            setdistancePoints(distancePoints + 1)
-            setDistanceMeasurementLog(distanceMeasurementLog => [distanceMeasurementLog + data.distance + "m \n"])
-            setDistanceData([...distanceData, {"x": distancePoints, "y": data.distance}])
-            const area = distanceTextarea.current;
-            area.scrollTop = area.scrollHeight;
+        if(isReady){
+            if(message.type === "distance_msg" && message.state === "scanning"){
+                setdistancePoints(distancePoints + 1)
+                setDistanceMeasurementLog(distanceMeasurementLog => [distanceMeasurementLog + message.distance + "m \n"])
+                setDistanceData([...distanceData, {"x": distancePoints, "y": message.distance}])
+                const area = distanceTextarea.current;
+                area.scrollTop = area.scrollHeight;
+            }
         }
-    }, [ws_data])
+    }, [isReady, message])
 
     useEffect(() => {
 
-    }, [isUWBDeviceConnected])
+    }, [isUWBReady])
 
     const startMeasurements= () => {
         try {
-            ws.send(
+            send(
                 JSON.stringify( {
                     type: "distance_msg",
                     state: "start",
@@ -44,7 +46,7 @@ export default function DistanceMeasurements(props) {
 
     const stopMeasurements = () => {
         try {
-            ws.send(
+            send(
                 JSON.stringify( {
                     type: "distance_msg",
                     state: "stop",
@@ -67,7 +69,7 @@ export default function DistanceMeasurements(props) {
                     </h3>
                     <div className='grid grid-cols-2 gap-0'>
                         <div>DWM3001 Status:</div>
-                        {isUWBDeviceConnected ? (
+                        {isUWBReady ? (
                             <div className='rounded-full w-5 h-5 bg-green-600'></div>
                         ) : (
                             <div className='rounded-full w-5 h-5 bg-red-600'></div>
@@ -78,7 +80,7 @@ export default function DistanceMeasurements(props) {
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
                     <div className="bg-gray-50 px-1 py-3 text-right sm:px-3">
-                        {isUWBDeviceConnected ? (
+                        {isUWBReady ? (
                             <button
                                 type='button' 
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
@@ -95,7 +97,7 @@ export default function DistanceMeasurements(props) {
                                 Start Measurements
                             </button>
                         )}
-                        {isUWBDeviceConnected ? (
+                        {isUWBReady ? (
                             <button
                                 type='button' 
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"

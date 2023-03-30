@@ -1,5 +1,5 @@
 import React from 'react';
-import UwbSettings from '../components/UwbSettings';
+import UwbSettingsTable from '../components/UwbSettingsTable';
 
 export default function SettingsPage() {
   return (
@@ -11,7 +11,10 @@ export default function SettingsPage() {
       <h3 className="font-bold leading-tight text-gray-900 text-l md:text-l lg:text-xl">
         UWB Device Settings
       </h3>
-      <UwbSettings />
+      <div className='mt-5'> 
+        <UwbSettingsTable />
+      </div>
+      
     </>
   );
 }
