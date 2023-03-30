@@ -18,7 +18,6 @@ export default function DistancesTable() {
 
   let getDistanceMeasurements = async(url = baseURL) => {
     let {response, data} = await api(url)
-    console.log(data)
     if (response.status === 200) {
         if(data.next) {
             let nextPage = data.next.match(rexPage)
@@ -37,15 +36,12 @@ export default function DistancesTable() {
         } else {
             setPreviousURL(null)
         }
-        console.log(previousURL)
         setdistanceMeasurementsList(data.results)
-        console.log(distanceMeasurementsList)
     }
   }
 
   let deleteDistance = async(settingId) => {
     let {response, data} = await api('/api/measurement-list/' + settingId + '/', 'DELETE')
-    console.log(response.status)
 
     if (response.status === 204) {
         getDistanceMeasurements()
