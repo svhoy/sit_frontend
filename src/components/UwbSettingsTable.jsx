@@ -222,14 +222,11 @@ export default function UwbSettingsTable() {
                                                     handleCancelClick={handleCancelClick}
                                                 />
                                             ) : (
-                                                (console.log(item),
-                                                (
-                                                    <ReadOnlyRow
-                                                        item={item}
-                                                        handleEditClick={handleEditClick}
-                                                        handleDeleteClick={handleDeleteClick}
-                                                    />
-                                                ))
+                                                <ReadOnlyRow
+                                                    item={item}
+                                                    handleEditClick={handleEditClick}
+                                                    handleDeleteClick={handleDeleteClick}
+                                                />
                                             )
                                         )
                                     })}

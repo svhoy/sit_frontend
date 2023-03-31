@@ -28,7 +28,7 @@ module.exports = {
             presets: ["@babel/preset-react"]
         }
     },
-    plugins: ["react", "prettier", "react-hooks", "import"],
+    plugins: ["prettier", "react", "react-hooks", "import"],
     root: true, // For configuration cascading.
     rules: {
         eqeqeq: "error",

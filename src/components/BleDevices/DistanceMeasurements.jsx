@@ -25,7 +25,7 @@ export default function DistanceMeasurements() {
         }
     }, [isReady, message, distancePoints, distanceData])
 
-    useEffect(() => { }, [isUWBReady])
+    useEffect(() => {}, [isUWBReady])
 
     const startMeasurements = () => {
         try {

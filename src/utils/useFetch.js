@@ -5,6 +5,7 @@ import AuthContext from "../context/AuthContext"
 
 const useFetch = () => {
     let config = {}
+
     let { authTokens, setAuthTokens, setUser } = useContext(AuthContext)
 
     const baseURL = "http://127.0.0.1:8000"
@@ -36,11 +37,13 @@ const useFetch = () => {
             setAuthTokens(data)
             setUser(jwtDecode(data.access))
         }
+
         return data
     }
 
     const callFetch = async (url, method = "GET", body = null) => {
         const user = jwtDecode(authTokens.access)
+
         const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1
 
         if (isExpired) {
@@ -72,5 +75,4 @@ const useFetch = () => {
 
     return callFetch
 }
-
 export default useFetch
