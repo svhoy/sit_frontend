@@ -1,25 +1,24 @@
 /* eslint-disable */
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import PrivateRoutes from './utils/PrivateRoutes';
-import { AuthProvider } from './context/AuthContext';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PrivateRoutes from "./utils/PrivateRoutes";
+import { AuthProvider } from "./context/AuthContext";
 
-import NavBar from './components/Navbar';
-import HomePage from './pages/HomePage';
-import DashboardPage from './pages/DashboardPage';
-import MeshDevicePage from './pages/MeshDevicePage';
-import BleDevicePage from './pages/BleDevicePage';
-import DistancePage from './pages/DistancePage';
-import SettingsPage from './pages/SettingsPage';
-import LoginPage from './pages/LoginPage';
-import TestSettings from './pages/TestSettings';
-import WebsocketRoutes from './utils/WebsocketRoutes';
+import NavBar from "./components/Navbar";
+import HomePage from "./pages/HomePage";
+import DashboardPage from "./pages/DashboardPage";
+import BleDevicePage from "./pages/BleDevicePage";
+import DistancePage from "./pages/DistancePage";
+import SettingsPage from "./pages/SettingsPage";
+import LoginPage from "./pages/LoginPage";
+import TestSettings from "./pages/TestSettings";
+import WebsocketRoutes from "./utils/WebsocketRoutes";
 
 function App() {
   return (
     <div className="App font-body font-normal leading-normal text-gray-800 text-sm md:font-base md:leading-relaxed">
       <BrowserRouter>
         <AuthProvider>
-          <header className=''>
+          <header className="">
             <NavBar />
           </header>
           <div className="container px-10">
@@ -29,7 +28,6 @@ function App() {
               <Route element={<PrivateRoutes />}>
                 <Route element={<WebsocketRoutes />}>
                   <Route element={<BleDevicePage/>} path="/devices/ble" />
-                  <Route element={<MeshDevicePage/>} path="/devices/ble-mesh" />
                 </Route>
                 <Route element={<DashboardPage/>} path="/dashboard" />
                 <Route element={<SettingsPage/>} path="/devices/settings" />
