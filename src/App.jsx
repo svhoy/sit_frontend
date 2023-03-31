@@ -12,6 +12,7 @@ import SettingsPage from "./pages/SettingsPage"
 import LoginPage from "./pages/LoginPage"
 import TestSettings from "./pages/TestSettings"
 import WebsocketRoutes from "./utils/WebsocketRoutes"
+import TestPage from "./pages/TestPage";
 
 function App() {
     return (
@@ -27,6 +28,7 @@ function App() {
                             <Route element={<LoginPage />} path="/login" />
                             <Route element={<PrivateRoutes />}>
                                 <Route element={<WebsocketRoutes />}>
+                                    <Route element={<TestPage />} path="/tests" />
                                     <Route element={<BleDevicePage />} path="/devices/ble" />
                                 </Route>
                                 <Route element={<DashboardPage />} path="/dashboard" />
