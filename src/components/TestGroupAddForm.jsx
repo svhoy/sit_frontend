@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react"
-import PropTypes from "prop-types"
+import { Link, useNavigate } from "react-router-dom"
 import useFetch from "../utils/useFetch"
 import AuthContext from "../context/AuthContext"
 
-export default function TestSettingsAddForm({ handleTestState }) {
+export default function TestGroupAddForm() {
     const { user } = useContext(AuthContext)
     const [addTestSettingsForm, setAddTestSettingsForm] = useState({
         owner: 0,
@@ -15,6 +15,7 @@ export default function TestSettingsAddForm({ handleTestState }) {
         testMaxMeasurements: null
     })
     let api = useFetch()
+    const navigate = useNavigate()
 
     useEffect(() => {}, [])
 
@@ -56,7 +57,7 @@ export default function TestSettingsAddForm({ handleTestState }) {
             test_max_measurements: addTestSettingsForm.testMaxMeasurements
         }
         sendTestAdd(addForm)
-        handleTestState(null)
+        navigate("/tests/groups", { replace: true })
     }
 
     return (
@@ -64,18 +65,20 @@ export default function TestSettingsAddForm({ handleTestState }) {
             <div className="md:col-span-1">
                 <div className="px-4 sm:px-0">
                     <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
-                        Add Test Settings
+                        Add Test Group
                     </h3>
                     <div className="grid grid-cols-2 gap-0">
-                        <button
-                            type="button"
-                            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                            onClick={() => {
-                                return handleTestState(null)
-                            }}
+                        <Link
+                            to="/tests/groups"
+                            replace
                         >
-                            Zurück
-                        </button>
+                            <button
+                                type="button"
+                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
+                            >
+                                Back
+                            </button>
+                        </Link>
                     </div>
                     <div className="grid grid-cols-2 gap-0" />
                     <div className="grid grid-cols-2 gap-0" />
@@ -98,7 +101,7 @@ export default function TestSettingsAddForm({ handleTestState }) {
                                     htmlFor="testName"
                                     className="block text-sm font-medium leading-6 text-gray-900"
                                 >
-                                    Test Settings Name
+                                    Test Group Name
                                     <div className="mt-1">
                                         <input
                                             className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -115,7 +118,7 @@ export default function TestSettingsAddForm({ handleTestState }) {
                                     htmlFor="testType"
                                     className="block text-sm font-medium leading-6 text-gray-900"
                                 >
-                                    Test Art
+                                    Test Type
                                     <div className="mt-1">
                                         <select
                                             className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -133,7 +136,7 @@ export default function TestSettingsAddForm({ handleTestState }) {
                                     htmlFor="testDistance"
                                     className="block text-sm font-medium leading-6 text-gray-900"
                                 >
-                                    Reale Distance
+                                    Real Distance
                                     <div className="mt-1">
                                         <input
                                             className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -152,7 +155,7 @@ export default function TestSettingsAddForm({ handleTestState }) {
                                     htmlFor="testUnit"
                                     className="block text-sm font-medium leading-6 text-gray-900"
                                 >
-                                    Einheit
+                                    Unit
                                     <div className="mt-1">
                                         <input
                                             className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -171,7 +174,7 @@ export default function TestSettingsAddForm({ handleTestState }) {
                                     htmlFor="testMinMeasurements"
                                     className="block text-sm font-medium leading-6 text-gray-900"
                                 >
-                                    Min. Messungen
+                                    Min. Measurements
                                     <div className="mt-1">
                                         <input
                                             className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -189,7 +192,7 @@ export default function TestSettingsAddForm({ handleTestState }) {
                                     htmlFor="testMaxMeasurements"
                                     className="block text-sm font-medium leading-6 text-gray-900"
                                 >
-                                    Max Messungen
+                                    Max Measurements
                                     <div className="mt-1">
                                         <input
                                             className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -208,8 +211,4 @@ export default function TestSettingsAddForm({ handleTestState }) {
             </form>
         </div>
     )
-}
-
-TestSettingsAddForm.propTypes = {
-    handleTestState: PropTypes.func.isRequired
 }

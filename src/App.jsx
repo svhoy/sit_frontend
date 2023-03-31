@@ -10,9 +10,11 @@ import BleDevicePage from "./pages/BleDevicePage"
 import DistancePage from "./pages/DistancePage"
 import SettingsPage from "./pages/SettingsPage"
 import LoginPage from "./pages/LoginPage"
-import TestSettings from "./pages/TestSettings"
+import TestGroupPage from "./pages/TestGroupsPage"
 import WebsocketRoutes from "./utils/WebsocketRoutes"
 import TestPage from "./pages/TestPage";
+import TestGroupsTable from "./components/TestGroupsTable";
+import TestGroupAddForm from "./components/TestGroupAddForm";
 
 function App() {
     return (
@@ -34,7 +36,10 @@ function App() {
                                 <Route element={<DashboardPage />} path="/dashboard" />
                                 <Route element={<SettingsPage />} path="/devices/settings" />
                                 <Route element={<DistancePage />} path="/distance" />
-                                <Route element={<TestSettings />} path="/tests/settings" />
+                                <Route element={<TestGroupPage />} path="/tests/groups">
+                                    <Route element={<TestGroupsTable />} path="" />
+                                    <Route element={<TestGroupAddForm />} path="add" />
+                                </Route>
                             </Route>
                         </Routes>
                     </div>

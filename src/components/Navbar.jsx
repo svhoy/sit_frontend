@@ -126,7 +126,7 @@ export default function NavBar() {
                                     <div className="dropdown-menu z-10 p-3 hidden bg-blue-500 rounded-lg shadow">
                                         <ul className="py-2 text-sm">
                                             <li className="text-gray-200 hover:text-gray-900">
-                                                <Link to="/tests/settings">Settings</Link>
+                                                <Link to="/tests/groups">Groups</Link>
                                             </li>
                                         </ul>
                                     </div>

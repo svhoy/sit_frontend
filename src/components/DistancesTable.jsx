@@ -60,60 +60,62 @@ export default function DistancesTable() {
     }
 
     return (
-        <>
-            <table className="table-auto max-w-full ">
-                <thead className="bg-white border-b">
-                    <tr>
-                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                            ID
-                        </th>
-                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                            Created
-                        </th>
-                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                            Distance
-                        </th>
-                        <th
-                            aria-label="Button"
-                            className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
-                        />
-                    </tr>
-                </thead>
-                <tbody>
-                    {distanceMeasurementsList &&
-                        distanceMeasurementsList.map((item) => {
-                            return (
-                                <tr
-                                    key={item.id}
-                                    className="bg-white border-b odd:bg-gray-100"
-                                >
-                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                        {item.id}
-                                    </td>
-                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                        {item.created}
-                                    </td>
-                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                        {item.distance}
-                                    </td>
-                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                        <button
-                                            type="button"
-                                            className="mx-2"
-                                            onClick={() => {
-                                                return handleDeleteClick(item.id)
-                                            }}
-                                            title="Löschen"
-                                        >
-                                            <FontAwesomeIcon icon={faTrashCan} />
-                                        </button>
-                                    </td>
-                                </tr>
-                            )
-                        })}
-                </tbody>
-            </table>
-            <div className="mt-5 md:col-span-2 md:mt-1">
+        <div className="shadow sm:overflow-x-auto sm:rounded-md">
+            <div className="overflow-x-auto">
+                <table className="table-auto ">
+                    <thead className="bg-white border-b">
+                        <tr>
+                            <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                ID
+                            </th>
+                            <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                Created
+                            </th>
+                            <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                Distance
+                            </th>
+                            <th
+                                aria-label="Button"
+                                className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                            />
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {distanceMeasurementsList &&
+                            distanceMeasurementsList.map((item) => {
+                                return (
+                                    <tr
+                                        key={item.id}
+                                        className="bg-white border-b odd:bg-gray-100"
+                                    >
+                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                            {item.id}
+                                        </td>
+                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                            {item.created}
+                                        </td>
+                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                            {item.distance}
+                                        </td>
+                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                            <button
+                                                type="button"
+                                                className="mx-2"
+                                                onClick={() => {
+                                                    return handleDeleteClick(item.id)
+                                                }}
+                                                title="Löschen"
+                                            >
+                                                <FontAwesomeIcon icon={faTrashCan} />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                )
+                            })}
+                    </tbody>
+                </table>
+            </div>
+            <div className="mt-5 md:mt-2">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
                     <div className="bg-gray-50 px-1 py-3 text-left sm:px-3">
                         {previousURL != null ? (
@@ -153,6 +155,6 @@ export default function DistancesTable() {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }

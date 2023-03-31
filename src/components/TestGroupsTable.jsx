@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashCan, faPlay } from "@fortawesome/free-solid-svg-icons"
-import PropTypes from "prop-types"
+import { Link } from "react-router-dom"
 import useFetch from "../utils/useFetch"
 
-export default function DistanceTestsSettingsTable({ handleTestState }) {
+export default function TestGroupsTable() {
     const [addTestSettingsList, setAddTestSettingsList] = useState([])
     const [baseURL] = useState("/api/tests/settings-list")
     const [nextURL, setNextURL] = useState(null)
@@ -81,20 +81,42 @@ export default function DistanceTestsSettingsTable({ handleTestState }) {
             <div className="md:col-span-1">
                 <div className="px-4 sm:px-0">
                     <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
-                        Test Settings
+                        Test Groups
                     </h3>
                     <div className="grid grid-cols-2 gap-0">
+                        <Link to="/tests/groups/add">
+                            <button
+                                type="button"
+                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
+                            >
+                                Add Test Group
+                            </button>
+                        </Link>
+                    </div>
+                    <div className="mt-5 grid grid-cols-2 gap-0" />
+                    {checkTest != null ? (
                         <button
                             type="button"
                             className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                            onClick={() => {
-                                return handleTestState("add")
-                            }}
+                            onClick={startTest}
                         >
-                            Add Settings
+                            Start Test
+                            <span className="ml-2">
+                                <FontAwesomeIcon icon={faPlay} />
+                            </span>
                         </button>
-                    </div>
-                    <div className="grid grid-cols-2 gap-0" />
+                    ) : (
+                        <button
+                            type="button"
+                            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
+                            disabled
+                        >
+                            Start Test
+                            <span className="ml-2">
+                                <FontAwesomeIcon icon={faPlay} />
+                            </span>
+                        </button>
+                    )}
                     <div className="grid grid-cols-2 gap-0" />
                 </div>
             </div>
@@ -233,29 +255,6 @@ export default function DistanceTestsSettingsTable({ handleTestState }) {
                                         Next
                                     </button>
                                 )}
-                                {checkTest != null ? (
-                                    <button
-                                        type="button"
-                                        className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                                        onClick={startTest}
-                                    >
-                                        Start Test
-                                        <span className="ml-2">
-                                            <FontAwesomeIcon icon={faPlay} />
-                                        </span>
-                                    </button>
-                                ) : (
-                                    <button
-                                        type="button"
-                                        className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
-                                        disabled
-                                    >
-                                        Start Test
-                                        <span className="ml-2">
-                                            <FontAwesomeIcon icon={faPlay} />
-                                        </span>
-                                    </button>
-                                )}
                             </div>
                         </div>
                     </div>
@@ -263,8 +262,4 @@ export default function DistanceTestsSettingsTable({ handleTestState }) {
             </div>
         </div>
     )
-}
-
-DistanceTestsSettingsTable.propTypes = {
-    handleTestState: PropTypes.func.isRequired
 }
