@@ -59,6 +59,9 @@ export const WebSocketProvider = ({ children }) => {
                 if (data.connection_list.includes(`Frontend_${user.username}`)) {
                     setIsReady(true)
                 }
+                if (data.device_list.includes("DWM3001 Blue")) {
+                    setIsUWBReady(true)
+                }
             } else if (data.type === "scanning_state" && data.scan.connection === "complete") {
                 if (data.scan.device_name !== "") {
                     setIsUWBReady(true)

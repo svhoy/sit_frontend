@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 import React, { useState, useEffect } from "react"
 import useFetch from "../utils/useFetch"
 import ReadOnlyRow from "./UwbSettings/ReadOnlyRow"

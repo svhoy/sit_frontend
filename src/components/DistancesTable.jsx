@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 import React, { useState, useEffect } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons"
@@ -37,7 +38,7 @@ export default function DistancesTable() {
 
     useEffect(() => {
         getDistanceMeasurements()
-    })
+    }, [])
 
     let deleteDistance = async (settingId) => {
         let { response } = await api(`/api/measurement-list/${settingId}/`, "DELETE")

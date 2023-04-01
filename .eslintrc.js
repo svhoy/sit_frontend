@@ -51,7 +51,6 @@ module.exports = {
         "react/jsx-indent": ["error", 4],
         "react/jsx-indent-props": ["error", 4],
         "arrow-body-style": ["error", "always"],
-        "operator-linebreak": ["error", "after"],
         "react/jsx-no-constructed-context-values": "off"
     },
     settings: {

@@ -2,21 +2,20 @@
 import React, { useState, useEffect } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashCan, faPlay } from "@fortawesome/free-solid-svg-icons"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import useFetch from "../utils/useFetch"
 
-export default function TestGroupsTable() {
-    const [testGroupList, setTestGroupList] = useState([])
-    const [baseURL] = useState("/api/tests/groups")
+export default function TestTable() {
+    const [testsList, setTestsList] = useState([])
+    const [baseURL] = useState("/api/tests/")
     const [nextURL, setNextURL] = useState(null)
     const [previousURL, setPreviousURL] = useState(null)
-    const [checkTest, setCheckTest] = useState(null)
+    const [checkTestGroup, setCheckTestGroup] = useState(0)
     let rexPage = /\?page=\d{1,}/
-
-    let api = useFetch()
     let navigate = useNavigate()
+    let api = useFetch()
 
-    let getTestGroupList = async (url = baseURL) => {
+    let getTestsList = async (url = baseURL) => {
         let { response, data } = await api(url)
 
         if (response.status === 200) {
@@ -36,40 +35,40 @@ export default function TestGroupsTable() {
             } else {
                 setPreviousURL(null)
             }
-            setTestGroupList(data.results)
+            setTestsList(data.results)
         }
     }
 
     useEffect(() => {
-        getTestGroupList()
+        getTestsList()
     }, [])
 
     let deleteDistance = async (id) => {
-        let { response } = await api(`/api/tests/groups/${id}/`, "DELETE")
+        let { response } = await api(`/api/tests/${id}/`, "DELETE")
 
         if (response.status === 204) {
-            getTestGroupList()
+            getTestsList()
         }
     }
 
     let nextPage = () => {
-        getTestGroupList(nextURL)
+        getTestsList(nextURL)
     }
 
     let previousPage = () => {
-        getTestGroupList(previousURL)
+        getTestsList(previousURL)
     }
 
     let startTest = () => {
-        navigate(`/tests/new/${checkTest}`)
+        navigate(`new/${checkTestGroup}`)
     }
 
     let toggleSelected = (id) => {
         return () => {
-            if (checkTest === id) {
-                setCheckTest(null)
+            if (checkTestGroup === id) {
+                setCheckTestGroup(0)
             } else {
-                setCheckTest(id)
+                setCheckTestGroup(id)
             }
         }
     }
@@ -82,42 +81,19 @@ export default function TestGroupsTable() {
             <div className="md:col-span-1">
                 <div className="px-4 sm:px-0">
                     <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
-                        Test Groups
+                        Tests
                     </h3>
-                    <div className="grid grid-cols-2 gap-0">
-                        <Link to="/tests/groups/add">
-                            <button
-                                type="button"
-                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                            >
-                                Add Test Group
-                            </button>
-                        </Link>
-                    </div>
-                    <div className="mt-5 grid grid-cols-2 gap-0" />
-                    {checkTest != null ? (
-                        <button
-                            type="button"
-                            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                            onClick={startTest}
-                        >
-                            Start Test
-                            <span className="ml-2">
-                                <FontAwesomeIcon icon={faPlay} />
-                            </span>
-                        </button>
-                    ) : (
-                        <button
-                            type="button"
-                            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
-                            disabled
-                        >
-                            Start Test
-                            <span className="ml-2">
-                                <FontAwesomeIcon icon={faPlay} />
-                            </span>
-                        </button>
-                    )}
+                    <div className="grid grid-cols-2 gap-0" />
+                    <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
+                        onClick={startTest}
+                    >
+                        Start new Test
+                        <span className="ml-2">
+                            <FontAwesomeIcon icon={faPlay} />
+                        </span>
+                    </button>
                     <div className="grid grid-cols-2 gap-0" />
                 </div>
             </div>
@@ -162,8 +138,8 @@ export default function TestGroupsTable() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {testGroupList &&
-                                    testGroupList.map((item) => {
+                                {testsList &&
+                                    testsList.map((item) => {
                                         return (
                                             <tr
                                                 key={item.id}
@@ -173,7 +149,7 @@ export default function TestGroupsTable() {
                                                     <input
                                                         type="checkbox"
                                                         id={item.id}
-                                                        checked={checkTest === item.id}
+                                                        checked={checkTestGroup === item.id}
                                                         onChange={toggleSelected(item.id)}
                                                     />
                                                 </td>

@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 import React, { useState, useEffect, useContext } from "react"
 import WebSocketContex from "../../context/WebSoketContex"
 

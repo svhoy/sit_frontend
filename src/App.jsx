@@ -13,8 +13,11 @@ import LoginPage from "./pages/LoginPage"
 import TestGroupPage from "./pages/TestGroupsPage"
 import WebsocketRoutes from "./utils/WebsocketRoutes"
 import TestPage from "./pages/TestPage";
+import TestTable from "./components/TestsTable"
 import TestGroupsTable from "./components/TestGroupsTable";
 import TestGroupAddForm from "./components/TestGroupAddForm";
+import TestStartForm from "./components/TestStartForm";
+import DistanceMeasurements from "./components/BleDevices/DistanceMeasurements";
 
 function App() {
     return (
@@ -30,7 +33,11 @@ function App() {
                             <Route element={<LoginPage />} path="/login" />
                             <Route element={<PrivateRoutes />}>
                                 <Route element={<WebsocketRoutes />}>
-                                    <Route element={<TestPage />} path="/tests" />
+                                    <Route element={<TestPage />} path="/tests">
+                                        <Route element={<TestTable />} path="" />
+                                        <Route element={<TestStartForm />} path="new/:groupID" />
+                                        <Route element={<DistanceMeasurements />} path=":testID" />
+                                    </Route>
                                     <Route element={<BleDevicePage />} path="/devices/ble" />
                                 </Route>
                                 <Route element={<DashboardPage />} path="/dashboard" />
