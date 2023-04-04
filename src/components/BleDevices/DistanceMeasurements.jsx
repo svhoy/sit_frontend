@@ -1,39 +1,42 @@
 import React, { useState, useEffect, useRef, useContext } from "react"
-import { CartesianGrid, Legend, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from "recharts"
+import {
+    CartesianGrid,
+    Legend,
+    Scatter,
+    ScatterChart,
+    Tooltip,
+    XAxis,
+    YAxis,
+    ZAxis
+} from "recharts"
+import PropTypes from "prop-types"
 import WebSocketContex from "../../context/WebSoketContex"
 
-export default function DistanceMeasurements() {
+export default function DistanceMeasurements({
+    testID,
+    testDistance,
+    minMeasurements,
+    maxMeasurements
+}) {
     const [distanceMeasurementLog, setDistanceMeasurementLog] = useState([])
     const [distanceData, setDistanceData] = useState([])
     const [distancePoints, setdistancePoints] = useState(0)
     const [measurementIsRunning, setMeasurementIsRunning] = useState(false)
+    const [canStop, setCanStop] = useState(null)
     const distanceTextarea = useRef()
 
     const { isReady, isUWBReady, message, send } = useContext(WebSocketContex)
-
-    useEffect(() => {
-        if (isReady) {
-            if (message.type === "distance_msg" && message.state === "scanning") {
-                setdistancePoints(distancePoints + 1)
-                setDistanceMeasurementLog((distanceMeasurementLog) => {
-                    return [`${distanceMeasurementLog + message.distance}m \n`]
-                })
-                setDistanceData([...distanceData, { x: distancePoints, y: message.distance }])
-                const area = distanceTextarea.current
-                area.scrollTop = area.scrollHeight
-            }
-        }
-    }, [isReady, message, distancePoints, distanceData])
-
-    useEffect(() => {}, [isUWBReady])
 
     const startMeasurements = () => {
         try {
             send(
                 JSON.stringify({
                     type: "distance_msg",
-                    state: "start",
-                    distance: -1
+                    data: {
+                        state: "start",
+                        distance: null,
+                        test_id: testID
+                    }
                 })
             )
             setMeasurementIsRunning(true)
@@ -47,8 +50,11 @@ export default function DistanceMeasurements() {
             send(
                 JSON.stringify({
                     type: "distance_msg",
-                    state: "stop",
-                    distance: -1
+                    data: {
+                        state: "stop",
+                        distance: null,
+                        test_id: testID
+                    }
                 })
             )
             setMeasurementIsRunning(false)
@@ -57,6 +63,33 @@ export default function DistanceMeasurements() {
         }
     }
 
+    useEffect(() => {
+        if (isReady) {
+            if (message.type === "distance_msg" && message.data.state === "scanning") {
+                setdistancePoints(distancePoints + 1)
+                let errorDistance = message.data.distance - testDistance
+                setDistanceMeasurementLog((distanceMeasurementLog) => {
+                    return [
+                        `${distanceMeasurementLog + message.data.distance}m  ${errorDistance}m  \n`
+                    ]
+                })
+                setDistanceData([
+                    ...distanceData,
+                    { x: message.data.distance, y: errorDistance, dataPoints: distancePoints }
+                ])
+                const area = distanceTextarea.current
+                area.scrollTop = area.scrollHeight
+                if (minMeasurements >= distancePoints || minMeasurements === null) {
+                    setCanStop(true)
+                }
+                if (maxMeasurements !== null && maxMeasurements <= distancePoints) {
+                    stopMeasurements()
+                }
+            }
+        }
+    }, [isReady, message])
+
+    useEffect(() => {}, [isUWBReady])
     return (
         <div className="md:grid md:grid-cols-3 md:gap-6">
             <div className="md:col-span-1">
@@ -94,7 +127,7 @@ export default function DistanceMeasurements() {
                                 Start Measurements
                             </button>
                         )}
-                        {measurementIsRunning ? (
+                        {measurementIsRunning && canStop ? (
                             <button
                                 type="button"
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
@@ -143,20 +176,36 @@ export default function DistanceMeasurements() {
                                     <XAxis
                                         dataKey="x"
                                         type="number"
-                                        name="dataPoints"
+                                        name="distance"
+                                        unit="m"
                                     />
                                     <YAxis
                                         dataKey="y"
                                         type="number"
-                                        name="distance"
+                                        name="error"
                                         unit="m"
+                                    />
+                                    <ZAxis
+                                        dataKey="dataPoints"
+                                        type="number"
+                                        name="Data Point"
                                     />
                                     <Tooltip cursor={{ strokeDasharray: "3 3" }} />
                                     <Legend />
                                     <Scatter
-                                        name="A school"
+                                        name="Messung"
                                         data={distanceData}
+                                        fill="#FF3030"
+                                    />
+                                    <Scatter
+                                        name="Device A"
+                                        data={[{ x: 0, y: 0 }]}
                                         fill="#8884d8"
+                                    />
+                                    <Scatter
+                                        name="Device B"
+                                        data={[{ x: testDistance, y: 0 }]}
+                                        fill="#191970"
                                     />
                                 </ScatterChart>
                             </div>
@@ -166,4 +215,18 @@ export default function DistanceMeasurements() {
             </div>
         </div>
     )
+}
+
+DistanceMeasurements.propTypes = {
+    testID: PropTypes.number,
+    testDistance: PropTypes.number,
+    minMeasurements: PropTypes.number,
+    maxMeasurements: PropTypes.number
+}
+
+DistanceMeasurements.defaultProps = {
+    testID: null,
+    testDistance: null,
+    minMeasurements: null,
+    maxMeasurements: null
 }

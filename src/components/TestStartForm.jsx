@@ -11,9 +11,11 @@ export default function TestStartForm() {
     const { user } = useContext(AuthContext)
     const { isUWBReady } = useContext(WebSocketContex)
     const [startTest, setStartTest] = useState(false)
+    const [testID, setTestID] = useState(null)
     const [addTestForm, setAddTestForm] = useState({
         owner: 0,
         testGroupId: 0,
+        realTestDistacnce: 0,
         testComment: ""
     })
     const [testGroup, setTestGroup] = useState([])
@@ -52,10 +54,11 @@ export default function TestStartForm() {
     }
 
     let sendTestAdd = async (addForm) => {
-        let { response } = await api("/api/tests/", "POST", JSON.stringify(addForm))
+        let { response, data } = await api("/api/tests/", "POST", JSON.stringify(addForm))
         console.log(response)
         if (response.status === 201) {
             setStartTest(true)
+            setTestID(data.id)
         }
     }
 
@@ -67,6 +70,7 @@ export default function TestStartForm() {
             let addForm = {
                 owner: user.user_id,
                 test_group: addTestForm.testGroupId,
+                real_test_distance: addTestForm.realTestDistacnce,
                 test_comment: addTestForm.testComment
             }
             sendTestAdd(addForm)
@@ -240,6 +244,25 @@ export default function TestStartForm() {
                             <div className="col-span-6 border-b border-gray-900/10 pb-1" />
                             <div className="sm:col-span-6">
                                 <label
+                                    htmlFor="realTestDistance"
+                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                >
+                                    Real test distance
+                                    <div className="mt-1">
+                                        <input
+                                            className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            type="number"
+                                            id="realTestDistance"
+                                            label="Test reale distance"
+                                            min="0"
+                                            step="0.001"
+                                            onChange={handleEditFormChange}
+                                        />
+                                    </div>
+                                </label>
+                            </div>
+                            <div className="sm:col-span-6">
+                                <label
                                     htmlFor="testComment"
                                     className="block text-sm font-medium leading-6 text-gray-900"
                                 >
@@ -260,7 +283,16 @@ export default function TestStartForm() {
                     </div>
                 </form>
             </div>
-            {startTest === true ? <DistanceMeasurements /> : <div />}
+            {startTest === true ? (
+                <DistanceMeasurements
+                    testID={testID}
+                    testDistance={testGroup.test_distance}
+                    minMeasurements={testGroup.test_min_measurements}
+                    maxMeasurements={testGroup.test_max_measurements}
+                />
+            ) : (
+                <div />
+            )}
         </>
     )
 }
