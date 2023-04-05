@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react"
 import {
     CartesianGrid,
+    Label,
     Legend,
     Scatter,
     ScatterChart,
@@ -178,20 +179,36 @@ export default function DistanceMeasurements({
                                         type="number"
                                         name="distance"
                                         unit="m"
-                                    />
+                                    >
+                                        <Label
+                                            value="Distance [m]"
+                                            offset={0}
+                                            position="insideBottom"
+                                        />
+                                    </XAxis>
                                     <YAxis
                                         dataKey="y"
                                         type="number"
                                         name="error"
                                         unit="m"
-                                    />
+                                    >
+                                        <Label
+                                            value="Error [m]"
+                                            offset={0}
+                                            position="insideLeft"
+                                            angle={-90}
+                                        />
+                                    </YAxis>
                                     <ZAxis
                                         dataKey="dataPoints"
                                         type="number"
                                         name="Data Point"
                                     />
                                     <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-                                    <Legend />
+                                    <Legend
+                                        verticalAlign="top"
+                                        height={36}
+                                    />
                                     <Scatter
                                         name="Messung"
                                         data={distanceData}
