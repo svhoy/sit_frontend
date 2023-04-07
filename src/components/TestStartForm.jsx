@@ -6,12 +6,15 @@ import useFetch from "../utils/useFetch"
 import AuthContext from "../context/AuthContext"
 import DistanceMeasurements from "./BleDevices/DistanceMeasurements"
 import WebSocketContex from "../context/WebSoketContex"
+import TestGroupDescription from "./Descriptions/TestGroupDescription"
+import TestGroupSelect from "./Selects/TestGroupSelect"
 
 export default function TestStartForm() {
     const { user } = useContext(AuthContext)
     const { isUWBReady } = useContext(WebSocketContex)
     const [startTest, setStartTest] = useState(false)
     const [testID, setTestID] = useState(null)
+    const [testGroupID, setTestGroupID] = useState(0)
     const [addTestForm, setAddTestForm] = useState({
         owner: 0,
         testGroupId: 0,
@@ -24,7 +27,7 @@ export default function TestStartForm() {
     let { groupID } = useParams()
 
     let getTestGroup = async () => {
-        let { response, data } = await api(`/api/tests/groups/${groupID}`)
+        let { response, data } = await api(`/api/tests/groups/${testGroupID}`)
 
         if (response.status === 200) {
             setTestGroup(data)
@@ -32,12 +35,16 @@ export default function TestStartForm() {
     }
 
     useEffect(() => {
-        if (groupID !== "0") {
+        if (testGroupID !== "0") {
             getTestGroup()
             const newFormData = { ...addTestForm }
-            newFormData.testGroupId = groupID
+            newFormData.testGroupId = testGroupID
             setAddTestForm(newFormData)
         }
+    }, [testGroupID])
+
+    useEffect(() => {
+        setTestGroupID(groupID)
     }, [groupID])
 
     let handleEditFormChange = (event) => {
@@ -78,6 +85,13 @@ export default function TestStartForm() {
             console.error("Kein Device Verbunden, bitte erst UWB Device verbinden")
         }
     }
+
+    let handleSelectChange = (event) => {
+        event.preventDefault()
+        groupID = event.target.value
+        setTestGroupID(groupID)
+    }
+
     return (
         <>
             <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -117,131 +131,23 @@ export default function TestStartForm() {
                                 </span>
                             </button>
                         </div>
-                        <div className="w-full mt-2 mb-4 px-3 grid grid-cols-1 gap-y-8 gap-x-6 sm:grid-cols-6">
+                        <div className="w-full mt-2 mb-4 px-3 grid grid-cols-1 gap-y-8 gap-x-6 sm:grid-cols-6 sm:px-6">
                             <div className="sm:col-span-6">
-                                <label
-                                    htmlFor="testGroup"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
-                                >
-                                    Test Group
-                                    <div className="mt-1">
-                                        <input
-                                            className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            type="text"
-                                            id="testGroup"
-                                            label="Test Name"
-                                            value={testGroup.test_name}
-                                            readOnly
-                                        />
-                                    </div>
-                                </label>
+                                <TestGroupSelect
+                                    handleSelectChange={handleSelectChange}
+                                    groupID={testGroupID}
+                                />
                             </div>
                             <div className="sm:col-span-6">
-                                <label
-                                    htmlFor="testType"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
-                                >
-                                    Test Type
-                                    <div className="mt-1">
-                                        <input
-                                            className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            id="testType"
-                                            label="Test Type"
-                                            value={testGroup.test_type}
-                                            readOnly
-                                        />
-                                    </div>
-                                </label>
+                                <TestGroupDescription testGroup={testGroup} />
                             </div>
-                            <div className="col-span-5">
-                                <label
-                                    htmlFor="testDistance"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
-                                >
-                                    Real Distance
-                                    <div className="mt-1">
-                                        <input
-                                            className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            type="number"
-                                            id="testDistance"
-                                            label="Test reale distance"
-                                            min="0"
-                                            step="0.001"
-                                            value={
-                                                testGroup.test_distance !== null
-                                                    ? testGroup.test_distance
-                                                    : ""
-                                            }
-                                            readOnly
-                                        />
-                                    </div>
-                                </label>
-                            </div>
-                            <div className="col-span-1">
-                                <label
-                                    htmlFor="testUnit"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
-                                >
-                                    Unit
-                                    <div className="mt-1">
-                                        <input
-                                            className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            type="text"
-                                            id="testUnit"
-                                            label="Test Einheit"
-                                            value={testGroup.test_unit}
-                                            readOnly
-                                        />
-                                    </div>
-                                </label>
-                            </div>
-                            <div className="sm:col-span-3">
-                                <label
-                                    htmlFor="testMinMeasurements"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
-                                >
-                                    Min. Measurements
-                                    <div className="mt-1">
-                                        <input
-                                            className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            type="number"
-                                            id="testMinMeasurements"
-                                            label="Test Measurements"
-                                            min="0"
-                                            value={
-                                                testGroup.test_min_measurements !== null
-                                                    ? testGroup.test_min_measurements
-                                                    : ""
-                                            }
-                                            readOnly
-                                        />
-                                    </div>
-                                </label>
-                            </div>
-                            <div className="sm:col-span-3">
-                                <label
-                                    htmlFor="testMaxMeasurements"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
-                                >
-                                    Max Measurements
-                                    <div className="mt-1">
-                                        <input
-                                            className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            type="number"
-                                            id="testMaxMeasurements"
-                                            label="Test Max Measurements"
-                                            min="0"
-                                            value={
-                                                testGroup.test_max_measurements !== null
-                                                    ? testGroup.test_max_measurements
-                                                    : ""
-                                            }
-                                            readOnly
-                                        />
-                                    </div>
-                                </label>
-                            </div>
+
                             <div className="col-span-6 border-b border-gray-900/10 pb-1" />
+                            <div className="sm:col-span-6">
+                                <div className="font-bold leading-tight text-gray-900 mt-1 text-m md:text-l lg:text-xl">
+                                    Test Description
+                                </div>
+                            </div>
                             <div className="sm:col-span-6">
                                 <label
                                     htmlFor="realTestDistance"

@@ -1,8 +1,8 @@
 /* eslint-disable operator-linebreak */
 import React, { useState, useEffect } from "react"
 import useFetch from "../utils/useFetch"
-import ReadOnlyRow from "./UwbSettings/ReadOnlyRow"
-import EditableRow from "./UwbSettings/EditableRow"
+import ReadOnlyRow from "./TableRows/ReadOnlyRow"
+import EditableRow from "./TableRows/EditableRow"
 
 export default function UwbSettingsTable() {
     const [uwbSettingsList, setUwbSettingsList] = useState([])
