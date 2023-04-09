@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom"
-import { WebSocketProvider } from "../context/WebSoketContex"
+import { WebSocketProvider } from "../context/WebSocketContex"
 
 const WebsocketRoutes = () => {
     return (
