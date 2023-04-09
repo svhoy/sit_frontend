@@ -9,19 +9,9 @@ export default function TestDataReview() {
     let params = useParams()
     let api = useFetch()
     const [distanceData, setDistanceData] = useState([])
-    const [testDistance, setTestDistance] = useState(null)
     const [testData, setTestData] = useState([])
     const [baseTestURL] = useState(`/api/tests/${params.testID}`)
     const [baseDistanceURL] = useState(`/api/measurement-list?test=${params.testID}&size=1000`)
-
-    let getTestsList = async (url = baseTestURL) => {
-        let { response, data } = await api(url)
-
-        if (response.status === 200) {
-            setTestDistance(data.real_test_distance)
-            setTestData(data)
-        }
-    }
 
     let getDistanceList = async (url = baseDistanceURL) => {
         let { response, data } = await api(url)
@@ -31,8 +21,8 @@ export default function TestDataReview() {
                 data.results.map((data) => {
                     distancePoints += 1
                     let errorDistance = 0
-                    if (testDistance !== null) {
-                        errorDistance = data.distance - testDistance
+                    if (testData.real_test_distance !== null) {
+                        errorDistance = data.distance - testData.real_test_distance
                     }
                     return { x: data.distance, y: errorDistance, dataPoints: distancePoints }
                 })
@@ -40,10 +30,23 @@ export default function TestDataReview() {
         }
     }
 
+    let getTestsList = async (url = baseTestURL) => {
+        let { response, data } = await api(url)
+
+        if (response.status === 200) {
+            setTestData(data)
+        }
+    }
+
     useEffect(() => {
         getTestsList()
-        getDistanceList()
     }, [])
+
+    // Wait here until test data is loaded and saved,
+    // otherwise the calc for the error distance could not be done
+    useEffect(() => {
+        getDistanceList()
+    }, [testData])
 
     return (
         <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -73,7 +76,7 @@ export default function TestDataReview() {
                     <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
                         <ScatterChartTest
                             distanceData={distanceData}
-                            testDistance={testDistance}
+                            testDistance={testData.real_test_distance}
                         />
                     </div>
                 </div>

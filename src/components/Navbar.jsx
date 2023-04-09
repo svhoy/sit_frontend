@@ -98,9 +98,6 @@ export default function NavBar() {
                                         </ul>
                                     </div>
                                 </li>
-                                <li className="text-gray-200 hover:text-gray-900">
-                                    <Link to="/distance">Distance List</Link>
-                                </li>
                                 <li className="dropdown">
                                     <Link to="/tests/">
                                         <button
@@ -127,6 +124,9 @@ export default function NavBar() {
                                         <ul className="py-2 text-sm">
                                             <li className="text-gray-200 hover:text-gray-900">
                                                 <Link to="/tests/groups">Groups</Link>
+                                            </li>
+                                            <li className="text-gray-200 hover:text-gray-900">
+                                                <Link to="/distance">Distance List</Link>
                                             </li>
                                         </ul>
                                     </div>

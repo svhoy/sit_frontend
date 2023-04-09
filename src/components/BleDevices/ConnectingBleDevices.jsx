@@ -1,6 +1,6 @@
 /* eslint-disable operator-linebreak */
 import React, { useState, useEffect, useContext } from "react"
-import WebSocketContex from "../../context/WebSoketContex"
+import WebSocketContex from "../../context/WebSocketContex"
 
 export default function ConnectingBleDevices() {
     const [isScanning, setScanning] = useState(false)

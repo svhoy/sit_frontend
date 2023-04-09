@@ -5,20 +5,20 @@ import { faPlay } from "@fortawesome/free-solid-svg-icons"
 import useFetch from "../utils/useFetch"
 import AuthContext from "../context/AuthContext"
 import DistanceMeasurements from "./BleDevices/DistanceMeasurements"
-import WebSocketContex from "../context/WebSoketContex"
+import WebSocketContex from "../context/WebSocketContex"
 import TestGroupDescription from "./Descriptions/TestGroupDescription"
 import TestGroupSelect from "./Selects/TestGroupSelect"
+import DeviceInformation from "./Informations/DeviceInformation"
 
 export default function TestStartForm() {
     const { user } = useContext(AuthContext)
-    const { isUWBReady } = useContext(WebSocketContex)
+    const { isReady, isGatewayReady, isUWBReady } = useContext(WebSocketContex)
     const [startTest, setStartTest] = useState(false)
     const [testID, setTestID] = useState(null)
     const [testGroupID, setTestGroupID] = useState(0)
     const [addTestForm, setAddTestForm] = useState({
         owner: 0,
-        testGroupId: 0,
-        realTestDistacnce: 0,
+        realTestDistance: 0,
         testComment: ""
     })
     const [testGroup, setTestGroup] = useState([])
@@ -37,9 +37,6 @@ export default function TestStartForm() {
     useEffect(() => {
         if (testGroupID !== "0") {
             getTestGroup()
-            const newFormData = { ...addTestForm }
-            newFormData.testGroupId = testGroupID
-            setAddTestForm(newFormData)
         }
     }, [testGroupID])
 
@@ -76,10 +73,11 @@ export default function TestStartForm() {
         if (isUWBReady === true) {
             let addForm = {
                 owner: user.user_id,
-                test_group: addTestForm.testGroupId,
-                real_test_distance: addTestForm.realTestDistacnce,
-                test_comment: addTestForm.testComment
+                test_group: testGroupID,
+                real_test_distance: addTestForm.realTestDistance,
+                comments: addTestForm.testComment
             }
+            console.log(addForm)
             sendTestAdd(addForm)
         } else {
             console.error("Kein Device Verbunden, bitte erst UWB Device verbinden")
@@ -100,7 +98,7 @@ export default function TestStartForm() {
                         <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
                             Start New Test
                         </h3>
-                        <div className="grid grid-cols-2 gap-0">
+                        <div className="grid grid-cols-2 gap-0  mt-2">
                             <button
                                 type="button"
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
@@ -111,8 +109,24 @@ export default function TestStartForm() {
                                 Back
                             </button>
                         </div>
-                        <div className="grid grid-cols-2 gap-0" />
-                        <div className="grid grid-cols-2 gap-0" />
+                        <div className="grid grid-cols-2 gap-0 mt-2">
+                            <DeviceInformation
+                                deviceName="Server"
+                                deviceStatus={isReady}
+                            />
+                        </div>
+                        <div className="grid grid-cols-2 gap-0  mt-2">
+                            <DeviceInformation
+                                deviceName="Gateway"
+                                deviceStatus={isGatewayReady}
+                            />
+                        </div>
+                        <div className="grid grid-cols-2 gap-0  mt-2">
+                            <DeviceInformation
+                                deviceName="DWM 3001"
+                                deviceStatus={isUWBReady}
+                            />
+                        </div>
                     </div>
                 </div>
                 <form

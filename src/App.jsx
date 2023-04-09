@@ -28,7 +28,7 @@ function App() {
                     <header className="">
                         <NavBar />
                     </header>
-                    <div className="container px-10">
+                    <div className="container">
                         <Routes>
                             <Route element={<HomePage />} path="/" exact />
                             <Route element={<LoginPage />} path="/login" />
@@ -38,7 +38,7 @@ function App() {
                                         <Route element={<TestTable />} path="" />
                                         <Route element={<TestStartForm />} path="new/:groupID" />
                                         <Route element={<DistanceMeasurements />} path=":testID" />
-                                        <Route element={<TestReviewPage />} path=":testID/review" />
+                                        <Route element={<TestReviewPage />} path="review/:testID" />
                                     </Route>
                                     <Route element={<BleDevicePage />} path="/devices/ble" />
                                 </Route>

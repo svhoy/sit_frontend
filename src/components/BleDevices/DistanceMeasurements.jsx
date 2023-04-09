@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react"
 
 import PropTypes from "prop-types"
-import WebSocketContex from "../../context/WebSoketContex"
+import WebSocketContex from "../../context/WebSocketContex"
 import ScatterChartTest from "../Charts/ScatterChartTest"
 
 export default function DistanceMeasurements({

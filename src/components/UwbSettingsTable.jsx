@@ -153,87 +153,96 @@ export default function UwbSettingsTable() {
     }
 
     return (
-        <div className="mt-5 md:col-span-2 md:mt-0 md:w-full">
-            <div className="shadow min-w-full sm:overflow-x-auto sm:rounded-md">
-                <div className="overflow-x-auto">
-                    <form onSubmit={handleEditFormSubmit}>
-                        <table className="table-auto max-w-full ">
-                            <thead className="bg-white border-b">
-                                <tr>
-                                    <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        Name
-                                    </th>
-                                    <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        Owner
-                                    </th>
-                                    <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        Channel Nummer
-                                    </th>
-                                    <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        Preamble Länge TX
-                                    </th>
-                                    <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        Preamble Chunk Size
-                                    </th>
-                                    <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        TX Preamble Code
-                                    </th>
-                                    <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        RX Preamble Code
-                                    </th>
-                                    <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        SFD Mode
-                                    </th>
-                                    <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        Data Rate
-                                    </th>
-                                    <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        PHY Header Mode
-                                    </th>
-                                    <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        Pulse Rep Frequenz
-                                    </th>
-                                    <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        SFD Timeout
-                                    </th>
-                                    <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        STS Mode
-                                    </th>
-                                    <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        STS Length
-                                    </th>
-                                    <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        PDoA Mode
-                                    </th>
-                                    <th
-                                        aria-label="Buttons"
-                                        className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
-                                    />
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {uwbSettingsList &&
-                                    uwbSettingsList.map((item) => {
-                                        return (
-                                            // eslint-disable-next-line no-unused-expressions
-                                            editUwbSettingsId === item.id ? (
-                                                <EditableRow
-                                                    editUwbSettingsForm={editUwbSettingsForm}
-                                                    handleEditFormChange={handleEditFormChange}
-                                                    handleCancelClick={handleCancelClick}
-                                                />
-                                            ) : (
-                                                <ReadOnlyRow
-                                                    item={item}
-                                                    handleEditClick={handleEditClick}
-                                                    handleDeleteClick={handleDeleteClick}
-                                                />
+        <div className="md:grid md:grid-cols-3 md:gap-1">
+            <div className="md:col-span-1">
+                <div className="px-4 sm:px-0">
+                    <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
+                        Overview
+                    </h3>
+                </div>
+            </div>
+            <div className="mt-5 md:col-span-2 md:mt-0 md:w-full">
+                <div className="shadow min-w-full sm:overflow-x-auto sm:rounded-md">
+                    <div className="overflow-x-auto">
+                        <form onSubmit={handleEditFormSubmit}>
+                            <table className="table-auto max-w-full ">
+                                <thead className="bg-white border-b">
+                                    <tr>
+                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                            Name
+                                        </th>
+                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                            Owner
+                                        </th>
+                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                            Channel Nummer
+                                        </th>
+                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                            Preamble Länge TX
+                                        </th>
+                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                            Preamble Chunk Size
+                                        </th>
+                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                            TX Preamble Code
+                                        </th>
+                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                            RX Preamble Code
+                                        </th>
+                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                            SFD Mode
+                                        </th>
+                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                            Data Rate
+                                        </th>
+                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                            PHY Header Mode
+                                        </th>
+                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                            Pulse Rep Frequenz
+                                        </th>
+                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                            SFD Timeout
+                                        </th>
+                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                            STS Mode
+                                        </th>
+                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                            STS Length
+                                        </th>
+                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                            PDoA Mode
+                                        </th>
+                                        <th
+                                            aria-label="Buttons"
+                                            className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                                        />
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {uwbSettingsList &&
+                                        uwbSettingsList.map((item) => {
+                                            return (
+                                                // eslint-disable-next-line no-unused-expressions
+                                                editUwbSettingsId === item.id ? (
+                                                    <EditableRow
+                                                        editUwbSettingsForm={editUwbSettingsForm}
+                                                        handleEditFormChange={handleEditFormChange}
+                                                        handleCancelClick={handleCancelClick}
+                                                    />
+                                                ) : (
+                                                    <ReadOnlyRow
+                                                        item={item}
+                                                        handleEditClick={handleEditClick}
+                                                        handleDeleteClick={handleDeleteClick}
+                                                    />
+                                                )
                                             )
-                                        )
-                                    })}
-                            </tbody>
-                        </table>
-                    </form>
+                                        })}
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
