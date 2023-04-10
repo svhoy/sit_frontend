@@ -1,7 +1,8 @@
 import React, { useEffect } from "react"
 import PropTypes from "prop-types"
+import LineDivider from "../Dividers/LineDivider"
 
-export default function Modal({ onClose, show, header, content }) {
+export default function InfoModal({ onClose, show, header, content }) {
     const closeOnEscapeKeyDown = (e) => {
         if ((e.charCode || e.keyCode) === 27) {
             onClose()
@@ -9,6 +10,7 @@ export default function Modal({ onClose, show, header, content }) {
     }
 
     useEffect(() => {
+        console.log(content)
         document.body.addEventListener("keydown", closeOnEscapeKeyDown)
         return function cleanup() {
             document.body.removeEventListener("keydown", closeOnEscapeKeyDown)
@@ -24,19 +26,23 @@ export default function Modal({ onClose, show, header, content }) {
             aria-hidden="true"
         >
             <div
-                className="modal-content w-5/6 bg-white sm:w-4/6 md:w-3/6"
+                className="modal-content w-5/6 p-4 bg-white shadow sm:w-4/6 md:w-3/6 sm:overflow-hidden sm:rounded-lg"
                 onClick={(e) => {
                     e.stopPropagation()
                 }}
                 aria-hidden="true"
             >
-                <div className="modal-header p-3">
-                    <h4 className="modal-title">{header}</h4>
+                <div className="modal-header mb-3">
+                    <h4 className="modal-title font-bold leading-tight text-gray-900 text-m md:text-l lg:text-xl">
+                        {header}
+                    </h4>
                 </div>
-                <div className="modal-body p-3">{content}</div>
-                <div className="modal-footer p-3">
+                <LineDivider />
+                <div className="modal-body whitespace-pre-line my-3">{content}</div>
+                <LineDivider />
+                <div className="modal-footer mt-3">
                     <button
-                        className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
                         type="button"
                         onClick={onClose}
                     >
@@ -48,7 +54,7 @@ export default function Modal({ onClose, show, header, content }) {
     )
 }
 
-Modal.propTypes = {
+InfoModal.propTypes = {
     show: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     header: PropTypes.string.isRequired,
