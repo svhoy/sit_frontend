@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashCan, faPlay, faCircleInfo } from "@fortawesome/free-solid-svg-icons"
 import { Link, useNavigate } from "react-router-dom"
 import useFetch from "../utils/useFetch"
-import Modal from "./Modals/ComponentModal"
+import InfoModal from "./Modals/InfoModal"
 
 export default function TestTable() {
     const [testsList, setTestsList] = useState([])
@@ -167,7 +167,7 @@ export default function TestTable() {
                                                             {item.user}
                                                         </Link>
                                                     </td>
-                                                    <td className="text-sm text-gray-900 font-light px-1 py-4 whitespace-nowrap">
+                                                    <td className=" text-sm text-right text-gray-900 font-light pr-6 py-4 whitespace-nowrap">
                                                         {item.comments && (
                                                             <button
                                                                 type="button"
@@ -247,7 +247,7 @@ export default function TestTable() {
                     </div>
                 </div>
             </div>
-            <Modal
+            <InfoModal
                 onClose={() => {
                     return setShowModal(false)
                 }}
