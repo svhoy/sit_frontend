@@ -41,7 +41,7 @@ export const WebSocketProvider = ({ children }) => {
 
         socket.onmessage = (event) => {
             let data = JSON.parse(event.data)
-
+            setMessage(data)
             if (data.type === "connection_ping") {
                 socket.send(
                     JSON.stringify({
@@ -72,8 +72,6 @@ export const WebSocketProvider = ({ children }) => {
                 }
             } else if (data.type === "scanning_state" && data.scan.connection === "disconnect") {
                 setIsUWBReady(false)
-            } else {
-                setMessage(data)
             }
         }
 

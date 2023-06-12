@@ -10,7 +10,6 @@ export default function InfoModal({ onClose, show, header, content }) {
     }
 
     useEffect(() => {
-        console.log(content)
         document.body.addEventListener("keydown", closeOnEscapeKeyDown)
         return function cleanup() {
             document.body.removeEventListener("keydown", closeOnEscapeKeyDown)
@@ -26,7 +25,7 @@ export default function InfoModal({ onClose, show, header, content }) {
             aria-hidden="true"
         >
             <div
-                className="modal-content w-5/6 p-4 bg-white shadow sm:w-4/6 md:w-3/6 sm:overflow-hidden sm:rounded-lg"
+                className="modal-content w-5/6 p-4 bg-white shadow sm:w-4/6 md:w-3/6 sm:overflow-hidden sm:rounded-xl"
                 onClick={(e) => {
                     e.stopPropagation()
                 }}

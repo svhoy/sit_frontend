@@ -81,6 +81,12 @@ export default function DistanceMeasurements({
         }
     }, [isReady, message])
 
+    useEffect(() => {
+        if (minMeasurements === null) {
+            setCanStop(true)
+        }
+    }, [measurementIsRunning])
+
     useEffect(() => {}, [isUWBReady])
     return (
         <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -102,7 +108,7 @@ export default function DistanceMeasurements({
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
                     <div className="bg-gray-50 px-1 py-3 text-right sm:px-3">
-                        {isUWBReady ? (
+                        {isUWBReady && !measurementIsRunning ? (
                             <button
                                 type="button"
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"

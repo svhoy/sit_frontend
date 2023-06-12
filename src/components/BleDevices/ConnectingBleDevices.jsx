@@ -16,11 +16,6 @@ export default function ConnectingBleDevices() {
                 setConnectionLog((connectionLog) => {
                     return [`${connectionLog + message.scan.message}\n`]
                 })
-            } else if (message.type === "scanning_state" && message.scan.state === false) {
-                setScanning(false)
-                setConnectionLog((connectionLog) => {
-                    return [`${connectionLog + message.scan.message}\n`]
-                })
             } else if (
                 message.type === "scanning_state" &&
                 message.scan.connection === "disconnect"
@@ -29,9 +24,22 @@ export default function ConnectingBleDevices() {
                 setConnectionLog((connectionLog) => {
                     return [`${connectionLog + message.scan.message}\n`]
                 })
+            } else if (
+                message.type === "scanning_state" &&
+                message.scan.connection === "complete"
+            ) {
+                setScanning(false)
+                setConnectionLog((connectionLog) => {
+                    return [`${connectionLog + message.scan.message}\n`]
+                })
+            } else if (message.type === "scanning_state" && message.scan.state === false) {
+                setScanning(false)
+                setConnectionLog((connectionLog) => {
+                    return [`${connectionLog + message.scan.message}\n`]
+                })
             }
         }
-    }, [isReady, message])
+    }, [isReady, message, isUWBReady])
 
     useEffect(() => {
         if (!isReady || !isGatewayReady) {
