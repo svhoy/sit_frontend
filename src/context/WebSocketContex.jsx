@@ -8,7 +8,7 @@ export default WebSocketContex
 
 // eslint-disable-next-line react/prop-types
 export const WebSocketProvider = ({ children }) => {
-    const [isReady, setIsReady] = useState(false)
+    const [isServerReady, setIsServerReady] = useState(false)
     const [isUWBReady, setIsUWBReady] = useState(false)
     const [isGatewayReady, setIsGatewayReady] = useState(false)
     const [message, setMessage] = useState({})
@@ -19,7 +19,7 @@ export const WebSocketProvider = ({ children }) => {
     useEffect(() => {
         let socket = new WebSocket("ws://127.0.0.1:8000/ws/ble-devices/")
         socket.onopen = () => {
-            setIsReady(true)
+            setIsServerReady(true)
             socket.send(
                 JSON.stringify({
                     type: "connection_register",
@@ -28,14 +28,14 @@ export const WebSocketProvider = ({ children }) => {
             )
         }
         socket.onclose = () => {
-            setIsReady(false)
+            setIsServerReady(false)
             setTimeout(() => {
                 socket = new WebSocket("ws://127.0.0.1:8000/ws/ble-devices/")
             }, 1000)
         }
         socket.onerror = (err) => {
             console.error("Socket encountered error: ", err.message, "Closing socket")
-            setIsReady(false)
+            setIsServerReady(false)
             socket.close()
         }
 
@@ -57,7 +57,7 @@ export const WebSocketProvider = ({ children }) => {
                     setIsUWBReady(false)
                 }
                 if (data.connection_list.includes(`Frontend_${user.username}`)) {
-                    setIsReady(true)
+                    setIsServerReady(true)
                 }
                 if (data.device_list.includes("DWM3001 Blue")) {
                     setIsUWBReady(true)
@@ -82,7 +82,7 @@ export const WebSocketProvider = ({ children }) => {
     }, [])
 
     let contexData = {
-        isReady,
+        isServerReady,
         isUWBReady,
         isGatewayReady,
         message,

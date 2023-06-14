@@ -17,7 +17,7 @@ export default function DistanceMeasurements({
     const [canStop, setCanStop] = useState(null)
     const distanceTextarea = useRef()
 
-    const { isReady, isUWBReady, message, send } = useContext(WebSocketContex)
+    const { isUWBReady, message, send } = useContext(WebSocketContex)
 
     const startMeasurements = () => {
         try {
@@ -26,11 +26,13 @@ export default function DistanceMeasurements({
                     type: "distance_msg",
                     data: {
                         state: "start",
-                        distance: null,
                         test_id: testID
                     }
                 })
             )
+            setDistanceData([])
+            setdistancePoints(0)
+            setDistanceMeasurementLog([])
             setMeasurementIsRunning(true)
         } catch (error) {
             console.error(error)
@@ -44,7 +46,6 @@ export default function DistanceMeasurements({
                     type: "distance_msg",
                     data: {
                         state: "stop",
-                        distance: null,
                         test_id: testID
                     }
                 })
@@ -56,30 +57,26 @@ export default function DistanceMeasurements({
     }
 
     useEffect(() => {
-        if (isReady) {
-            if (message.type === "distance_msg" && message.data.state === "scanning") {
-                setdistancePoints(distancePoints + 1)
-                let errorDistance = message.data.distance - testDistance
-                setDistanceMeasurementLog((distanceMeasurementLog) => {
-                    return [
-                        `${distanceMeasurementLog + message.data.distance}m  ${errorDistance}m  \n`
-                    ]
-                })
-                setDistanceData([
-                    ...distanceData,
-                    { x: message.data.distance, y: errorDistance, dataPoints: distancePoints }
-                ])
-                const area = distanceTextarea.current
-                area.scrollTop = area.scrollHeight
-                if (minMeasurements >= distancePoints || minMeasurements === null) {
-                    setCanStop(true)
-                }
-                if (maxMeasurements !== null && maxMeasurements <= distancePoints) {
-                    stopMeasurements()
-                }
+        if (message.type === "distance_msg" && message.data.state === "scanning") {
+            setdistancePoints(distancePoints + 1)
+            let errorDistance = message.data.distance - testDistance
+            setDistanceMeasurementLog((distanceMeasurementLog) => {
+                return [`${distanceMeasurementLog + message.data.distance}m  ${errorDistance}m  \n`]
+            })
+            setDistanceData([
+                ...distanceData,
+                { x: message.data.distance, y: errorDistance, dataPoints: distancePoints }
+            ])
+            const area = distanceTextarea.current
+            area.scrollTop = area.scrollHeight
+            if (minMeasurements >= distancePoints || minMeasurements === null) {
+                setCanStop(true)
+            }
+            if (maxMeasurements !== null && maxMeasurements <= distancePoints) {
+                stopMeasurements()
             }
         }
-    }, [isReady, message])
+    }, [message])
 
     useEffect(() => {
         if (minMeasurements === null) {

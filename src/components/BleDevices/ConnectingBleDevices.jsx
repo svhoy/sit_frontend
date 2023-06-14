@@ -6,10 +6,10 @@ export default function ConnectingBleDevices() {
     const [isScanning, setScanning] = useState(false)
     const [connectionLog, setConnectionLog] = useState([])
 
-    const { isReady, isGatewayReady, isUWBReady, message, send } = useContext(WebSocketContex)
+    const { isServerReady, isGatewayReady, isUWBReady, message, send } = useContext(WebSocketContex)
 
     useEffect(() => {
-        if (isReady) {
+        if (isServerReady) {
             if (message.type === "connection_established") {
                 setScanning(false)
             } else if (message.type === "scanning_state" && message.scan.state === true) {
@@ -39,13 +39,13 @@ export default function ConnectingBleDevices() {
                 })
             }
         }
-    }, [isReady, message, isUWBReady])
+    }, [isServerReady, message, isUWBReady])
 
     useEffect(() => {
-        if (!isReady || !isGatewayReady) {
+        if (!isServerReady || !isGatewayReady) {
             setConnectionLog([])
         }
-    }, [isReady, isGatewayReady])
+    }, [isServerReady, isGatewayReady])
 
     useEffect(() => {}, [isUWBReady])
 
@@ -94,7 +94,7 @@ export default function ConnectingBleDevices() {
                     </h3>
                     <div className="grid grid-cols-2 gap-0">
                         <div>Server Status:</div>
-                        {isReady ? (
+                        {isServerReady ? (
                             <div className="rounded-full w-5 h-5 bg-green-600" />
                         ) : (
                             <div className="rounded-full w-5 h-5 bg-red-600" />
@@ -121,7 +121,7 @@ export default function ConnectingBleDevices() {
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
                     <div className="bg-gray-50 px-1 py-3 text-right sm:px-3">
-                        {isReady && isGatewayReady && isUWBReady && !isScanning ? (
+                        {isServerReady && isGatewayReady && isUWBReady && !isScanning ? (
                             <button
                                 type="button"
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
@@ -138,7 +138,7 @@ export default function ConnectingBleDevices() {
                                 Disconnect
                             </button>
                         )}
-                        {isReady && isGatewayReady && !isUWBReady && !isScanning ? (
+                        {isServerReady && isGatewayReady && !isUWBReady && !isScanning ? (
                             <button
                                 type="button"
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
