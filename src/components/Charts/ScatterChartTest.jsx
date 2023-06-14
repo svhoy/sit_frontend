@@ -84,10 +84,21 @@ export default function ScatterChartTest({ distanceData, testDistance }) {
 ScatterChartTest.propTypes = {
     distanceData: PropTypes.arrayOf(
         PropTypes.shape({
-            x: PropTypes.number.isRequired,
-            y: PropTypes.number.isRequired,
-            z: PropTypes.number.isRequired
-        }).isRequired
-    ).isRequired,
-    testDistance: PropTypes.number.isRequired
+            x: PropTypes.number,
+            y: PropTypes.number,
+            z: PropTypes.number
+        })
+    ),
+    testDistance: PropTypes.number
+}
+
+ScatterChartTest.defaultProps = {
+    distanceData: PropTypes.arrayOf(
+        PropTypes.shape({
+            x: null,
+            y: null,
+            z: null
+        })
+    ),
+    testDistance: null
 }
