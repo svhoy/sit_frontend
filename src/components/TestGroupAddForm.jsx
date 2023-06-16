@@ -34,8 +34,8 @@ export default function TestGroupAddForm() {
 
     let sendTestAdd = async (addForm) => {
         let { response } = await api("/api/tests/groups", "POST", JSON.stringify(addForm))
-
-        if (response.status === 200) {
+        console.log("Test:", response.status)
+        if (response.status === 201) {
             navigate("/tests/groups", { replace: true })
         }
     }

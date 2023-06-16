@@ -9,22 +9,26 @@ export default function TestDataReview() {
     let params = useParams()
     let api = useFetch()
     const [distanceData, setDistanceData] = useState([])
-    const [testData, setTestData] = useState([])
+    const [scatterData, setScatterData] = useState([])
+    const [testData, setTestData] = useState({})
     const [baseTestURL] = useState(`/api/tests/${params.testID}`)
     const [baseDistanceURL] = useState(`/api/measurement-list?test=${params.testID}&size=1000`)
+    const [yaxisDomain, setYAxisDomain] = useState(null)
 
     let getDistanceList = async (url = baseDistanceURL) => {
         let { response, data } = await api(url)
         let distancePoints = 0
         if (response.status === 200) {
-            setDistanceData(
+            setDistanceData(data.results)
+            setScatterData(
                 data.results.map((data) => {
                     distancePoints += 1
-                    let errorDistance = 0
-                    if (testData.real_test_distance !== null) {
-                        errorDistance = data.distance - testData.real_test_distance
+                    if (data.error_distance == null) {
+                        setYAxisDomain([-1, 1])
+                        return { x: data.distance, y: 0, dataPoints: distancePoints }
                     }
-                    return { x: data.distance, y: errorDistance, dataPoints: distancePoints }
+                    setYAxisDomain(null)
+                    return { x: data.distance, y: data.error_distance, dataPoints: distancePoints }
                 })
             )
         }
@@ -40,13 +44,8 @@ export default function TestDataReview() {
 
     useEffect(() => {
         getTestsList()
-    }, [])
-
-    // Wait here until test data is loaded and saved,
-    // otherwise the calc for the error distance could not be done
-    useEffect(() => {
         getDistanceList()
-    }, [testData])
+    }, [])
 
     return (
         <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -75,8 +74,9 @@ export default function TestDataReview() {
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
                     <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
                         <ScatterChartTest
-                            distanceData={distanceData}
+                            distanceData={scatterData}
                             testDistance={testData.real_test_distance}
+                            yaxisDomain={yaxisDomain}
                         />
                     </div>
                 </div>
@@ -92,7 +92,7 @@ export default function TestDataReview() {
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
                     <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
                         <DistanceTable
-                            headers={["#", "Distance", "Error"]}
+                            headers={["#", "Distance", "Error", "RSSI", "FPI", "NLOS"]}
                             distanceData={distanceData}
                         />
                     </div>

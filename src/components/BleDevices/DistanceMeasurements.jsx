@@ -59,13 +59,20 @@ export default function DistanceMeasurements({
     useEffect(() => {
         if (message.type === "distance_msg" && message.data.state === "scanning") {
             setdistancePoints(distancePoints + 1)
-            let errorDistance = message.data.distance - testDistance
             setDistanceMeasurementLog((distanceMeasurementLog) => {
-                return [`${distanceMeasurementLog + message.data.distance}m  ${errorDistance}m  \n`]
+                return [
+                    // eslint-disable-next-line
+                    `${distanceMeasurementLog + message.data.distance}m  ${message.data.error_distance
+                    }m  \n`
+                ]
             })
             setDistanceData([
                 ...distanceData,
-                { x: message.data.distance, y: errorDistance, dataPoints: distancePoints }
+                {
+                    x: message.data.distance,
+                    y: message.data.error_distance,
+                    dataPoints: distancePoints
+                }
             ])
             const area = distanceTextarea.current
             area.scrollTop = area.scrollHeight

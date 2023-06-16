@@ -1,13 +1,20 @@
 /* eslint-disable operator-linebreak */
 import React, { useState, useEffect } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTrashCan, faPlay, faCircleInfo } from "@fortawesome/free-solid-svg-icons"
+import {
+    faTrashCan,
+    faPlay,
+    faCircleInfo,
+    faObjectUngroup
+} from "@fortawesome/free-solid-svg-icons"
 import { Link, useNavigate } from "react-router-dom"
 import useFetch from "../utils/useFetch"
 import InfoModal from "./Modals/InfoModal"
+import TestGroupDescription from "./Descriptions/TestGroupDescription"
 
 export default function TestTable() {
     const [testsList, setTestsList] = useState([])
+    const [testGroupInfo, setTestGroupInfo] = useState(null)
     const [baseURL] = useState("/api/tests/")
     const [nextURL, setNextURL] = useState(null)
     const [previousURL, setPreviousURL] = useState(null)
@@ -43,9 +50,30 @@ export default function TestTable() {
         }
     }
 
+    let getTestGroupInfo = async (groupID, url = baseURL) => {
+        let { response, data } = await api(`${url}groups/${groupID}`)
+        console.log(data)
+        if (response.status === 200) {
+            setTestGroupInfo(data)
+        }
+    }
+
     useEffect(() => {
         getTestsList()
     }, [])
+
+    useEffect(() => {
+        if (testGroupInfo !== null) {
+            setShowModal(true)
+            setModalTitle(`${testGroupInfo.test_name}`)
+            setModalContent(
+                <TestGroupDescription
+                    testGroup={testGroupInfo}
+                    showTestGroupName={false}
+                />
+            )
+        }
+    }, [testGroupInfo])
 
     let deleteDistance = async (id) => {
         let { response } = await api(`/api/tests/${id}/`, "DELETE")
@@ -79,6 +107,10 @@ export default function TestTable() {
 
     let handleDeleteClick = (settingId) => {
         deleteDistance(settingId)
+    }
+
+    let handleGroupDescriptonModal = (groupID) => {
+        getTestGroupInfo(groupID)
     }
 
     return (
@@ -186,7 +218,20 @@ export default function TestTable() {
                                                                 />
                                                             </button>
                                                         )}
-
+                                                        <button
+                                                            type="button"
+                                                            className="mx-2"
+                                                            onClick={() => {
+                                                                handleGroupDescriptonModal(
+                                                                    item.test_group
+                                                                )
+                                                            }}
+                                                            title="Test Group"
+                                                        >
+                                                            <FontAwesomeIcon
+                                                                icon={faObjectUngroup}
+                                                            />
+                                                        </button>
                                                         <button
                                                             type="button"
                                                             className="mx-2"

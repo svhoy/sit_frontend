@@ -12,7 +12,7 @@ import {
 } from "recharts"
 import PropTypes from "prop-types"
 
-export default function ScatterChartTest({ distanceData, testDistance }) {
+export default function ScatterChartTest({ distanceData, testDistance, yaxisDomain }) {
     useEffect(() => {}, [distanceData])
 
     return (
@@ -44,6 +44,7 @@ export default function ScatterChartTest({ distanceData, testDistance }) {
                 type="number"
                 name="error"
                 unit="m"
+                domain={yaxisDomain}
             >
                 <Label
                     value="Error [m]"
@@ -89,7 +90,8 @@ ScatterChartTest.propTypes = {
             z: PropTypes.number
         })
     ),
-    testDistance: PropTypes.number
+    testDistance: PropTypes.number,
+    yaxisDomain: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]))
 }
 
 ScatterChartTest.defaultProps = {
@@ -100,5 +102,6 @@ ScatterChartTest.defaultProps = {
             z: null
         })
     ),
-    testDistance: null
+    testDistance: null,
+    yaxisDomain: [0, "auto"]
 }

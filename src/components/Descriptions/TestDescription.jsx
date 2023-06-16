@@ -50,8 +50,8 @@ export default function TestDescription({ testData }) {
 
 TestDescription.propTypes = {
     testData: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        user: PropTypes.string.isRequired,
+        id: PropTypes.number,
+        user: PropTypes.string,
         created: PropTypes.string,
         real_test_distance: PropTypes.number,
         comments: PropTypes.string,

@@ -14,7 +14,10 @@ export default function DistanceTable({ headers, distanceData }) {
                             {headers &&
                                 headers.map((item) => {
                                     return (
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th
+                                            key={item}
+                                            className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                                        >
                                             {item}
                                         </th>
                                     )
@@ -30,13 +33,22 @@ export default function DistanceTable({ headers, distanceData }) {
                                         className="bg-white border-b odd:bg-gray-100"
                                     >
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            {item.dataPoints}
+                                            {item.sequence}
                                         </td>
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            {item.x}
+                                            {item.distance}
                                         </td>
                                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            {item.y}
+                                            {item.error_distance}
+                                        </td>
+                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                            {item.RecivedSignalStrengthIndex}
+                                        </td>
+                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                            {item.firstPathIndex}
+                                        </td>
+                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                            {item.nlos}
                                         </td>
                                     </tr>
                                 )
@@ -51,9 +63,13 @@ export default function DistanceTable({ headers, distanceData }) {
 DistanceTable.propTypes = {
     distanceData: PropTypes.arrayOf(
         PropTypes.shape({
-            x: PropTypes.number.isRequired,
-            y: PropTypes.number.isRequired,
-            z: PropTypes.number.isRequired
+            RecivedSignalStrengthIndex: PropTypes.number,
+            distance: PropTypes.number,
+            error_distance: PropTypes.number,
+            firstPathIndex: PropTypes.number,
+            id: PropTypes.number,
+            nlos: PropTypes.number,
+            sequence: PropTypes.number
         }).isRequired
     ).isRequired,
     headers: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired

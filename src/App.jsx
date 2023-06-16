@@ -17,6 +17,7 @@ import TestTable from "./components/TestsTable"
 import TestGroupsTable from "./components/TestGroupsTable";
 import TestGroupAddForm from "./components/TestGroupAddForm";
 import TestStartForm from "./components/TestStartForm";
+import TestRunning from "./components/TestRunning";
 import DistanceMeasurements from "./components/BleDevices/DistanceMeasurements";
 import TestReviewPage from "./pages/TestReviewPage";
 
@@ -37,6 +38,7 @@ function App() {
                                     <Route element={<TestPage />} path="/tests">
                                         <Route element={<TestTable />} path="" />
                                         <Route element={<TestStartForm />} path="new/:groupID" />
+                                        <Route element={<TestRunning />} path="running/:testID" />
                                         <Route element={<DistanceMeasurements />} path=":testID" />
                                         <Route element={<TestReviewPage />} path="review/:testID" />
                                     </Route>

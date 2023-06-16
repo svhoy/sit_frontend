@@ -4,9 +4,7 @@ import PropTypes from "prop-types"
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons"
 
 const ReadOnlyRow = ({ item, handleEditClick, handleDeleteClick }) => {
-    useEffect(() => {
-        console.log(item)
-    }, [item])
+    useEffect(() => {}, [item])
     return (
         <tr
             key={item.id}
