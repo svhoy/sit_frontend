@@ -18,7 +18,7 @@ export default function AddBleDeviceForm() {
         let { response } = await api("/api/device/", "POST", JSON.stringify(addForm))
         console.log("Test:", response.status)
         if (response.status === 201) {
-            navigate("/devices/ble", { replace: true })
+            navigate(-1, { replace: true })
         }
     }
 
