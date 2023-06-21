@@ -18,12 +18,12 @@ export default function AddBleDeviceForm() {
         let { response } = await api("/api/device/", "POST", JSON.stringify(addForm))
         console.log("Test:", response.status)
         if (response.status === 201) {
-            navigate(-1, { replace: true })
+            navigate("/devices/", { replace: true })
         }
     }
 
     let goBack = () => {
-        navigate(-1, { replace: true })
+        navigate(-1)
     }
 
     let handleEditFormChange = (event) => {
@@ -45,7 +45,7 @@ export default function AddBleDeviceForm() {
         let addForm = {
             device_name: addDeviceForm.deviceName,
             device_id: addDeviceForm.deviceId,
-            comment: addDeviceForm.deviceComment
+            comments: addDeviceForm.deviceComment
         }
         sendDeviceAdd(addForm)
     }
