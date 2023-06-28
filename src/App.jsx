@@ -20,6 +20,11 @@ import TestStartForm from "./components/TestStartForm";
 import TestRunning from "./components/TestRunning";
 import DistanceMeasurements from "./components/BleDevices/DistanceMeasurements";
 import TestReviewPage from "./pages/TestReviewPage";
+import BleDevices from "./components/BleDevices"
+import AddBleDeviceForm from "./components/Forms/AddBleDeviceForm"
+import DeviceOverview from "./components/DeviceOverview";
+
+
 
 function App() {
     return (
@@ -42,21 +47,25 @@ function App() {
                                         <Route element={<DistanceMeasurements />} path=":testID" />
                                         <Route element={<TestReviewPage />} path="review/:testID" />
                                     </Route>
-                                    <Route element={<BleDevicePage />} path="/devices/ble" />
+                                    <Route element={<BleDevicePage />} path="/devices" >
+                                        <Route element={<DeviceOverview />} path="" />
+                                        <Route element={<BleDevices />} path="ble" />
+                                        <Route element={<AddBleDeviceForm />} path="ble/add" />
+                                    </Route>
                                 </Route>
-                                <Route element={<DashboardPage />} path="/dashboard" />
-                                <Route element={<SettingsPage />} path="/devices/settings" />
-                                <Route element={<DistancePage />} path="/distance" />
-                                <Route element={<TestGroupPage />} path="/tests/groups">
-                                    <Route element={<TestGroupsTable />} path="" />
-                                    <Route element={<TestGroupAddForm />} path="add" />
-                                </Route>
+                            </Route>
+                            <Route element={<DashboardPage />} path="/dashboard" />
+                            <Route element={<SettingsPage />} path="/devices/settings" />
+                            <Route element={<DistancePage />} path="/distance" />
+                            <Route element={<TestGroupPage />} path="/tests/groups">
+                                <Route element={<TestGroupsTable />} path="" />
+                                <Route element={<TestGroupAddForm />} path="add" />
                             </Route>
                         </Routes>
                     </div>
                 </AuthProvider>
             </BrowserRouter>
-        </div>
+        </div >
     );
 }
 

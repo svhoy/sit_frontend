@@ -1,11 +1,14 @@
 /* eslint-disable operator-linebreak */
 import React, { useState, useEffect, useContext } from "react"
+import { Link } from "react-router-dom"
+import DeviceSelect from "../Selects/DeviceSelect"
+import DeviceInformation from "../Informations/DeviceInformation"
 import WebSocketContex from "../../context/WebSocketContex"
 
 export default function ConnectingBleDevices() {
     const [isScanning, setScanning] = useState(false)
     const [connectionLog, setConnectionLog] = useState([])
-
+    const [deviceName, setDeviceName] = useState("")
     const { isServerReady, isGatewayReady, isUWBReady, message, send } = useContext(WebSocketContex)
 
     useEffect(() => {
@@ -49,6 +52,10 @@ export default function ConnectingBleDevices() {
 
     useEffect(() => {}, [isUWBReady])
 
+    const handleSelectedValue = (selectedDeviceID) => {
+        setDeviceName(selectedDeviceID)
+    }
+
     const startConnecting = () => {
         setScanning(true)
         setConnectionLog([])
@@ -58,7 +65,7 @@ export default function ConnectingBleDevices() {
                     type: "scanning_state",
                     scan: {
                         state: true,
-                        device_name: "DWM3001 Blue"
+                        device_name: deviceName
                     }
                 })
             )
@@ -75,7 +82,7 @@ export default function ConnectingBleDevices() {
                     type: "scanning_state",
                     scan: {
                         state: false,
-                        device_name: "DWM3001 Blue",
+                        device_name: deviceName,
                         connection: "disconnect"
                     }
                 })
@@ -92,29 +99,38 @@ export default function ConnectingBleDevices() {
                     <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
                         Connect Device
                     </h3>
+
                     <div className="grid grid-cols-2 gap-0">
-                        <div>Server Status:</div>
-                        {isServerReady ? (
-                            <div className="rounded-full w-5 h-5 bg-green-600" />
-                        ) : (
-                            <div className="rounded-full w-5 h-5 bg-red-600" />
-                        )}
+                        <DeviceInformation
+                            deviceName="Server Status"
+                            deviceStatus={isServerReady}
+                        />
                     </div>
                     <div className="grid grid-cols-2 gap-0">
-                        <div>PI Status:</div>
-                        {isGatewayReady ? (
-                            <div className="rounded-full w-5 h-5 bg-green-600" />
-                        ) : (
-                            <div className="rounded-full w-5 h-5 bg-red-600" />
-                        )}
+                        <DeviceInformation
+                            deviceName="Gateway Status"
+                            deviceStatus={isGatewayReady}
+                        />
                     </div>
-                    <div className="grid grid-cols-2 gap-0">
-                        <div>DWM3001 Status:</div>
-                        {isUWBReady ? (
-                            <div className="rounded-full w-5 h-5 bg-green-600" />
-                        ) : (
-                            <div className="rounded-full w-5 h-5 bg-red-600" />
-                        )}
+                    {isUWBReady ? (
+                        <div className="grid grid-cols-2 gap-0">
+                            <DeviceInformation
+                                deviceName={deviceName}
+                                deviceStatus={isUWBReady}
+                            />
+                        </div>
+                    ) : (
+                        <div />
+                    )}
+                    <div className="grid grid-cols-2 gap-0 mt-3">
+                        <Link to="/devices/ble/add">
+                            <button
+                                type="button"
+                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
+                            >
+                                Add Device
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -156,7 +172,8 @@ export default function ConnectingBleDevices() {
                             </button>
                         )}
                     </div>
-                    <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                    <form className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                        <DeviceSelect handleSelectedValue={handleSelectedValue} />
                         <label
                             htmlFor="connectionLog"
                             className="block text-sm font-medium text-gray-700"
@@ -174,7 +191,7 @@ export default function ConnectingBleDevices() {
                                 />
                             </div>
                         </label>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
