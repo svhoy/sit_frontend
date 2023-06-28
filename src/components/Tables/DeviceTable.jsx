@@ -19,7 +19,6 @@ export default function DeviceTable() {
 
     let getDevices = async (url = baseURL) => {
         let { response, data } = await api(url)
-        console.log(data)
         if (response.status === 200) {
             if (data.next) {
                 let nextPage = data.next.match(rexPage)
