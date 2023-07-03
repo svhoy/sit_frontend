@@ -4,7 +4,7 @@ import PropTypes from "prop-types"
 export default function DeviceInformation({ deviceName, deviceStatus }) {
     return (
         <>
-            <div>{`${deviceName} Status:`}</div>
+            <div className="md:col-span-1">{`${deviceName} Status:`}</div>
             {deviceStatus ? (
                 <div className="rounded-full w-5 h-5 bg-green-600" />
             ) : (

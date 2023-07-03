@@ -1,3 +1,6 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable indent */
+/* eslint-disable react/jsx-indent */
 /* eslint-disable operator-linebreak */
 import React, { useState, useEffect, useContext } from "react"
 import { Link } from "react-router-dom"
@@ -9,7 +12,7 @@ export default function ConnectingBleDevices() {
     const [isScanning, setScanning] = useState(false)
     const [connectionLog, setConnectionLog] = useState([])
     const [deviceName, setDeviceName] = useState("")
-    const { isServerReady, isGatewayReady, isUWBReady, message, send } = useContext(WebSocketContex)
+    const { isServerReady, isGatewayReady, uwbList, message, send } = useContext(WebSocketContex)
 
     useEffect(() => {
         if (isServerReady) {
@@ -42,7 +45,7 @@ export default function ConnectingBleDevices() {
                 })
             }
         }
-    }, [isServerReady, message, isUWBReady])
+    }, [isServerReady, message, uwbList])
 
     useEffect(() => {
         if (!isServerReady || !isGatewayReady) {
@@ -50,7 +53,9 @@ export default function ConnectingBleDevices() {
         }
     }, [isServerReady, isGatewayReady])
 
-    useEffect(() => {}, [isUWBReady])
+    useEffect(() => {
+        console.log(uwbList)
+    }, [uwbList])
 
     const handleSelectedValue = (selectedDeviceID) => {
         setDeviceName(selectedDeviceID)
@@ -93,51 +98,53 @@ export default function ConnectingBleDevices() {
     }
 
     return (
-        <div className="md:grid md:grid-cols-3 md:gap-6">
-            <div className="md:col-span-1">
-                <div className="px-4 sm:px-0">
-                    <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
-                        Connect Device
-                    </h3>
+        <div className="md:grid md:grid-cols-3 md:gap-4">
+            <div className="md:col-span-1 px-4 sm:px-0">
+                <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
+                    Connect Device
+                </h3>
 
-                    <div className="grid grid-cols-2 gap-0">
-                        <DeviceInformation
-                            deviceName="Server Status"
-                            deviceStatus={isServerReady}
-                        />
-                    </div>
-                    <div className="grid grid-cols-2 gap-0">
-                        <DeviceInformation
-                            deviceName="Gateway Status"
-                            deviceStatus={isGatewayReady}
-                        />
-                    </div>
-                    {isUWBReady ? (
-                        <div className="grid grid-cols-2 gap-0">
-                            <DeviceInformation
-                                deviceName={deviceName}
-                                deviceStatus={isUWBReady}
-                            />
-                        </div>
-                    ) : (
-                        <div />
-                    )}
-                    <div className="grid grid-cols-2 gap-0 mt-3">
-                        <Link to="/devices/ble/add">
-                            <button
-                                type="button"
-                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                            >
-                                Add Device
-                            </button>
-                        </Link>
-                    </div>
+                <div className="grid grid-cols-2 gap-10">
+                    <DeviceInformation
+                        deviceName="Server Status"
+                        deviceStatus={isServerReady}
+                    />
+                </div>
+                <div className="grid grid-cols-2 gap-10">
+                    <DeviceInformation
+                        deviceName="Gateway Status"
+                        deviceStatus={isGatewayReady}
+                    />
+                </div>
+                {uwbList &&
+                    uwbList.map((item) => {
+                        return (
+                            <div key={item} className="grid grid-cols-2 gap-10">
+                                <DeviceInformation
+                                    deviceName={item}
+                                    deviceStatus
+                                />
+                            </div>
+                        )
+                    })}
+                <div className="grid grid-cols-2 gap-0 mt-3">
+                    <Link to="/devices/ble/add">
+                        <button
+                            type="button"
+                            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
+                        >
+                            Add Device
+                        </button>
+                    </Link>
                 </div>
             </div>
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
                     <div className="bg-gray-50 px-1 py-3 text-right sm:px-3">
-                        {isServerReady && isGatewayReady && isUWBReady && !isScanning ? (
+                        {isServerReady &&
+                            isGatewayReady &&
+                            !isScanning &&
+                            (Array.isArray(uwbList) ? uwbList.includes(deviceName) : false) ? (
                             <button
                                 type="button"
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
@@ -154,7 +161,10 @@ export default function ConnectingBleDevices() {
                                 Disconnect
                             </button>
                         )}
-                        {isServerReady && isGatewayReady && !isUWBReady && !isScanning ? (
+                        {isServerReady &&
+                            isGatewayReady &&
+                            !isScanning &&
+                            !(Array.isArray(uwbList) ? uwbList.includes(deviceName) : false) ? (
                             <button
                                 type="button"
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"

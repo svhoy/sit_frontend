@@ -9,7 +9,7 @@ export default WebSocketContex
 // eslint-disable-next-line react/prop-types
 export const WebSocketProvider = ({ children }) => {
     const [isServerReady, setIsServerReady] = useState(false)
-    const [isUWBReady, setIsUWBReady] = useState(false)
+    const [uwbList, setUwbList] = useState([])
     const [isGatewayReady, setIsGatewayReady] = useState(false)
     const [message, setMessage] = useState({})
     let { user } = useContext(AuthContext)
@@ -54,24 +54,29 @@ export const WebSocketProvider = ({ children }) => {
                     setIsGatewayReady(true)
                 } else {
                     setIsGatewayReady(false)
-                    setIsUWBReady(false)
+                    setUwbList([])
                 }
                 if (data.connection_list.includes(`Frontend_${user.username}`)) {
                     setIsServerReady(true)
                 }
-                if (data.device_list.includes("DWM3001 Blue")) {
-                    setIsUWBReady(true)
+                if (data.device_list && data.device_list.length > 0) {
+                    setUwbList(data.device_list)
                 } else {
-                    setIsUWBReady(false)
+                    setUwbList([])
                 }
             } else if (data.type === "scanning_state" && data.scan.connection === "complete") {
                 if (data.scan.device_name !== "") {
-                    setIsUWBReady(true)
-                } else {
-                    setIsUWBReady(false)
+                    setUwbList((uwbList) => {
+                        return [...uwbList, data.scan.device_name]
+                    })
                 }
             } else if (data.type === "scanning_state" && data.scan.connection === "disconnect") {
-                setIsUWBReady(false)
+                console.log(data.scan)
+                setUwbList((uwbList) => {
+                    return uwbList.filter((item) => {
+                        return item !== data.scan.device_name
+                    })
+                })
             }
         }
 
@@ -83,7 +88,7 @@ export const WebSocketProvider = ({ children }) => {
 
     let contexData = {
         isServerReady,
-        isUWBReady,
+        uwbList,
         isGatewayReady,
         message,
         send: ws.current?.send.bind(ws.current)
