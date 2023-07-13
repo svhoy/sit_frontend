@@ -58,7 +58,7 @@ export default function ConnectingBleDevices() {
     }, [uwbList])
 
     const handleSelectedValue = (selectedDeviceID) => {
-        setDeviceName(selectedDeviceID)
+        setDeviceName(selectedDeviceID[1])
     }
 
     const startConnecting = () => {
@@ -74,6 +74,7 @@ export default function ConnectingBleDevices() {
                     }
                 })
             )
+            console.log("Test")
         } catch (error) {
             console.error(error)
         }
@@ -183,7 +184,7 @@ export default function ConnectingBleDevices() {
                         )}
                     </div>
                     <form className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                        <DeviceSelect handleSelectedValue={handleSelectedValue} />
+                        <DeviceSelect handleSelectedValue={handleSelectedValue} lableName="Device" />
                         <label
                             htmlFor="connectionLog"
                             className="block text-sm font-medium text-gray-700"
