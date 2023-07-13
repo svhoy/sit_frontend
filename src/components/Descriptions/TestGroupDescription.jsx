@@ -68,7 +68,7 @@ TestGroupDescription.propTypes = {
     testGroup: PropTypes.shape({
         id: PropTypes.number,
         test_name: PropTypes.string,
-        test_type: PropTypes.string.isRequired,
+        test_type: PropTypes.string,
         test_distance: PropTypes.number,
         test_unit: PropTypes.string,
         test_min_measurements: PropTypes.number,

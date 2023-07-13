@@ -1,3 +1,6 @@
+/* eslint-disable indent */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable prettier/prettier */
 import React, { useState, useEffect, useContext } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -8,17 +11,20 @@ import WebSocketContex from "../context/WebSocketContex"
 import TestGroupDescription from "./Descriptions/TestGroupDescription"
 import TestGroupSelect from "./Selects/TestGroupSelect"
 import DeviceInformation from "./Informations/DeviceInformation"
+import DeviceSelect from "./Selects/DeviceSelect"
 
 export default function TestStartForm() {
     const { user } = useContext(AuthContext)
-    const { isServerReady, isGatewayReady, isUWBReady } = useContext(WebSocketContex)
+    const { isServerReady, isGatewayReady, uwbList } = useContext(WebSocketContex)
+    const [initiatorDevice, setInitinatorDevice] = useState("")
+    const [responderDevice, setResponderDevice] = useState("")
     const [testGroupID, setTestGroupID] = useState(0)
     const [addTestForm, setAddTestForm] = useState({
         owner: 0,
         realTestDistance: 0,
         testComment: ""
     })
-    const [testGroup, setTestGroup] = useState([])
+    const [testGroup, setTestGroup] = useState({})
     let api = useFetch()
     let navigate = useNavigate()
     let { groupID } = useParams()
@@ -32,13 +38,15 @@ export default function TestStartForm() {
     }
 
     useEffect(() => {
-        if (testGroupID !== "0") {
+        if (testGroupID !== 0) {
             getTestGroup()
         }
     }, [testGroupID])
 
     useEffect(() => {
-        setTestGroupID(groupID)
+        if (groupID instanceof String) {
+            setTestGroupID(Number(groupID))
+        }
     }, [groupID])
 
     let handleEditFormChange = (event) => {
@@ -64,23 +72,29 @@ export default function TestStartForm() {
 
     let handleAddFormSubmit = (event) => {
         event.preventDefault()
-        if (isUWBReady === true) {
+        if (initiatorDevice !== "" && responderDevice !== "") {
             let addForm = {
                 owner: user.user_id,
                 test_group: testGroupID,
                 real_test_distance: addTestForm.realTestDistance,
+                initiator_device: initiatorDevice,
+                responder_device: responderDevice,
                 comments: addTestForm.testComment
             }
-            console.log(addForm)
             sendTestAdd(addForm)
         } else {
             console.error("Kein Device Verbunden, bitte erst UWB Device verbinden")
         }
     }
 
-    let handleSelectChange = (event) => {
-        event.preventDefault()
-        groupID = event.target.value
+    const handleInitiatorValue = (selectedDeviceID) => {
+        setInitinatorDevice(selectedDeviceID)
+    }
+    const handleResponderValue = (selectedDeviceID) => {
+        setResponderDevice(selectedDeviceID)
+    }
+
+    let handleSelectValue = (groupID) => {
         setTestGroupID(groupID)
     }
 
@@ -115,10 +129,16 @@ export default function TestStartForm() {
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-0  mt-2">
-                        <DeviceInformation
-                            deviceName="DWM 3001"
-                            deviceStatus={isUWBReady}
-                        />
+                        {uwbList
+                            && uwbList.map((item) => {
+                                return (
+                                    <DeviceInformation
+                                        deviceName={item}
+                                        deviceStatus
+                                        key={item}
+                                    />
+                                )
+                            })}
                     </div>
                 </div>
             </div>
@@ -128,7 +148,10 @@ export default function TestStartForm() {
             >
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
                     <div className="bg-gray-50 px-1 py-3 text-right sm:px-3">
-                        {isServerReady && isGatewayReady && isUWBReady ? (
+                        {isServerReady
+                            && isGatewayReady
+                            && initiatorDevice !== ""
+                            && responderDevice !== "" ? (
                             <button
                                 type="submit"
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
@@ -154,7 +177,7 @@ export default function TestStartForm() {
                     <div className="w-full mt-2 mb-4 px-3 grid grid-cols-1 gap-y-8 gap-x-6 sm:grid-cols-6 sm:px-6">
                         <div className="sm:col-span-6">
                             <TestGroupSelect
-                                handleSelectChange={handleSelectChange}
+                                handleSelectValue={handleSelectValue}
                                 groupID={testGroupID}
                             />
                         </div>
@@ -170,6 +193,22 @@ export default function TestStartForm() {
                             <div className="font-bold leading-tight text-gray-900 mt-1 text-m md:text-l lg:text-xl">
                                 Test Description
                             </div>
+                        </div>
+                        <div className="sm:col-span-6">
+                            <DeviceSelect
+                                handleSelectedValue={handleInitiatorValue}
+                                lableName="Initiator"
+                                uwbList={uwbList}
+                                couldEmpty
+                            />
+                        </div>
+                        <div className="sm:col-span-6">
+                            <DeviceSelect
+                                handleSelectedValue={handleResponderValue}
+                                lableName="Responder"
+                                uwbList={uwbList}
+                                couldEmpty
+                            />
                         </div>
                         <div className="sm:col-span-6">
                             <label
