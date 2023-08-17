@@ -17,21 +17,23 @@ export const WebSocketProvider = ({ children }) => {
     const ws = useRef(null)
 
     useEffect(() => {
-        let socket = new WebSocket("ws://127.0.0.1:8000/ws/ble-devices/")
+        let socket = new WebSocket("ws://127.0.0.1:8000/ws/sit/1")
         socket.onopen = () => {
             setIsServerReady(true)
             socket.send(
                 JSON.stringify({
-                    type: "connection_register",
-                    device_id: `Frontend_${user.username}`
+                    type: "RegisterWsClient",
+                    data: {
+                        client_id: `Frontend_${user.username}`
+                    }
                 })
             )
         }
         socket.onclose = () => {
             setIsServerReady(false)
             setTimeout(() => {
-                socket = new WebSocket("ws://127.0.0.1:8000/ws/ble-devices/")
-            }, 1000)
+                socket = new WebSocket("ws://127.0.0.1:8000/ws/sit/1")
+            }, 5000)
         }
         socket.onerror = (err) => {
             console.error("Socket encountered error: ", err.message, "Closing socket")
@@ -41,22 +43,25 @@ export const WebSocketProvider = ({ children }) => {
 
         socket.onmessage = (event) => {
             let data = JSON.parse(event.data)
+            console.log(data)
             setMessage(data)
-            if (data.type === "connection_ping") {
+            if (data.type === "PingWsConnection") {
                 socket.send(
                     JSON.stringify({
-                        type: "connection_ping",
-                        device_id: `Frontend_${user.username}`
+                        type: "RegisterWsClient",
+                        data: {
+                            client_id: `Frontend_${user.username}`
+                        }
                     })
                 )
-            } else if (data.type === "connection_update") {
-                if (data.connection_list.includes("PI_Home")) {
+            } else if (data.type === "WsClientRegisterd") {
+                if (data.data.clients.includes("PI_Home")) {
                     setIsGatewayReady(true)
                 } else {
                     setIsGatewayReady(false)
                     setUwbList([])
                 }
-                if (data.connection_list.includes(`Frontend_${user.username}`)) {
+                if (data.data.clients.includes(`Frontend_${user.username}`)) {
                     setIsServerReady(true)
                 }
                 if (data.device_list && data.device_list.length > 0) {
@@ -64,12 +69,8 @@ export const WebSocketProvider = ({ children }) => {
                 } else {
                     setUwbList([])
                 }
-            } else if (data.type === "scanning_state" && data.scan.connection === "complete") {
-                if (data.scan.device_name !== "") {
-                    setUwbList((uwbList) => {
-                        return [...uwbList, data.scan.device_name]
-                    })
-                }
+            } else if (data.type === "BleDeviceRegistered" || data.type === "DeviceList") {
+                setUwbList(data.data.device_list)
             } else if (data.type === "scanning_state" && data.scan.connection === "disconnect") {
                 console.log(data.scan)
                 setUwbList((uwbList) => {

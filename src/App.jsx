@@ -23,6 +23,7 @@ import TestReviewPage from "./pages/TestReviewPage";
 import BleDevices from "./components/BleDevices"
 import AddBleDeviceForm from "./components/Forms/AddBleDeviceForm"
 import DeviceOverview from "./components/DeviceOverview";
+import Calibration from "./components/Calibration";
 
 
 
@@ -51,6 +52,7 @@ function App() {
                                         <Route element={<DeviceOverview />} path="" />
                                         <Route element={<BleDevices />} path="ble" />
                                         <Route element={<AddBleDeviceForm />} path="ble/add" />
+                                        <Route element={<Calibration />} path="calibration" />
                                     </Route>
                                 </Route>
                             </Route>

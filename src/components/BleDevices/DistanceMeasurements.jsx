@@ -32,9 +32,8 @@ export default function DistanceMeasurements({
             if (devicePreSelected) {
                 send(
                     JSON.stringify({
-                        type: "distance_msg",
+                        type: "StartDistanceTest",
                         data: {
-                            state: "start",
                             test_id: testID
                         }
                     })
@@ -42,14 +41,11 @@ export default function DistanceMeasurements({
             } else {
                 send(
                     JSON.stringify({
-                        type: "distance_msg",
+                        type: "StartDistanceMeasurement",
                         data: {
-                            state: "start",
-                            test_id: testID
-                        },
-                        setup: {
-                            initiator_device: initiatorDevice[1],
-                            responder_device: [responderDevice[1]]
+                            test_id: testID,
+                            initiator: initiatorDevice[1],
+                            responder: [responderDevice[1]]
                         }
                     })
                 )
@@ -67,12 +63,10 @@ export default function DistanceMeasurements({
         try {
             send(
                 JSON.stringify({
-                    type: "distance_msg",
+                    type: "StopDistanceMeasurement",
                     data: {
-                        state: "stop",
                         test_id: testID
-                    },
-                    setup: null
+                    }
                 })
             )
             setMeasurementIsRunning(false)
@@ -93,7 +87,7 @@ export default function DistanceMeasurements({
     }
 
     useEffect(() => {
-        if (message.type === "distance_msg" && message.data.state === "scanning") {
+        if (message.type === "SavedDistanceMeasurement") {
             setdistancePoints(distancePoints + 1)
             setDistanceMeasurementLog((distanceMeasurementLog) => {
                 return [

@@ -95,6 +95,9 @@ export default function NavBar() {
                                                 <Link to="/devices/ble">Connection</Link>
                                             </li>
                                             <li className="text-gray-200 hover:text-gray-900">
+                                                <Link to="/devices/calibration">Calibration</Link>
+                                            </li>
+                                            <li className="text-gray-200 hover:text-gray-900">
                                                 <Link to="/devices/settings">Settings</Link>
                                             </li>
                                         </ul>

@@ -21,10 +21,8 @@ export default function DeviceSelect({ handleSelectedValue, lableName, uwbList, 
                         return uwbList.includes(item.device_id)
                     })
                 )
-                handleSelectedValue([deviceList[0].id, deviceList[0].device_id])
             } else {
                 setDeviceList(data.results)
-                handleSelectedValue([data.results[0].id, data.results[0].device_id])
             }
         }
     }
@@ -37,6 +35,12 @@ export default function DeviceSelect({ handleSelectedValue, lableName, uwbList, 
         })
         handleSelectedValue([deviceList[index].id, deviceList[index].device_id])
     }
+
+    useEffect(() => {
+        if (deviceList > 0) {
+            handleSelectedValue([deviceList[0].id, deviceList[0].device_id])
+        }
+    }, [deviceList])
 
     useEffect(() => {
         getDeviceList()

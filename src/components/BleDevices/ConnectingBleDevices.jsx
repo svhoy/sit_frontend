@@ -16,32 +16,30 @@ export default function ConnectingBleDevices() {
 
     useEffect(() => {
         if (isServerReady) {
-            if (message.type === "connection_established") {
+            if (message.type === "ConnectionEstablished") {
                 setScanning(false)
-            } else if (message.type === "scanning_state" && message.scan.state === true) {
+            } else if (
+                message.type === "ConnectBleDevice") {
+                setScanning(true)
                 setConnectionLog((connectionLog) => {
-                    return [`${connectionLog + message.scan.message}\n`]
+                    return [`${connectionLog} Start Scanning: ${message.data.device_id}\n`]
                 })
             } else if (
-                message.type === "scanning_state" &&
-                message.scan.connection === "disconnect"
-            ) {
+                message.type === "BleDeviceRegistered") {
                 setScanning(false)
                 setConnectionLog((connectionLog) => {
-                    return [`${connectionLog + message.scan.message}\n`]
+                    return [`${connectionLog} Devices Connected: ${message.data.new_device}\n`]
                 })
             } else if (
-                message.type === "scanning_state" &&
-                message.scan.connection === "complete"
-            ) {
+                message.type === "BleDeviceConnectDisconneced") {
                 setScanning(false)
                 setConnectionLog((connectionLog) => {
-                    return [`${connectionLog + message.scan.message}\n`]
+                    return [`${connectionLog} Device Disconnected: ${message.data.device_id}\n`]
                 })
-            } else if (message.type === "scanning_state" && message.scan.state === false) {
+            } else if (message.type === "BleDeviceConnectError" || message.type === "BleDeviceConnectFailed") {
                 setScanning(false)
                 setConnectionLog((connectionLog) => {
-                    return [`${connectionLog + message.scan.message}\n`]
+                    return [`${connectionLog} Can not connect reason: ${message.data.reason}\n`]
                 })
             }
         }
@@ -53,10 +51,6 @@ export default function ConnectingBleDevices() {
         }
     }, [isServerReady, isGatewayReady])
 
-    useEffect(() => {
-        console.log(uwbList)
-    }, [uwbList])
-
     const handleSelectedValue = (selectedDeviceID) => {
         setDeviceName(selectedDeviceID[1])
     }
@@ -67,14 +61,12 @@ export default function ConnectingBleDevices() {
         try {
             send(
                 JSON.stringify({
-                    type: "scanning_state",
-                    scan: {
-                        state: true,
-                        device_name: deviceName
+                    type: "ConnectBleDevice",
+                    data: {
+                        device_id: deviceName
                     }
                 })
             )
-            console.log("Test")
         } catch (error) {
             console.error(error)
         }
@@ -85,11 +77,9 @@ export default function ConnectingBleDevices() {
         try {
             send(
                 JSON.stringify({
-                    type: "scanning_state",
-                    scan: {
-                        state: false,
-                        device_name: deviceName,
-                        connection: "disconnect"
+                    type: "DisconnectBleDevice",
+                    data: {
+                        device_id: deviceName
                     }
                 })
             )
