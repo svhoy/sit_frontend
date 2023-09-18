@@ -77,8 +77,8 @@ export default function TestStartForm() {
                 owner: user.user_id,
                 test_group: testGroupID,
                 real_test_distance: addTestForm.realTestDistance,
-                initiator_device: initiatorDevice,
-                responder_device: responderDevice,
+                initiator_device: initiatorDevice[0],
+                responder_device: responderDevice[0],
                 comments: addTestForm.testComment
             }
             sendTestAdd(addForm)
@@ -88,6 +88,7 @@ export default function TestStartForm() {
     }
 
     const handleInitiatorValue = (selectedDeviceID) => {
+        console.log(selectedDeviceID)
         setInitinatorDevice(selectedDeviceID)
     }
     const handleResponderValue = (selectedDeviceID) => {

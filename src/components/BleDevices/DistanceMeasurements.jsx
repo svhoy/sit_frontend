@@ -14,6 +14,8 @@ export default function DistanceMeasurements({
     testDistance,
     minMeasurements,
     maxMeasurements,
+    initiator,
+    responder,
     devicePreSelected
 }) {
     const [initiatorDevice, setInitinatorDevice] = useState([])
@@ -32,9 +34,13 @@ export default function DistanceMeasurements({
             if (devicePreSelected) {
                 send(
                     JSON.stringify({
-                        type: "StartDistanceTest",
+                        type: "StartTestMeasurement",
                         data: {
-                            test_id: testID
+                            test_id: testID,
+                            initiator,
+                            responder: [responder],
+                            min_measurement: minMeasurements,
+                            max_measurement: maxMeasurements
                         }
                     })
                 )
@@ -43,7 +49,6 @@ export default function DistanceMeasurements({
                     JSON.stringify({
                         type: "StartDistanceMeasurement",
                         data: {
-                            test_id: testID,
                             initiator: initiatorDevice[1],
                             responder: [responderDevice[1]]
                         }
@@ -65,7 +70,6 @@ export default function DistanceMeasurements({
                 JSON.stringify({
                     type: "StopDistanceMeasurement",
                     data: {
-                        test_id: testID
                     }
                 })
             )
@@ -87,12 +91,12 @@ export default function DistanceMeasurements({
     }
 
     useEffect(() => {
-        if (message.type === "SavedDistanceMeasurement") {
+        if (message.type === "MeasurementSaved") {
             setdistancePoints(distancePoints + 1)
             setDistanceMeasurementLog((distanceMeasurementLog) => {
                 return [
                     // eslint-disable-next-line
-                    `${distanceMeasurementLog + message.data.distance}m  ${message.data.error_distance
+                    `${distanceMeasurementLog + message.data.distance}m  ${message.data.e_distance
                     }m  \n`
                 ]
             })
@@ -100,7 +104,7 @@ export default function DistanceMeasurements({
                 ...distanceData,
                 {
                     x: message.data.distance,
-                    y: message.data.error_distance,
+                    y: message.data.e_distance,
                     dataPoints: distancePoints
                 }
             ])
@@ -237,13 +241,17 @@ DistanceMeasurements.propTypes = {
     testDistance: PropTypes.number,
     minMeasurements: PropTypes.number,
     maxMeasurements: PropTypes.number,
+    initiator: PropTypes.string,
+    responder: PropTypes.string,
     devicePreSelected: PropTypes.bool
 }
 
 DistanceMeasurements.defaultProps = {
     testID: null,
     testDistance: null,
-    minMeasurements: null,
-    maxMeasurements: null,
+    minMeasurements: 0,
+    maxMeasurements: 0,
+    initiator: null,
+    responder: null,
     devicePreSelected: false
 }

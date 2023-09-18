@@ -32,6 +32,7 @@ export default function TestStartForm() {
         if (response.status === 200) {
             setTestInfo(data)
             setTestGroupID(data.test_group)
+            console.log(data)
         }
     }
 
@@ -159,6 +160,8 @@ export default function TestStartForm() {
                     testDistance={testInfo.real_test_distance}
                     minMeasurements={testGroup.test_min_measurements}
                     maxMeasurements={testGroup.test_max_measurements}
+                    initiator={testInfo.initiator_device_id}
+                    responder={testInfo.responder_device_id}
                     devicePreSelected
                 />
             </div>
