@@ -64,20 +64,12 @@ export const WebSocketProvider = ({ children }) => {
                 if (data.data.clients.includes(`Frontend_${user.username}`)) {
                     setIsServerReady(true)
                 }
-                if (data.device_list && data.device_list.length > 0) {
-                    setUwbList(data.device_list)
-                } else {
-                    setUwbList([])
-                }
-            } else if (data.type === "BleDeviceRegistered" || data.type === "DeviceList") {
+            } else if (data.type === "BleDeviceRegistered") {
                 setUwbList(data.data.device_list)
-            } else if (data.type === "scanning_state" && data.scan.connection === "disconnect") {
-                console.log(data.scan)
-                setUwbList((uwbList) => {
-                    return uwbList.filter((item) => {
-                        return item !== data.scan.device_name
-                    })
-                })
+            } else if (data.type === "BleDeviceUnregistered") {
+                setUwbList(data.data.device_list)
+            } else if (data.type === "DeviceList") {
+                setUwbList(data.data.device_list)
             }
         }
 

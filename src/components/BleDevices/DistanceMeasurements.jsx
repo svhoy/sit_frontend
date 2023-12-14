@@ -24,7 +24,7 @@ export default function DistanceMeasurements({
     const [distanceData, setDistanceData] = useState([])
     const [distancePoints, setdistancePoints] = useState(0)
     const [measurementIsRunning, setMeasurementIsRunning] = useState(false)
-    const [canStop, setCanStop] = useState(null)
+    const [canStop, setCanStop] = useState(false)
     const distanceTextarea = useRef()
 
     const { uwbList, message, send } = useContext(WebSocketContex)
@@ -59,6 +59,9 @@ export default function DistanceMeasurements({
             setdistancePoints(0)
             setDistanceMeasurementLog([])
             setMeasurementIsRunning(true)
+            if (minMeasurements === 0) {
+                setCanStop(true)
+            }
         } catch (error) {
             console.error(error)
         }
@@ -110,10 +113,10 @@ export default function DistanceMeasurements({
             ])
             const area = distanceTextarea.current
             area.scrollTop = area.scrollHeight
-            if (minMeasurements >= distancePoints || minMeasurements === null) {
+            if (minMeasurements >= distancePoints || minMeasurements === 0) {
                 setCanStop(true)
             }
-            if (maxMeasurements !== null && maxMeasurements <= distancePoints) {
+            if (maxMeasurements !== 0 && maxMeasurements <= distancePoints) {
                 stopMeasurements()
             }
         }
@@ -131,7 +134,7 @@ export default function DistanceMeasurements({
             <div className="md:col-span-1">
                 <div className="px-4 sm:px-0">
                     <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
-                        Distance Measurments
+                        Distance Measurements
                     </h3>
                     {uwbList
                         && uwbList.map((item) => {

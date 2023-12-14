@@ -7,27 +7,30 @@ export default function TestGroupSelect({ handleSelectValue, groupID }) {
     let api = useFetch()
 
     const [testGroups, setTestGroups] = useState([])
-
+    const [id, setId] = useState(0)
     let getTestGroup = async () => {
         let { response, data } = await api("/api/tests/groups?size=10000")
 
         if (response.status === 200) {
             setTestGroups(data.results)
-            if (data.results.length > 0) {
-                handleSelectValue(data.results[0].id)
-            }
         }
     }
 
     let handleSelectChange = (event) => {
         event.preventDefault()
-        let selecedGroupID = event.target.value
-        handleSelectValue(selecedGroupID)
+        let selecedGroupID = parseInt(event.target.value, 10)
+        if (selecedGroupID !== 0) {
+            handleSelectValue(selecedGroupID)
+        }
     }
 
     useEffect(() => {
         getTestGroup()
-    }, [])
+        setId(groupID)
+        console.log(groupID)
+    }, [groupID])
+
+    useEffect(() => {}, [id])
 
     return (
         <label
@@ -41,7 +44,7 @@ export default function TestGroupSelect({ handleSelectValue, groupID }) {
                     id="testGroup"
                     label="Test Group"
                     onChange={handleSelectChange}
-                    value={groupID}
+                    value={id}
                     required
                 >
                     {testGroups &&
@@ -67,5 +70,5 @@ TestGroupSelect.propTypes = {
 }
 
 TestGroupSelect.defaultProps = {
-    groupID: null
+    groupID: 0
 }

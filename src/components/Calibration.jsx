@@ -8,13 +8,15 @@ import WebSocketContex from "../context/WebSocketContex"
 import LineDivider from "./Dividers/LineDivider"
 import DeviceCheckboxes from "./Checkboxes/DeviceCheckboxes"
 import StaticSelect from "./Selects/StaticSelect"
+import DistanceInput from "./Inputs/DistanceInput"
 
 export default function Calibration() {
     const [deviceList, setDeviceList] = useState([])
     const [calibrationIsRunning, setCalibrationIsRunning] = useState(false)
     const [informationLog, setInformationLog] = useState("")
     const [calibrationType, setCalibrationType] = useState("")
-    const [calibrationOptions] = useState(["Antenna Calibration"])
+    const [calibrationOptions] = useState(["Antenna Calibration (ASP014)"])
+    const [calibrationDistances, setCalibrationDistances] = useState([])
     const informationTextarea = useRef()
 
     const { uwbList, message, send } = useContext(WebSocketContex)
@@ -23,10 +25,10 @@ export default function Calibration() {
         try {
             send(
                 JSON.stringify({
-                    type: "calibration_msg",
+                    type: "CreateCalibration",
                     data: {
-                        type: calibrationType,
-                        state: "start"
+                        calibration_type: calibrationType,
+                        devices: deviceList
                     }
                 })
             )
@@ -55,22 +57,76 @@ export default function Calibration() {
             )
         }
     }
+
     const handleTypeSelectChange = (value) => {
         setCalibrationType(value)
     }
 
+    const handleInputValue = (event, item) => {
+        event.preventDefault()
+        let buf = calibrationDistances
+        let insert = false
+        if (buf.length >= 1) {
+            buf.forEach((distance, index) => {
+                if (item[0] === distance[0] && item[1] === distance[1]) {
+                    buf[index][2] = Number(event.target.value)
+                    insert = true
+                }
+            })
+        }
+        if (insert === false) {
+            buf.push([item[0], item[1], Number(event.target.value)])
+        }
+        console.log(buf)
+        setCalibrationDistances(buf)
+    }
+
     useEffect(() => {
-        if (message.type === "calibration_msg" && message.data.state === "running") {
-            setDeviceList([])
+        if (message.type === "CalibrationCreated") {
+            try {
+                send(
+                    JSON.stringify({
+                        type: "AddCalibrationDistances",
+                        data: {
+                            calibration_id: message.data.calibration_id,
+                            distance_list: calibrationDistances
+                        }
+                    })
+                )
+                setInformationLog(`Calibration Added: ${message.data.calibration_id} -> Send Calibration Distances \n`)
+            } catch (error) {
+                console.error(error)
+                setInformationLog(`Calibration Added: ${message.data.calibration_id} -> Fail Send Calibration Distances \n`)
+                setCalibrationIsRunning(false)
+            }
+        } else if (message.type === "StartCalibrationMeasurement") {
             setInformationLog((informationLog) => {
                 return [
                     // eslint-disable-next-line
-                    `${informationLog + message.data.distance}m  ${message.data.error_distance
-                    }m  \n`
+                    `${informationLog} Starting Calibration Measurement \n`
                 ]
             })
-            const area = informationTextarea.current
-            area.scrollTop = area.scrollHeight
+        } else if (message.type === "CalibrationMeasurementFinished") {
+            setInformationLog((informationLog) => {
+                return [
+                    // eslint-disable-next-line
+                    `${informationLog} Measurement Finished: ${message.data.result} \n Starting Calculation`
+                ]
+            })
+        } else if (message.type === "CalibrationCalcFinished") {
+            setInformationLog((informationLog) => {
+                return [
+                    // eslint-disable-next-line
+                    `${informationLog} Calcuation Finished: ${message.data.result} \n`
+                ]
+            })
+        } else if (message.type === "CalibrationResultsSaved") {
+            setInformationLog((informationLog) => {
+                return [
+                    // eslint-disable-next-line
+                    `${informationLog} Finished Calibration: ${message.data.calibration_id} \n`
+                ]
+            })
         }
     }, [message])
 
@@ -113,6 +169,7 @@ export default function Calibration() {
                             <button
                                 type="button"
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
+                                title="Select more devices or calibration is running"
                                 disabled
                             >
                                 Start Calibration
@@ -122,7 +179,15 @@ export default function Calibration() {
                     <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
                         <StaticSelect handleSelectedValue={handleTypeSelectChange} label="Calibration Type" options={calibrationOptions} />
                         <LineDivider />
-                        <DeviceCheckboxes handleSelectChange={handleSelectChange} />
+                        <DeviceCheckboxes
+                            handleSelectChange={handleSelectChange}
+                            uwbList={uwbList}
+                        />
+                        <LineDivider />
+                        <DistanceInput
+                            handleInputValue={handleInputValue}
+                            deviceList={deviceList}
+                        />
                         <LineDivider />
                         <label
                             htmlFor="distanceMeasurementLog"

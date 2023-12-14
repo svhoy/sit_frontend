@@ -37,7 +37,7 @@ export default function DeviceSelect({ handleSelectedValue, lableName, uwbList, 
     }
 
     useEffect(() => {
-        if (deviceList > 0) {
+        if (deviceList.length > 0) {
             handleSelectedValue([deviceList[0].id, deviceList[0].device_id])
         }
     }, [deviceList])

@@ -31,10 +31,10 @@ export default function ConnectingBleDevices() {
                     return [`${connectionLog} Devices Connected: ${message.data.new_device}\n`]
                 })
             } else if (
-                message.type === "BleDeviceConnectDisconneced") {
+                message.type === "BleDeviceUnregistered") {
                 setScanning(false)
                 setConnectionLog((connectionLog) => {
-                    return [`${connectionLog} Device Disconnected: ${message.data.device_id}\n`]
+                    return [`${connectionLog} Device Disconnected: ${message.data.device}\n`]
                 })
             } else if (message.type === "BleDeviceConnectError" || message.type === "BleDeviceConnectFailed") {
                 setScanning(false)
@@ -57,7 +57,6 @@ export default function ConnectingBleDevices() {
 
     const startConnecting = () => {
         setScanning(true)
-        setConnectionLog([])
         try {
             send(
                 JSON.stringify({

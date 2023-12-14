@@ -22,6 +22,7 @@ export default function TestStartForm() {
     const [addTestForm, setAddTestForm] = useState({
         owner: 0,
         realTestDistance: 0,
+        antennaDelay: 0,
         testComment: ""
     })
     const [testGroup, setTestGroup] = useState({})
@@ -44,10 +45,11 @@ export default function TestStartForm() {
     }, [testGroupID])
 
     useEffect(() => {
+        console.log(groupID)
         if (groupID instanceof String) {
-            setTestGroupID(Number(groupID))
+            setTestGroupID(parseInt(groupID, 10))
         }
-    }, [groupID])
+    }, [])
 
     let handleEditFormChange = (event) => {
         event.preventDefault()
@@ -223,6 +225,25 @@ export default function TestStartForm() {
                                         type="number"
                                         id="realTestDistance"
                                         label="Test reale distance"
+                                        min="0"
+                                        step="0.001"
+                                        onChange={handleEditFormChange}
+                                    />
+                                </div>
+                            </label>
+                        </div>
+                        <div className="sm:col-span-6">
+                            <label
+                                htmlFor="realTestDistance"
+                                className="block text-sm font-medium leading-6 text-gray-900"
+                            >
+                                Antenna Delay
+                                <div className="mt-1">
+                                    <input
+                                        className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        type="number"
+                                        id="antennaDelay"
+                                        label="AntennaDelay"
                                         min="0"
                                         step="0.001"
                                         onChange={handleEditFormChange}

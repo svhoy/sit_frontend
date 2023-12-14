@@ -18,8 +18,6 @@ export default function DeviceCheckboxes({ handleSelectChange, uwbList }) {
                         return uwbList.includes(item.device_id)
                     })
                 )
-            } else {
-                setDeviceList(data.results)
             }
         }
     }
@@ -37,8 +35,8 @@ export default function DeviceCheckboxes({ handleSelectChange, uwbList }) {
             <legend className="text-sm font-semibold leading-6 text-gray-900">
                 Calibration Devices
             </legend>
-
-            {deviceList &&
+            {deviceList.length > 0 ? (
+                deviceList &&
                 deviceList.map((item) => {
                     return (
                         <div
@@ -70,7 +68,12 @@ export default function DeviceCheckboxes({ handleSelectChange, uwbList }) {
                             </div>
                         </div>
                     )
-                })}
+                })
+            ) : (
+                <div className="col-span-2 text-sm font-medium leading-6 text-gray-900">
+                    Please connect devices
+                </div>
+            )}
         </fieldset>
     )
 }
