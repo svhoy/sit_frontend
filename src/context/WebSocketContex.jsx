@@ -9,7 +9,7 @@ export default WebSocketContex
 // eslint-disable-next-line react/prop-types
 export const WebSocketProvider = ({ children }) => {
     const [isServerReady, setIsServerReady] = useState(false)
-    const [isUWBReady, setIsUWBReady] = useState(false)
+    const [uwbList, setUwbList] = useState([])
     const [isGatewayReady, setIsGatewayReady] = useState(false)
     const [message, setMessage] = useState({})
     let { user } = useContext(AuthContext)
@@ -17,21 +17,23 @@ export const WebSocketProvider = ({ children }) => {
     const ws = useRef(null)
 
     useEffect(() => {
-        let socket = new WebSocket("ws://127.0.0.1:8000/ws/ble-devices/")
+        let socket = new WebSocket("ws://127.0.0.1:8000/ws/sit/1")
         socket.onopen = () => {
             setIsServerReady(true)
             socket.send(
                 JSON.stringify({
-                    type: "connection_register",
-                    device_id: `Frontend_${user.username}`
+                    type: "RegisterWsClient",
+                    data: {
+                        client_id: `Frontend_${user.username}`
+                    }
                 })
             )
         }
         socket.onclose = () => {
             setIsServerReady(false)
             setTimeout(() => {
-                socket = new WebSocket("ws://127.0.0.1:8000/ws/ble-devices/")
-            }, 1000)
+                socket = new WebSocket("ws://127.0.0.1:8000/ws/sit/1")
+            }, 5000)
         }
         socket.onerror = (err) => {
             console.error("Socket encountered error: ", err.message, "Closing socket")
@@ -41,37 +43,33 @@ export const WebSocketProvider = ({ children }) => {
 
         socket.onmessage = (event) => {
             let data = JSON.parse(event.data)
+            console.log(data)
             setMessage(data)
-            if (data.type === "connection_ping") {
+            if (data.type === "PingWsConnection") {
                 socket.send(
                     JSON.stringify({
-                        type: "connection_ping",
-                        device_id: `Frontend_${user.username}`
+                        type: "RegisterWsClient",
+                        data: {
+                            client_id: `Frontend_${user.username}`
+                        }
                     })
                 )
-            } else if (data.type === "connection_update") {
-                if (data.connection_list.includes("PI_Home")) {
+            } else if (data.type === "WsClientRegisterd") {
+                if (data.data.clients.includes("PI_Home")) {
                     setIsGatewayReady(true)
                 } else {
                     setIsGatewayReady(false)
-                    setIsUWBReady(false)
+                    setUwbList([])
                 }
-                if (data.connection_list.includes(`Frontend_${user.username}`)) {
+                if (data.data.clients.includes(`Frontend_${user.username}`)) {
                     setIsServerReady(true)
                 }
-                if (data.device_list.includes("DWM3001 Blue")) {
-                    setIsUWBReady(true)
-                } else {
-                    setIsUWBReady(false)
-                }
-            } else if (data.type === "scanning_state" && data.scan.connection === "complete") {
-                if (data.scan.device_name !== "") {
-                    setIsUWBReady(true)
-                } else {
-                    setIsUWBReady(false)
-                }
-            } else if (data.type === "scanning_state" && data.scan.connection === "disconnect") {
-                setIsUWBReady(false)
+            } else if (data.type === "BleDeviceRegistered") {
+                setUwbList(data.data.device_list)
+            } else if (data.type === "BleDeviceUnregistered") {
+                setUwbList(data.data.device_list)
+            } else if (data.type === "DeviceList") {
+                setUwbList(data.data.device_list)
             }
         }
 
@@ -83,7 +81,7 @@ export const WebSocketProvider = ({ children }) => {
 
     let contexData = {
         isServerReady,
-        isUWBReady,
+        uwbList,
         isGatewayReady,
         message,
         send: ws.current?.send.bind(ws.current)

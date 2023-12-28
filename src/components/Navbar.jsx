@@ -92,7 +92,10 @@ export default function NavBar() {
                                     <div className="dropdown-menu z-10 p-3 hidden bg-blue-500 rounded-lg shadow">
                                         <ul className="py-2 text-sm">
                                             <li className="text-gray-200 hover:text-gray-900">
-                                                <Link to="/devices/ble">BLE Devices</Link>
+                                                <Link to="/devices/ble">Connection</Link>
+                                            </li>
+                                            <li className="text-gray-200 hover:text-gray-900">
+                                                <Link to="/devices/calibration">Calibration</Link>
                                             </li>
                                             <li className="text-gray-200 hover:text-gray-900">
                                                 <Link to="/devices/settings">Settings</Link>

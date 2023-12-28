@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { useState, useEffect, useContext } from "react"
 import { useNavigate, useParams } from "react-router-dom"
@@ -8,7 +9,7 @@ import TestGroupDescription from "./Descriptions/TestGroupDescription"
 import DeviceInformation from "./Informations/DeviceInformation"
 
 export default function TestStartForm() {
-    const { isServerReady, isGatewayReady, isUWBReady } = useContext(WebSocketContex)
+    const { isServerReady, isGatewayReady, uwbList } = useContext(WebSocketContex)
     const [testIDstate, setTestID] = useState(0)
     const [testGroupID, setTestGroupID] = useState(0)
     const [testInfo, setTestInfo] = useState([])
@@ -31,6 +32,7 @@ export default function TestStartForm() {
         if (response.status === 200) {
             setTestInfo(data)
             setTestGroupID(data.test_group)
+            console.log(data)
         }
     }
 
@@ -82,10 +84,16 @@ export default function TestStartForm() {
                             />
                         </div>
                         <div className="grid grid-cols-2 gap-0  mt-2">
-                            <DeviceInformation
-                                deviceName="DWM 3001"
-                                deviceStatus={isUWBReady}
-                            />
+                            {uwbList &&
+                                uwbList.map((item) => {
+                                    return (
+                                        <DeviceInformation
+                                            deviceName={item}
+                                            deviceStatus
+                                            key={item}
+                                        />
+                                    )
+                                })}
                         </div>
                     </div>
                 </div>
@@ -152,6 +160,9 @@ export default function TestStartForm() {
                     testDistance={testInfo.real_test_distance}
                     minMeasurements={testGroup.test_min_measurements}
                     maxMeasurements={testGroup.test_max_measurements}
+                    initiator={testInfo.initiator_device_id}
+                    responder={testInfo.responder_device_id}
+                    devicePreSelected
                 />
             </div>
         </>

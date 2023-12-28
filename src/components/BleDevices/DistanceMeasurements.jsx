@@ -1,39 +1,67 @@
+/* eslint-disable react/jsx-indent */
+/* eslint-disable indent */
+/* eslint-disable prettier/prettier */
 import React, { useState, useEffect, useRef, useContext } from "react"
 
 import PropTypes from "prop-types"
 import WebSocketContex from "../../context/WebSocketContex"
+import DeviceInformation from "../Informations/DeviceInformation"
+import DeviceSelect from "../Selects/DeviceSelect"
 import ScatterChartTest from "../Charts/ScatterChartTest"
 
 export default function DistanceMeasurements({
     testID,
     testDistance,
     minMeasurements,
-    maxMeasurements
+    maxMeasurements,
+    initiator,
+    responder,
+    devicePreSelected
 }) {
+    const [initiatorDevice, setInitinatorDevice] = useState([])
+    const [responderDevice, setResponderDevice] = useState([])
     const [distanceMeasurementLog, setDistanceMeasurementLog] = useState([])
     const [distanceData, setDistanceData] = useState([])
     const [distancePoints, setdistancePoints] = useState(0)
     const [measurementIsRunning, setMeasurementIsRunning] = useState(false)
-    const [canStop, setCanStop] = useState(null)
+    const [canStop, setCanStop] = useState(false)
     const distanceTextarea = useRef()
 
-    const { isUWBReady, message, send } = useContext(WebSocketContex)
+    const { uwbList, message, send } = useContext(WebSocketContex)
 
     const startMeasurements = () => {
         try {
-            send(
-                JSON.stringify({
-                    type: "distance_msg",
-                    data: {
-                        state: "start",
-                        test_id: testID
-                    }
-                })
-            )
+            if (devicePreSelected) {
+                send(
+                    JSON.stringify({
+                        type: "StartTestMeasurement",
+                        data: {
+                            test_id: testID,
+                            initiator,
+                            responder: [responder],
+                            min_measurement: minMeasurements,
+                            max_measurement: maxMeasurements
+                        }
+                    })
+                )
+            } else {
+                send(
+                    JSON.stringify({
+                        type: "StartDistanceMeasurement",
+                        data: {
+                            initiator: initiatorDevice[1],
+                            responder: [responderDevice[1]]
+                        }
+                    })
+                )
+            }
             setDistanceData([])
             setdistancePoints(0)
             setDistanceMeasurementLog([])
             setMeasurementIsRunning(true)
+            if (minMeasurements === 0) {
+                setCanStop(true)
+            }
         } catch (error) {
             console.error(error)
         }
@@ -43,10 +71,8 @@ export default function DistanceMeasurements({
         try {
             send(
                 JSON.stringify({
-                    type: "distance_msg",
+                    type: "StopDistanceMeasurement",
                     data: {
-                        state: "stop",
-                        test_id: testID
                     }
                 })
             )
@@ -56,13 +82,24 @@ export default function DistanceMeasurements({
         }
     }
 
+    const handleInitiatorValue = (selectedDeviceID) => {
+        setInitinatorDevice(selectedDeviceID)
+    }
+    const handleResponderValue = (selectedDeviceID) => {
+        setResponderDevice(selectedDeviceID)
+    }
+
+    let checkUwbList = (deviceName) => {
+        return Array.isArray(uwbList) ? uwbList.includes(deviceName) : false
+    }
+
     useEffect(() => {
-        if (message.type === "distance_msg" && message.data.state === "scanning") {
+        if (message.type === "MeasurementSaved") {
             setdistancePoints(distancePoints + 1)
             setDistanceMeasurementLog((distanceMeasurementLog) => {
                 return [
                     // eslint-disable-next-line
-                    `${distanceMeasurementLog + message.data.distance}m  ${message.data.error_distance
+                    `${distanceMeasurementLog + message.data.distance}m  ${message.data.e_distance
                     }m  \n`
                 ]
             })
@@ -70,16 +107,16 @@ export default function DistanceMeasurements({
                 ...distanceData,
                 {
                     x: message.data.distance,
-                    y: message.data.error_distance,
+                    y: message.data.e_distance,
                     dataPoints: distancePoints
                 }
             ])
             const area = distanceTextarea.current
             area.scrollTop = area.scrollHeight
-            if (minMeasurements >= distancePoints || minMeasurements === null) {
+            if (minMeasurements >= distancePoints || minMeasurements === 0) {
                 setCanStop(true)
             }
-            if (maxMeasurements !== null && maxMeasurements <= distancePoints) {
+            if (maxMeasurements !== 0 && maxMeasurements <= distancePoints) {
                 stopMeasurements()
             }
         }
@@ -91,28 +128,37 @@ export default function DistanceMeasurements({
         }
     }, [measurementIsRunning])
 
-    useEffect(() => {}, [isUWBReady])
+    useEffect(() => {}, [uwbList])
     return (
         <div className="md:grid md:grid-cols-3 md:gap-6">
             <div className="md:col-span-1">
                 <div className="px-4 sm:px-0">
                     <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
-                        Distance Measurments
+                        Distance Measurements
                     </h3>
-                    <div className="grid grid-cols-2 gap-0">
-                        <div>DWM3001 Status:</div>
-                        {isUWBReady ? (
-                            <div className="rounded-full w-5 h-5 bg-green-600" />
-                        ) : (
-                            <div className="rounded-full w-5 h-5 bg-red-600" />
-                        )}
-                    </div>
+                    {uwbList
+                        && uwbList.map((item) => {
+                            return (
+                                <div
+                                    key={item}
+                                    className="grid grid-cols-2 gap-10"
+                                >
+                                    <DeviceInformation
+                                        deviceName={item}
+                                        deviceStatus
+                                    />
+                                </div>
+                            )
+                        })}
                 </div>
             </div>
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
                     <div className="bg-gray-50 px-1 py-3 text-right sm:px-3">
-                        {isUWBReady && !measurementIsRunning ? (
+                        {((checkUwbList(initiatorDevice[1])
+                            && (initiatorDevice[1] !== responderDevice[1]))
+                            || devicePreSelected)
+                            && !measurementIsRunning ? (
                             <button
                                 type="button"
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
@@ -148,6 +194,22 @@ export default function DistanceMeasurements({
                         )}
                     </div>
                     <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                        {!devicePreSelected ? (
+                            <>
+                                <DeviceSelect
+                                    handleSelectedValue={handleInitiatorValue}
+                                    lableName="Initiator"
+                                    uwbList={uwbList}
+                                    couldEmpty
+                                />
+                                <DeviceSelect
+                                    handleSelectedValue={handleResponderValue}
+                                    lableName="Responder"
+                                    uwbList={uwbList}
+                                    couldEmpty
+                                />
+                            </>
+                        ) : (<div />)}
                         <label
                             htmlFor="distanceMeasurementLog"
                             className="block text-sm font-medium text-gray-700"
@@ -181,12 +243,18 @@ DistanceMeasurements.propTypes = {
     testID: PropTypes.number,
     testDistance: PropTypes.number,
     minMeasurements: PropTypes.number,
-    maxMeasurements: PropTypes.number
+    maxMeasurements: PropTypes.number,
+    initiator: PropTypes.string,
+    responder: PropTypes.string,
+    devicePreSelected: PropTypes.bool
 }
 
 DistanceMeasurements.defaultProps = {
     testID: null,
     testDistance: null,
-    minMeasurements: null,
-    maxMeasurements: null
+    minMeasurements: 0,
+    maxMeasurements: 0,
+    initiator: null,
+    responder: null,
+    devicePreSelected: false
 }

@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react"
 import PropTypes from "prop-types"
 import useFetch from "../../utils/useFetch"
 
-export default function TestGroupSelect({ handleSelectChange, groupID }) {
+export default function TestGroupSelect({ handleSelectValue, groupID }) {
     let api = useFetch()
 
     const [testGroups, setTestGroups] = useState([])
-
+    const [id, setId] = useState(0)
     let getTestGroup = async () => {
         let { response, data } = await api("/api/tests/groups?size=10000")
 
@@ -16,9 +16,21 @@ export default function TestGroupSelect({ handleSelectChange, groupID }) {
         }
     }
 
+    let handleSelectChange = (event) => {
+        event.preventDefault()
+        let selecedGroupID = parseInt(event.target.value, 10)
+        if (selecedGroupID !== 0) {
+            handleSelectValue(selecedGroupID)
+        }
+    }
+
     useEffect(() => {
         getTestGroup()
-    }, [])
+        setId(groupID)
+        console.log(groupID)
+    }, [groupID])
+
+    useEffect(() => {}, [id])
 
     return (
         <label
@@ -32,12 +44,19 @@ export default function TestGroupSelect({ handleSelectChange, groupID }) {
                     id="testGroup"
                     label="Test Group"
                     onChange={handleSelectChange}
-                    value={groupID}
+                    value={id}
                     required
                 >
                     {testGroups &&
                         testGroups.map((item) => {
-                            return <option value={item.id}>{item.test_name}</option>
+                            return (
+                                <option
+                                    value={item.id}
+                                    key={item.id}
+                                >
+                                    {item.test_name}
+                                </option>
+                            )
                         })}
                 </select>
             </div>
@@ -46,10 +65,10 @@ export default function TestGroupSelect({ handleSelectChange, groupID }) {
 }
 
 TestGroupSelect.propTypes = {
-    handleSelectChange: PropTypes.func.isRequired,
+    handleSelectValue: PropTypes.func.isRequired,
     groupID: PropTypes.number
 }
 
 TestGroupSelect.defaultProps = {
-    groupID: null
+    groupID: 0
 }
