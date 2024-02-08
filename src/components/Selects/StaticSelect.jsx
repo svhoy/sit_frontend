@@ -27,12 +27,22 @@ export default function StaticSelect({ handleSelectedValue, label, options }) {
                 >
                     {options
                         && options.map((item) => {
+                            if (typeof item === "string") {
+                                return (
+                                    <option
+                                        key={item}
+                                        value={item}
+                                    >
+                                        {item}
+                                    </option>
+                                )
+                            }
                             return (
                                 <option
-                                    key={item}
-                                    value={item}
+                                    key={item[1]}
+                                    value={item[1]}
                                 >
-                                    {item}
+                                    {item[0]}
                                 </option>
                             )
                         })}
