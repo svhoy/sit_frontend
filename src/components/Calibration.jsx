@@ -15,7 +15,9 @@ export default function Calibration() {
     const [calibrationIsRunning, setCalibrationIsRunning] = useState(false)
     const [informationLog, setInformationLog] = useState("")
     const [calibrationType, setCalibrationType] = useState("")
+    const [measurementType, setMeasurementType] = useState("")
     const [calibrationOptions] = useState(["Antenna Calibration (ASP014)"])
+    const [measurementTypeOptions] = useState(["SS-TWR", "DS-TWR"])
     const [calibrationDistances, setCalibrationDistances] = useState([])
     const informationTextarea = useRef()
 
@@ -28,6 +30,7 @@ export default function Calibration() {
                     type: "CreateCalibration",
                     data: {
                         calibration_type: calibrationType,
+                        measurement_type: measurementType,
                         devices: deviceList
                     }
                 })
@@ -60,6 +63,10 @@ export default function Calibration() {
 
     const handleTypeSelectChange = (value) => {
         setCalibrationType(value)
+    }
+
+    const handleMeasurementTypeSelectChange = (value) => {
+        setMeasurementType(value)
     }
 
     const handleInputValue = (event, item) => {
@@ -177,7 +184,11 @@ export default function Calibration() {
                         )}
                     </div>
                     <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                        <legend className="text-sm font-semibold leading-6 text-gray-900">
+                            Calibration Options
+                        </legend>
                         <StaticSelect handleSelectedValue={handleTypeSelectChange} label="Calibration Type" options={calibrationOptions} />
+                        <StaticSelect handleSelectedValue={handleMeasurementTypeSelectChange} label="Measurement Type" options={measurementTypeOptions} />
                         <LineDivider />
                         <DeviceCheckboxes
                             handleSelectChange={handleSelectChange}
