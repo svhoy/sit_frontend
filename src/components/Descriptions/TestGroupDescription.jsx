@@ -31,7 +31,7 @@ export default function TestGroupDescription({ testGroup, showTestGroupName }) {
                 </div>
                 <div className="sm:grid sm:grid-cols-4 sm:gap-4">
                     <div className="bg-white py-5 sm:col-span-4 ">
-                        <dt className="text-sm font-medium text-gray-500">Test Type</dt>
+                        <dt className="text-sm font-medium text-gray-500">Test Measurement Type</dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0">
                             {testGroup.test_measurement_type}
                         </dd>
