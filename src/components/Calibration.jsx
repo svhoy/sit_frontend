@@ -17,7 +17,7 @@ export default function Calibration() {
     const [calibrationType, setCalibrationType] = useState("")
     const [measurementType, setMeasurementType] = useState("")
     const [calibrationOptions] = useState(["Antenna Calibration (ASP014)"])
-    const [measurementTypeOptions] = useState(["SS-TWR", "DS-TWR"])
+    const [measurementTypeOptions] = useState([["SS-TWR", "ss_twr"], ["DS-TWR", "ds_3_twr"]])
     const [calibrationDistances, setCalibrationDistances] = useState([])
     const informationTextarea = useRef()
 
