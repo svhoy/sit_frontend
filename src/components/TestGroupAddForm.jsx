@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import useFetch from "../utils/useFetch"
 import AuthContext from "../context/AuthContext"
+import StaticSelect from "./Selects/StaticSelect"
 
 export default function TestGroupAddForm() {
     const { user } = useContext(AuthContext)
@@ -9,11 +10,16 @@ export default function TestGroupAddForm() {
         owner: 0,
         testName: "",
         testType: "Static Distance",
+        testMeasurementType: "",
         testDistance: null,
         testUnit: null,
         testMinMeasurements: null,
         testMaxMeasurements: null
     })
+    const [measurementTypeOptions] = useState([
+        ["SS-TWR", "ss_twr"],
+        ["DS-TWR", "ds_3_twr"]
+    ])
     let api = useFetch()
     const navigate = useNavigate()
 
@@ -28,6 +34,12 @@ export default function TestGroupAddForm() {
         }
         const newFormData = { ...addTestGroupForm }
         newFormData[fieldName] = fieldValue
+
+        setAddTestGroupForm(newFormData)
+    }
+    let handleMeasurementTypeChange = (value) => {
+        const newFormData = { ...addTestGroupForm }
+        newFormData.testMeasurementType = value
 
         setAddTestGroupForm(newFormData)
     }
@@ -49,6 +61,7 @@ export default function TestGroupAddForm() {
             test_type: addTestGroupForm.testType,
             test_distance: addTestGroupForm.testDistance,
             test_unit: "m",
+            test_measurement_type: addTestGroupForm.testMeasurementType,
             test_min_measurements: addTestGroupForm.testMinMeasurements,
             test_max_measurements: addTestGroupForm.testMaxMeasurements
         }
@@ -109,6 +122,13 @@ export default function TestGroupAddForm() {
                                     />
                                 </div>
                             </label>
+                        </div>
+                        <div className="sm:col-span-6">
+                            <StaticSelect
+                                label="Measurement Type"
+                                handleSelectedValue={handleMeasurementTypeChange}
+                                options={measurementTypeOptions}
+                            />
                         </div>
                         <div className="col-span-6">
                             <label
