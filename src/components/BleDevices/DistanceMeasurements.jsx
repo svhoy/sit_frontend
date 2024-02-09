@@ -17,6 +17,7 @@ export default function DistanceMeasurements({
     maxMeasurements,
     initiator,
     responder,
+    measurementTypePre,
     devicePreSelected
 }) {
     const [initiatorDevice, setInitinatorDevice] = useState([])
@@ -42,6 +43,7 @@ export default function DistanceMeasurements({
                             test_id: testID,
                             initiator,
                             responder: [responder],
+                            measurement_type: measurementTypePre,
                             min_measurement: minMeasurements,
                             max_measurement: maxMeasurements
                         }
@@ -259,6 +261,7 @@ DistanceMeasurements.propTypes = {
     maxMeasurements: PropTypes.number,
     initiator: PropTypes.string,
     responder: PropTypes.string,
+    measurementTypePre: PropTypes.string,
     devicePreSelected: PropTypes.bool
 }
 
@@ -269,5 +272,6 @@ DistanceMeasurements.defaultProps = {
     maxMeasurements: 0,
     initiator: null,
     responder: null,
+    measurementTypePre: null,
     devicePreSelected: false
 }
