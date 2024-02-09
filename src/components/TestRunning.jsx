@@ -162,6 +162,7 @@ export default function TestStartForm() {
                     maxMeasurements={testGroup.test_max_measurements}
                     initiator={testInfo.initiator_device_id}
                     responder={testInfo.responder_device_id}
+                    measurementTypePre={testGroup.test_measurement_type}
                     devicePreSelected
                 />
             </div>
