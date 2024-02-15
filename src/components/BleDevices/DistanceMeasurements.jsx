@@ -8,6 +8,7 @@ import WebSocketContex from "../../context/WebSocketContex"
 import DeviceInformation from "../Informations/DeviceInformation"
 import DeviceSelect from "../Selects/DeviceSelect"
 import ScatterChartTest from "../Charts/ScatterChartTest"
+import StaticSelect from "../Selects/StaticSelect"
 
 export default function DistanceMeasurements({
     testID,
@@ -16,6 +17,7 @@ export default function DistanceMeasurements({
     maxMeasurements,
     initiator,
     responder,
+    measurementTypePre,
     devicePreSelected
 }) {
     const [initiatorDevice, setInitinatorDevice] = useState([])
@@ -23,6 +25,8 @@ export default function DistanceMeasurements({
     const [distanceMeasurementLog, setDistanceMeasurementLog] = useState([])
     const [distanceData, setDistanceData] = useState([])
     const [distancePoints, setdistancePoints] = useState(0)
+    const [measurementType, setMeasurementType] = useState("")
+    const [measurementTypeOptions] = useState([["SS-TWR", "ss_twr"], ["DS-TWR", "ds_3_twr"]])
     const [measurementIsRunning, setMeasurementIsRunning] = useState(false)
     const [canStop, setCanStop] = useState(false)
     const distanceTextarea = useRef()
@@ -39,6 +43,7 @@ export default function DistanceMeasurements({
                             test_id: testID,
                             initiator,
                             responder: [responder],
+                            measurement_type: measurementTypePre,
                             min_measurement: minMeasurements,
                             max_measurement: maxMeasurements
                         }
@@ -50,7 +55,8 @@ export default function DistanceMeasurements({
                         type: "StartDistanceMeasurement",
                         data: {
                             initiator: initiatorDevice[1],
-                            responder: [responderDevice[1]]
+                            responder: [responderDevice[1]],
+                            measurement_type: measurementType
                         }
                     })
                 )
@@ -87,6 +93,10 @@ export default function DistanceMeasurements({
     }
     const handleResponderValue = (selectedDeviceID) => {
         setResponderDevice(selectedDeviceID)
+    }
+
+    const handleMeasurementTypeSelectChange = (value) => {
+        setMeasurementType(value)
     }
 
     let checkUwbList = (deviceName) => {
@@ -208,6 +218,11 @@ export default function DistanceMeasurements({
                                     uwbList={uwbList}
                                     couldEmpty
                                 />
+                                <StaticSelect
+                                    handleSelectedValue={handleMeasurementTypeSelectChange}
+                                    label="Measurement Type"
+                                    options={measurementTypeOptions}
+                                />
                             </>
                         ) : (<div />)}
                         <label
@@ -246,6 +261,7 @@ DistanceMeasurements.propTypes = {
     maxMeasurements: PropTypes.number,
     initiator: PropTypes.string,
     responder: PropTypes.string,
+    measurementTypePre: PropTypes.string,
     devicePreSelected: PropTypes.bool
 }
 
@@ -256,5 +272,6 @@ DistanceMeasurements.defaultProps = {
     maxMeasurements: 0,
     initiator: null,
     responder: null,
+    measurementTypePre: null,
     devicePreSelected: false
 }
