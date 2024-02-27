@@ -50,6 +50,7 @@ export default function DistanceMeasurements({
                     })
                 )
             } else {
+                console.log("test")
                 send(
                     JSON.stringify({
                         type: "StartDistanceMeasurement",

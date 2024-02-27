@@ -9,7 +9,11 @@ export default function StaticSelect({ handleSelectedValue, label, options }) {
     }
 
     useEffect(() => {
-        handleSelectedValue(options[0])
+        if (Array.isArray(options[0])) {
+            handleSelectedValue(options[0][1])
+        } else {
+            handleSelectedValue(options[0])
+        }
     }, [])
 
     return (
@@ -55,5 +59,9 @@ export default function StaticSelect({ handleSelectedValue, label, options }) {
 StaticSelect.propTypes = {
     handleSelectedValue: PropTypes.func.isRequired,
     label: PropTypes.string.isRequired,
-    options: PropTypes.arrayOf(PropTypes.string).isRequired
+    options: PropTypes.arrayOf(
+        PropTypes.oneOfType(
+            [PropTypes.string, PropTypes.arrayOf(PropTypes.string)]
+        )
+    ).isRequired
 }
