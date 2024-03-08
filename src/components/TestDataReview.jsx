@@ -51,28 +51,28 @@ export default function TestDataReview() {
         <div className="md:grid md:grid-cols-3 md:gap-6">
             <div className="md:col-span-1">
                 <div className="px-4 sm:px-0">
-                    <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
+                    <h3 className="font-bold leading-tight mt-3 mb-5 text-m md:text-l lg:text-xl">
                         Test Information
                     </h3>
                 </div>
             </div>
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
-                    <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                    <div className="space-y-6 px-4 py-5 sm:p-6">
                         <TestDescription testData={testData} />
                     </div>
                 </div>
             </div>
             <div className="md:col-span-1">
                 <div className="px-4 sm:px-0">
-                    <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
+                    <h3 className="font-bold leading-tight mt-3 mb-5 text-m md:text-l lg:text-xl">
                         Distance Measurements
                     </h3>
                 </div>
             </div>
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
-                    <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                    <div className="space-y-6 px-4 py-5 sm:p-6">
                         <ScatterChartTest
                             distanceData={scatterData}
                             testDistance={testData.real_test_distance}
@@ -83,14 +83,14 @@ export default function TestDataReview() {
             </div>
             <div className="md:col-span-1">
                 <div className="px-4 sm:px-0">
-                    <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
+                    <h3 className="font-bold leading-tight mt-3 mb-5 text-m md:text-l lg:text-xl">
                         Distance Table
                     </h3>
                 </div>
             </div>
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
-                    <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                    <div className="space-y-6 px-4 py-5 sm:p-6">
                         <DistanceTable
                             headers={["#", "Distance", "Error", "RSSI", "FPI", "NLOS"]}
                             distanceData={distanceData}

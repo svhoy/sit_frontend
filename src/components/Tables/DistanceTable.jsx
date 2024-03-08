@@ -9,14 +9,14 @@ export default function DistanceTable({ headers, distanceData }) {
         <div className="sm:overflow-x-auto">
             <div className="overflow-x-auto">
                 <table className="table-auto ">
-                    <thead className="bg-white border-b">
+                    <thead className="border-b">
                         <tr>
                             {headers &&
                                 headers.map((item) => {
                                     return (
                                         <th
                                             key={item}
-                                            className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                                            className="text-sm font-medium px-6 py-4 text-left"
                                         >
                                             {item}
                                         </th>
@@ -30,24 +30,24 @@ export default function DistanceTable({ headers, distanceData }) {
                                 return (
                                     <tr
                                         key={item.id}
-                                        className="bg-white border-b odd:bg-gray-100"
+                                        className="border-b odd:bg-gray-500 dark:odd:bg-neutral-700"
                                     >
-                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                                             {item.sequence}
                                         </td>
-                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                                             {item.distance}
                                         </td>
-                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                                             {item.error_distance}
                                         </td>
-                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                                             {item.RecivedSignalStrengthIndex}
                                         </td>
-                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                                             {item.firstPathIndex}
                                         </td>
-                                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                                             {item.nlos}
                                         </td>
                                     </tr>

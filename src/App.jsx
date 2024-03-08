@@ -24,18 +24,18 @@ import BleDevices from "./components/BleDevices"
 import AddBleDeviceForm from "./components/Forms/AddBleDeviceForm"
 import DeviceOverview from "./components/DeviceOverview";
 import Calibration from "./components/Calibration";
-
+import DistancesTable from "./components/DistancesTable";
 
 
 function App() {
     return (
-        <div className="App font-body font-normal leading-normal text-gray-800 text-sm md:font-base md:leading-relaxed">
+        <div className="App">
             <BrowserRouter>
                 <AuthProvider>
-                    <header className="">
+                    <header>
                         <NavBar />
                     </header>
-                    <div className="container">
+                    <div className="container flex flex-col">
                         <Routes>
                             <Route element={<HomePage />} path="/" exact />
                             <Route element={<LoginPage />} path="/login" />
@@ -58,7 +58,9 @@ function App() {
                             </Route>
                             <Route element={<DashboardPage />} path="/dashboard" />
                             <Route element={<SettingsPage />} path="/devices/settings" />
-                            <Route element={<DistancePage />} path="/distance" />
+                            <Route element={<DistancePage />} path="/distance">
+                                <Route element={<DistancesTable />} path="" />
+                            </Route>
                             <Route element={<TestGroupPage />} path="/tests/groups">
                                 <Route element={<TestGroupsTable />} path="" />
                                 <Route element={<TestGroupAddForm />} path="add" />

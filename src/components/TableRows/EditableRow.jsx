@@ -8,9 +8,9 @@ const EditableRow = ({ editUwbSettingsForm, handleEditFormChange, handleCancelCl
     return (
         <tr
             key={editUwbSettingsForm.id}
-            className="bg-white border-b odd:bg-gray-100"
+            className="border-b odd:bg-gray-100 dark:bg-neutral-700"
         >
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 <input
                     type="text"
                     required="required"
@@ -20,10 +20,10 @@ const EditableRow = ({ editUwbSettingsForm, handleEditFormChange, handleCancelCl
                     onChange={handleEditFormChange}
                 />
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 {editUwbSettingsForm.owner}
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 <select
                     name="channel_num"
                     onChange={handleEditFormChange}
@@ -33,7 +33,7 @@ const EditableRow = ({ editUwbSettingsForm, handleEditFormChange, handleCancelCl
                     <option value="9">9</option>
                 </select>
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 <select
                     name="premable_length_tx"
                     onChange={handleEditFormChange}
@@ -50,7 +50,7 @@ const EditableRow = ({ editUwbSettingsForm, handleEditFormChange, handleCancelCl
                     <option value="DWT_PLEN_4096">DWT_PLEN_4096</option>
                 </select>
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 <select
                     name="preamble_chunk_size"
                     onChange={handleEditFormChange}
@@ -62,7 +62,7 @@ const EditableRow = ({ editUwbSettingsForm, handleEditFormChange, handleCancelCl
                     <option value="DWT_PAC64">DWT_PAC64</option>
                 </select>
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 <input
                     type="number"
                     required="required"
@@ -72,7 +72,7 @@ const EditableRow = ({ editUwbSettingsForm, handleEditFormChange, handleCancelCl
                     onChange={handleEditFormChange}
                 />
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 <input
                     type="number"
                     required="required"
@@ -82,7 +82,7 @@ const EditableRow = ({ editUwbSettingsForm, handleEditFormChange, handleCancelCl
                     onChange={handleEditFormChange}
                 />
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 <select
                     name="sfd_mode"
                     onChange={handleEditFormChange}
@@ -96,7 +96,7 @@ const EditableRow = ({ editUwbSettingsForm, handleEditFormChange, handleCancelCl
                     <option value="DWT_SFD_LEN16">DWT_SFD_LEN16</option>
                 </select>
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 <select
                     name="data_rate"
                     onChange={handleEditFormChange}
@@ -107,7 +107,7 @@ const EditableRow = ({ editUwbSettingsForm, handleEditFormChange, handleCancelCl
                     <option value="DWT_BR_NODATA">DWT_BR_NODATA</option>
                 </select>
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 <select
                     name="phy_header_mode"
                     onChange={handleEditFormChange}
@@ -117,7 +117,7 @@ const EditableRow = ({ editUwbSettingsForm, handleEditFormChange, handleCancelCl
                     <option value="DWT_PHRMODE_EXT">DWT_PHRMODE_EXT</option>
                 </select>
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 <select
                     name="pulse_rep_freq"
                     onChange={handleEditFormChange}
@@ -128,7 +128,7 @@ const EditableRow = ({ editUwbSettingsForm, handleEditFormChange, handleCancelCl
                     <option value="DWT_PRF_SCP">DWT_PRF_SCP</option>
                 </select>
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 <input
                     type="number"
                     required="required"
@@ -138,7 +138,7 @@ const EditableRow = ({ editUwbSettingsForm, handleEditFormChange, handleCancelCl
                     onChange={handleEditFormChange}
                 />
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 <select
                     name="sts_mode"
                     onChange={handleEditFormChange}
@@ -153,7 +153,7 @@ const EditableRow = ({ editUwbSettingsForm, handleEditFormChange, handleCancelCl
                     <option value="DWT_STS_MODE_MASK_NO_SDC">DWT_STS_MODE_MASK_NO_SDC</option>
                 </select>
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 <select
                     name="sts_length"
                     onChange={handleEditFormChange}
@@ -166,7 +166,7 @@ const EditableRow = ({ editUwbSettingsForm, handleEditFormChange, handleCancelCl
                     <option value="DWT_STS_LEN_512">DWT_STS_LEN_512</option>
                 </select>
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 <select
                     name="pdoa_mode"
                     onChange={handleEditFormChange}
@@ -177,7 +177,7 @@ const EditableRow = ({ editUwbSettingsForm, handleEditFormChange, handleCancelCl
                     <option value="DWT_PDOA_M3">DWT_PDOA_M3</option>
                 </select>
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                 <button
                     type="submit"
                     className="mx-2"

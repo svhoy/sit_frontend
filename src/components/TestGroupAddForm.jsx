@@ -72,7 +72,7 @@ export default function TestGroupAddForm() {
         <div className="md:grid md:grid-cols-3 md:gap-6">
             <div className="md:col-span-1">
                 <div className="px-4 sm:px-0">
-                    <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
+                    <h3 className="font-bold leading-tight mt-3 mb-5 text-m md:text-l lg:text-xl">
                         Add Test Group
                     </h3>
                     <div className="grid grid-cols-2 gap-0">
@@ -109,7 +109,7 @@ export default function TestGroupAddForm() {
                         <div className="col-span-6">
                             <label
                                 htmlFor="testName"
-                                className="block text-sm font-medium leading-6 text-gray-900"
+                                className="block text-sm font-medium leading-6"
                             >
                                 Test Group Name
                                 <div className="mt-1">
@@ -133,7 +133,7 @@ export default function TestGroupAddForm() {
                         <div className="col-span-6">
                             <label
                                 htmlFor="testType"
-                                className="block text-sm font-medium leading-6 text-gray-900"
+                                className="block text-sm font-medium leading-6"
                             >
                                 Test Type
                                 <div className="mt-1">
@@ -151,7 +151,7 @@ export default function TestGroupAddForm() {
                         <div className="col-span-5">
                             <label
                                 htmlFor="testDistance"
-                                className="block text-sm font-medium leading-6 text-gray-900"
+                                className="block text-sm font-medium leading-6"
                             >
                                 Real Distance
                                 <div className="mt-1">
@@ -170,7 +170,7 @@ export default function TestGroupAddForm() {
                         <div className="col-span-1">
                             <label
                                 htmlFor="testUnit"
-                                className="block text-sm font-medium leading-6 text-gray-900"
+                                className="block text-sm font-medium leading-6"
                             >
                                 Unit
                                 <div className="mt-1">
@@ -189,7 +189,7 @@ export default function TestGroupAddForm() {
                         <div className="col-span-6 sm:col-span-3">
                             <label
                                 htmlFor="testMinMeasurements"
-                                className="block text-sm font-medium leading-6 text-gray-900"
+                                className="block text-sm font-medium leading-6"
                             >
                                 Min. Measurements
                                 <div className="mt-1">
@@ -207,7 +207,7 @@ export default function TestGroupAddForm() {
                         <div className="col-span-6 mb-4 sm:col-span-3 sm:mb-0">
                             <label
                                 htmlFor="testMaxMeasurements"
-                                className="block text-sm font-medium leading-6 text-gray-900"
+                                className="block text-sm font-medium leading-6"
                             >
                                 Max Measurements
                                 <div className="mt-1">

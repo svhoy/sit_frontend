@@ -118,7 +118,7 @@ export default function TestTable() {
             <div className="lg:grid lg:grid-cols-3 lg:gap-6">
                 <div className="lg:col-span-1">
                     <div className="px-4 sm:px-0">
-                        <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
+                        <h3 className="font-bold leading-tight mt-3 mb-5 text-m md:text-l lg:text-xl">
                             Tests
                         </h3>
                         <div className="grid grid-cols-2 gap-0" />
@@ -139,27 +139,27 @@ export default function TestTable() {
                     <div className="shadow min-w-full sm:overflow-x-auto sm:rounded-md">
                         <div className="overflow-x-auto">
                             <table className="table-auto overflow-scroll min-w-full ">
-                                <thead className="bg-white border-b">
+                                <thead className="border-b">
                                     <tr>
                                         <th
                                             aria-label="Checkbox"
-                                            className="text-sm font-medium text-gray-900 px-3 py-4 text-left"
+                                            className="text-sm font-medium px-3 py-4 text-left"
                                         />
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className="text-sm font-medium px-6 py-4 text-left">
                                             ID
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className="text-sm font-medium px-6 py-4 text-left">
                                             Test Group
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className="text-sm font-medium px-6 py-4 text-left">
                                             Test Distance
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className="text-sm font-medium px-6 py-4 text-left">
                                             Owner
                                         </th>
                                         <th
                                             aria-label="Buttons"
-                                            className="text-sm font-medium text-gray-900 px-1 py-4 text-left"
+                                            className="text-sm font-medium px-1 py-4 text-left"
                                         />
                                     </tr>
                                 </thead>
@@ -169,9 +169,9 @@ export default function TestTable() {
                                             return (
                                                 <tr
                                                     key={item.id}
-                                                    className="bg-white border-b odd:bg-gray-100"
+                                                    className="border-b odd:bg-gray-100 dark:odd:bg-neutral-700"
                                                 >
-                                                    <td className="text-sm text-gray-900 font-light px-3 py-4 whitespace-nowrap">
+                                                    <td className="text-sm font-light px-3 py-4 whitespace-nowrap">
                                                         <input
                                                             type="checkbox"
                                                             id={item.id}
@@ -179,27 +179,27 @@ export default function TestTable() {
                                                             onChange={toggleSelected(item.id)}
                                                         />
                                                     </td>
-                                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                    <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                                                         <Link to={`review/${item.id}`}>
                                                             {item.id}
                                                         </Link>
                                                     </td>
-                                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                    <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                                                         <Link to={`review/${item.id}`}>
                                                             {item.test_group_name}
                                                         </Link>
                                                     </td>
-                                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                    <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                                                         <Link to={`review/${item.id}`}>
                                                             {item.real_test_distance}
                                                         </Link>
                                                     </td>
-                                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                    <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
                                                         <Link to={`review/${item.id}`}>
                                                             {item.user}
                                                         </Link>
                                                     </td>
-                                                    <td className=" text-sm text-right text-gray-900 font-light pr-6 py-4 whitespace-nowrap">
+                                                    <td className=" text-sm text-right font-light pr-6 py-4 whitespace-nowrap">
                                                         {item.comments && (
                                                             <button
                                                                 type="button"
@@ -251,7 +251,7 @@ export default function TestTable() {
                         </div>
                         <div className="mt-5 md:col-span-2 md:mt-1">
                             <div className="shadow sm:overflow-hidden sm:rounded-md">
-                                <div className="bg-gray-50 px-1 py-3 text-left sm:px-3">
+                                <div className="bg-gray-50 dark:bg-neutral-800 px-1 py-3 text-left sm:px-3">
                                     {previousURL != null ? (
                                         <button
                                             type="button"
