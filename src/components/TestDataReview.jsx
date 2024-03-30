@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { useParams } from "react-router-dom"
 import useFetch from "../utils/useFetch"
 import ScatterChartTest from "./Charts/ScatterChartTest"
 import TestDescription from "./Descriptions/TestDescription"
 import DistanceTable from "./Tables/DistanceTable"
+import StyleContex from "../context/StyleContex"
 
 export default function TestDataReview() {
     let params = useParams()
     let api = useFetch()
+    const { containerStyle, headerStyle } = useContext(StyleContex)
     const [distanceData, setDistanceData] = useState([])
     const [scatterData, setScatterData] = useState([])
     const [testData, setTestData] = useState({})
@@ -48,55 +50,41 @@ export default function TestDataReview() {
     }, [])
 
     return (
-        <div className="md:grid md:grid-cols-3 md:gap-6">
-            <div className="md:col-span-1">
-                <div className="px-4 sm:px-0">
-                    <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
-                        Test Information
-                    </h3>
+        <div className={containerStyle.component}>
+            <div className={containerStyle.left}>
+                <h3 className={headerStyle.h3}>
+                    Test Information
+                </h3>
+            </div>
+            <div className={containerStyle.right}>
+                <div className={containerStyle.rightContainer}>
+                    <TestDescription testData={testData} />
                 </div>
             </div>
-            <div className="mt-5 md:col-span-2 md:mt-0">
-                <div className="shadow sm:overflow-hidden sm:rounded-md">
-                    <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                        <TestDescription testData={testData} />
-                    </div>
+            <div className={containerStyle.left}>
+                <h3 className={headerStyle.h3}>
+                    Distance Measurements
+                </h3>
+            </div>
+            <div className={containerStyle.right}>
+                <div className={containerStyle.rightContainer}>
+                    <ScatterChartTest
+                        distanceData={scatterData}
+                        testDistance={testData.real_test_distance}
+                        yaxisDomain={yaxisDomain}
+                    />
                 </div>
             </div>
-            <div className="md:col-span-1">
-                <div className="px-4 sm:px-0">
-                    <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
-                        Distance Measurements
-                    </h3>
-                </div>
+            <div className={containerStyle.left}>
+                <h3 className={headerStyle.h3}>
+                    Distance Table
+                </h3>
             </div>
-            <div className="mt-5 md:col-span-2 md:mt-0">
-                <div className="shadow sm:overflow-hidden sm:rounded-md">
-                    <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                        <ScatterChartTest
-                            distanceData={scatterData}
-                            testDistance={testData.real_test_distance}
-                            yaxisDomain={yaxisDomain}
-                        />
-                    </div>
-                </div>
-            </div>
-            <div className="md:col-span-1">
-                <div className="px-4 sm:px-0">
-                    <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
-                        Distance Table
-                    </h3>
-                </div>
-            </div>
-            <div className="mt-5 md:col-span-2 md:mt-0">
-                <div className="shadow sm:overflow-hidden sm:rounded-md">
-                    <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                        <DistanceTable
-                            headers={["#", "Distance", "Error", "RSSI", "FPI", "NLOS"]}
-                            distanceData={distanceData}
-                        />
-                    </div>
-                </div>
+            <div className={containerStyle.right}>
+                <DistanceTable
+                    headers={["#", "Distance", "Error", "RSSI", "FPI", "NLOS"]}
+                    distanceData={distanceData}
+                />
             </div>
         </div>
     )

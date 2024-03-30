@@ -1,15 +1,17 @@
-import React from "react"
+import React, { useContext } from "react"
+import StyleContex from "../context/StyleContex"
 
 export default function HomePage() {
+    const { headerStyle } = useContext(StyleContex)
     return (
-        <div>
-            <h1 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-xl md:text-2xl lg:text-3xl">
+        <div className="flex-1 ">
+            <h1 className={headerStyle.h1}>
                 Sport Indoor Tracking - Test App
             </h1>
-            <h2 className="font-bold leading-tight text-gray-900 mb-5 text-l md:text-xl lg:text-2xl">
+            <h2 className={headerStyle.h2}>
                 {" "}
                 Welcome to the Sport Indoor Tracking - Test App
             </h2>
-        </div>
+        </div >
     )
 }

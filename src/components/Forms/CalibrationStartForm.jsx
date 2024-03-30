@@ -3,14 +3,14 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect, useRef, useContext } from "react"
 
-import DeviceInformation from "./Informations/DeviceInformation"
-import WebSocketContex from "../context/WebSocketContex"
-import LineDivider from "./Dividers/LineDivider"
-import DeviceCheckboxes from "./Checkboxes/DeviceCheckboxes"
-import StaticSelect from "./Selects/StaticSelect"
-import DistanceInput from "./Inputs/DistanceInput"
+import DeviceInformation from "../Informations/DeviceInformation"
+import WebSocketContex from "../../context/WebSocketContex"
+import LineDivider from "../Dividers/LineDivider"
+import DeviceCheckboxes from "../Checkboxes/DeviceCheckboxes"
+import StaticSelect from "../Selects/StaticSelect"
+import DistanceInput from "../Inputs/DistanceInput"
 
-export default function Calibration() {
+export default function CalibrationStartForm() {
     const [deviceList, setDeviceList] = useState([])
     const [calibrationIsRunning, setCalibrationIsRunning] = useState(false)
     const [informationLog, setInformationLog] = useState("")

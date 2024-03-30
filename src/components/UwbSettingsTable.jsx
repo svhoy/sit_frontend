@@ -1,42 +1,43 @@
 /* eslint-disable operator-linebreak */
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import useFetch from "../utils/useFetch"
 import ReadOnlyRow from "./TableRows/ReadOnlyRow"
 import EditableRow from "./TableRows/EditableRow"
+import StyleContex from "../context/StyleContex"
 
 export default function UwbSettingsTable() {
+    const { containerStyle, headerStyle, tableStyle, buttonStyle, pageMenuStyle } = useContext(StyleContex)
     const [uwbSettingsList, setUwbSettingsList] = useState([])
     const [editUwbSettingsForm, setEditUwbSettingsForm] = useState({
         name: ""
     })
     const [editUwbSettingsId, setEditUwbSettingsId] = useState(null)
     const [baseURL] = useState("/api/settings/uwb/")
-    // const [nextURL, setNextURL] = useState(null)
-    // const [previousURL, setPreviousURL] = useState(null)
-    // let rexPage = /\?page=\d{1,}/
-
+    const [nextURL, setNextURL] = useState(null)
+    const [previousURL, setPreviousURL] = useState(null)
+    let rexPage = /\?page=\d{1,}/
     let api = useFetch()
 
     let getUwbSettingsList = async (url = baseURL) => {
         let { response, data } = await api(url)
 
         if (response.status === 200) {
-            // if (data.next) {
-            //     let nextPage = data.next.match(rexPage)
-            //     setNextURL(baseURL + nextPage)
-            // } else {
-            //     setNextURL(null)
-            // }
-            // if (data.previous) {
-            //     if (rexPage.test(data.previous)) {
-            //         let previousPage = data.previous.match(rexPage)
-            //         setPreviousURL(baseURL + previousPage)
-            //     } else {
-            //         setPreviousURL(baseURL)
-            //     }
-            // } else {
-            //     setPreviousURL(null)
-            // }
+            if (data.next) {
+                let nextPage = data.next.match(rexPage)
+                setNextURL(baseURL + nextPage)
+            } else {
+                setNextURL(null)
+            }
+            if (data.previous) {
+                if (rexPage.test(data.previous)) {
+                    let previousPage = data.previous.match(rexPage)
+                    setPreviousURL(baseURL + previousPage)
+                } else {
+                    setPreviousURL(baseURL)
+                }
+            } else {
+                setPreviousURL(null)
+            }
             setUwbSettingsList(data.results)
         }
     }
@@ -45,13 +46,13 @@ export default function UwbSettingsTable() {
         getUwbSettingsList()
     }, [])
 
-    // let nextPage = () => {
-    //     getUwbSettingsList(nextURL)
-    // }
+    let nextPage = () => {
+        setUwbSettingsList(nextURL)
+    }
 
-    // let previousPage = () => {
-    //     getUwbSettingsList(previousURL)
-    // }
+    let previousPage = () => {
+        setUwbSettingsList(previousURL)
+    }
 
     let sendUwbSettings = async (editedUwbSetting) => {
         let { response, data } = await api(
@@ -153,69 +154,67 @@ export default function UwbSettingsTable() {
     }
 
     return (
-        <div className="md:grid md:grid-cols-3 md:gap-1">
-            <div className="md:col-span-1">
-                <div className="px-4 sm:px-0">
-                    <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
-                        Overview
-                    </h3>
-                </div>
+        <div className={containerStyle.component}>
+            <div className={containerStyle.left}>
+                <h3 className={headerStyle.h3}>
+                    UWB Device Settings
+                </h3>
             </div>
-            <div className="mt-5 md:col-span-2 md:mt-0 md:w-full">
-                <div className="shadow min-w-full sm:overflow-x-auto sm:rounded-md">
-                    <div className="overflow-x-auto">
+            <div className={containerStyle.right}>
+                <div className={tableStyle.container}>
+                    <div className={tableStyle.overflow}>
                         <form onSubmit={handleEditFormSubmit}>
-                            <table className="table-auto max-w-full ">
-                                <thead className="bg-white border-b">
+                            <table className={tableStyle.table}>
+                                <thead className={tableStyle.head}>
                                     <tr>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             Name
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             Owner
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             Channel Nummer
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             Preamble Länge TX
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             Preamble Chunk Size
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             TX Preamble Code
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             RX Preamble Code
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             SFD Mode
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             Data Rate
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             PHY Header Mode
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             Pulse Rep Frequenz
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             SFD Timeout
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             STS Mode
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             STS Length
                                         </th>
-                                        <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             PDoA Mode
                                         </th>
                                         <th
                                             aria-label="Buttons"
-                                            className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                                            className={tableStyle.th}
                                         />
                                     </tr>
                                 </thead>
@@ -242,6 +241,42 @@ export default function UwbSettingsTable() {
                                 </tbody>
                             </table>
                         </form>
+                    </div>
+                    <div className={pageMenuStyle.container}>
+                        {previousURL != null ? (
+                            <button
+                                type="button"
+                                className={buttonStyle.activ}
+                                onClick={previousPage}
+                            >
+                                Previous
+                            </button>
+                        ) : (
+                            <button
+                                type="button"
+                                className={buttonStyle.inactiv}
+                                disabled
+                            >
+                                Previous
+                            </button>
+                        )}
+                        {nextURL != null ? (
+                            <button
+                                type="button"
+                                className={buttonStyle.activ}
+                                onClick={nextPage}
+                            >
+                                Next
+                            </button>
+                        ) : (
+                            <button
+                                type="button"
+                                className={buttonStyle.inactiv}
+                                disabled
+                            >
+                                Next
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

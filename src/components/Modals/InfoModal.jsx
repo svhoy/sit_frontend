@@ -25,14 +25,14 @@ export default function InfoModal({ onClose, show, header, content }) {
             aria-hidden="true"
         >
             <div
-                className="modal-content w-5/6 p-4 bg-white shadow sm:w-4/6 md:w-3/6 sm:overflow-hidden sm:rounded-xl"
+                className="modal-content w-5/6 p-4 bg-white dark:bg-neutral-800 shadow sm:w-4/6 md:w-3/6 sm:overflow-hidden sm:rounded-xl"
                 onClick={(e) => {
                     e.stopPropagation()
                 }}
                 aria-hidden="true"
             >
                 <div className="modal-header mb-3">
-                    <h4 className="modal-title font-bold leading-tight text-gray-900 text-m md:text-l lg:text-xl">
+                    <h4 className="modal-title font-bold leading-tight text-m md:text-l lg:text-xl">
                         {header}
                     </h4>
                 </div>
