@@ -32,9 +32,7 @@ export default function DeviceCheckboxes({ handleSelectChange, uwbList }) {
 
     return (
         <fieldset>
-            <legend className="text-sm font-semibold leading-6 text-gray-900">
-                Calibration Devices
-            </legend>
+            <legend className="text-sm font-semibold leading-6">Calibration Devices</legend>
             {deviceList.length > 0 ? (
                 deviceList &&
                 deviceList.map((item) => {
@@ -52,7 +50,7 @@ export default function DeviceCheckboxes({ handleSelectChange, uwbList }) {
                             />
                             <label
                                 htmlFor={item.id}
-                                className="col-span-2 text-sm font-medium leading-6 text-gray-900"
+                                className="col-span-2 text-sm font-medium leading-6"
                             >
                                 {item.device_name} ({item.device_id})
                             </label>
@@ -63,14 +61,14 @@ export default function DeviceCheckboxes({ handleSelectChange, uwbList }) {
                                 value={item.calibrated}
                                 disabled
                             />
-                            <div className="col-span-1 text-sm font-medium leading-6 text-gray-900">
+                            <div className="col-span-1 text-sm font-medium leading-6 ">
                                 {item.calibrated}
                             </div>
                         </div>
                     )
                 })
             ) : (
-                <div className="col-span-2 text-sm font-medium leading-6 text-gray-900">
+                <div className="col-span-2 text-sm font-medium leading-6">
                     Please connect devices
                 </div>
             )}

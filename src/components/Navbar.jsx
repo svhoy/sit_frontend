@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react"
 
 import { Link } from "react-router-dom"
 import AuthContext from "../context/AuthContext"
+import DarkModeSwitcher from "./Switcher/darkModeSwitcher"
 
 export default function NavBar() {
     const [navbar, setNavbar] = useState(false)
@@ -9,13 +10,13 @@ export default function NavBar() {
     let { user, logoutUser } = useContext(AuthContext)
 
     return (
-        <nav className=" w-full bg-blue-600 shadow">
+        <nav className="w-full bg-blue-600 dark:bg-blue-900 shadow">
             <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8">
                 <div>
                     <div className="flex items-center justify-between py-3 md:py-5 md:block">
-                        <a href="/">
+                        <Link to="/">
                             <h2 className="text-2xl font-bold text-white">LOGO</h2>
-                        </a>
+                        </Link>
                         <div className="md:hidden">
                             <button
                                 type="button"
@@ -62,6 +63,9 @@ export default function NavBar() {
                     ${navbar ? "block" : "hidden"}`}
                 >
                     <ul className="items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0">
+                        <div className="text-gray-200 hover:text-gray-900 block md:hidden ">
+                            <DarkModeSwitcher />
+                        </div>
                         {user ? (
                             <>
                                 <li className="text-gray-200 hover:text-gray-900">
@@ -89,7 +93,7 @@ export default function NavBar() {
                                             </svg>
                                         </button>
                                     </Link>
-                                    <div className="dropdown-menu z-10 p-3 hidden bg-blue-500 rounded-lg shadow">
+                                    <div className="dropdown-menu z-10 p-3 hidden bg-blue-500 dark:bg-blue-900 rounded-lg shadow">
                                         <ul className="py-2 text-sm">
                                             <li className="text-gray-200 hover:text-gray-900">
                                                 <Link to="/devices/ble">Connection</Link>
@@ -152,7 +156,7 @@ export default function NavBar() {
                                             </svg>
                                         </button>
                                     </Link>
-                                    <div className="dropdown-menu z-10 p-3 hidden bg-blue-500 rounded-lg shadow">
+                                    <div className="dropdown-menu z-10 p-3 hidden bg-blue-500 dark:bg-blue-900 rounded-lg shadow">
                                         <ul className="py-2 text-sm">
                                             <li className="text-gray-200 hover:text-gray-900">
                                                 <Link to="/tests/groups">Groups</Link>
@@ -185,6 +189,9 @@ export default function NavBar() {
                             </>
                         )}
                     </ul>
+                </div>
+                <div className="text-gray-200 hover:text-gray-900 hidden md:block ">
+                    <DarkModeSwitcher />
                 </div>
             </div>
         </nav>
