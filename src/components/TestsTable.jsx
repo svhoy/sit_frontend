@@ -1,5 +1,5 @@
 /* eslint-disable operator-linebreak */
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
     faTrashCan,
@@ -11,8 +11,10 @@ import { Link, useNavigate } from "react-router-dom"
 import useFetch from "../utils/useFetch"
 import InfoModal from "./Modals/InfoModal"
 import TestGroupDescription from "./Descriptions/TestGroupDescription"
+import StyleContex from "../context/StyleContex"
 
 export default function TestTable() {
+    const { headerStyle, buttonStyle, tableStyle, pageMenuStyle, containerStyle } = useContext(StyleContex)
     const [testsList, setTestsList] = useState([])
     const [testGroupInfo, setTestGroupInfo] = useState(null)
     const [baseURL] = useState("/api/tests/")
@@ -115,51 +117,49 @@ export default function TestTable() {
 
     return (
         <>
-            <div className="lg:grid lg:grid-cols-3 lg:gap-6">
-                <div className="lg:col-span-1">
-                    <div className="px-4 sm:px-0">
-                        <h3 className="font-bold leading-tight mt-3 mb-5 text-m md:text-l lg:text-xl">
-                            Tests
-                        </h3>
-                        <div className="grid grid-cols-2 gap-0" />
+            <div className={containerStyle.component}>
+                <div className={containerStyle.left}>
+                    <h3 className={headerStyle.h3}>
+                        Tests
+                    </h3>
+                    <div className={containerStyle.leftComponent}>
                         <button
                             type="button"
-                            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
+                            className={buttonStyle.activ}
                             onClick={startTest}
                         >
                             Start new Test
-                            <span className="ml-2">
+                            <span className={buttonStyle.icon}>
                                 <FontAwesomeIcon icon={faPlay} />
                             </span>
                         </button>
-                        <div className="grid grid-cols-2 gap-0" />
                     </div>
                 </div>
-                <div className="mt-5 lg:col-span-2 lg:mt-0 lg:w-full">
-                    <div className="shadow min-w-full sm:overflow-x-auto sm:rounded-md">
-                        <div className="overflow-x-auto">
-                            <table className="table-auto overflow-scroll min-w-full ">
-                                <thead className="border-b">
+                <div className={containerStyle.right}>
+                    <div className={tableStyle.container}>
+                        <div className={tableStyle.overflow}>
+                            <table className={tableStyle.table}>
+                                <thead className={tableStyle.thead}>
                                     <tr>
                                         <th
                                             aria-label="Checkbox"
-                                            className="text-sm font-medium px-3 py-4 text-left"
+                                            className={tableStyle.th}
                                         />
-                                        <th className="text-sm font-medium px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             ID
                                         </th>
-                                        <th className="text-sm font-medium px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             Test Group
                                         </th>
-                                        <th className="text-sm font-medium px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             Test Distance
                                         </th>
-                                        <th className="text-sm font-medium px-6 py-4 text-left">
+                                        <th className={tableStyle.th}>
                                             Owner
                                         </th>
                                         <th
                                             aria-label="Buttons"
-                                            className="text-sm font-medium px-1 py-4 text-left"
+                                            className={tableStyle.th}
                                         />
                                     </tr>
                                 </thead>
@@ -169,9 +169,9 @@ export default function TestTable() {
                                             return (
                                                 <tr
                                                     key={item.id}
-                                                    className="border-b odd:bg-gray-100 dark:odd:bg-neutral-700"
+                                                    className={tableStyle.tr}
                                                 >
-                                                    <td className="text-sm font-light px-3 py-4 whitespace-nowrap">
+                                                    <td className={tableStyle.td}>
                                                         <input
                                                             type="checkbox"
                                                             id={item.id}
@@ -179,31 +179,31 @@ export default function TestTable() {
                                                             onChange={toggleSelected(item.id)}
                                                         />
                                                     </td>
-                                                    <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                                    <td className={tableStyle.td}>
                                                         <Link to={`review/${item.id}`}>
                                                             {item.id}
                                                         </Link>
                                                     </td>
-                                                    <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                                    <td className={tableStyle.td}>
                                                         <Link to={`review/${item.id}`}>
                                                             {item.test_group_name}
                                                         </Link>
                                                     </td>
-                                                    <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                                    <td className={tableStyle.td}>
                                                         <Link to={`review/${item.id}`}>
                                                             {item.real_test_distance}
                                                         </Link>
                                                     </td>
-                                                    <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                                    <td className={tableStyle.td}>
                                                         <Link to={`review/${item.id}`}>
                                                             {item.user}
                                                         </Link>
                                                     </td>
-                                                    <td className=" text-sm text-right font-light pr-6 py-4 whitespace-nowrap">
+                                                    <td className={tableStyle.td}>
                                                         {item.comments && (
                                                             <button
                                                                 type="button"
-                                                                className="mx-2"
+                                                                className={tableStyle.editButton}
                                                                 onClick={() => {
                                                                     setShowModal(true)
                                                                     setModalTitle(
@@ -220,7 +220,7 @@ export default function TestTable() {
                                                         )}
                                                         <button
                                                             type="button"
-                                                            className="mx-2"
+                                                            className={tableStyle.editButton}
                                                             onClick={() => {
                                                                 handleGroupDescriptonModal(
                                                                     item.test_group
@@ -234,7 +234,7 @@ export default function TestTable() {
                                                         </button>
                                                         <button
                                                             type="button"
-                                                            className="mx-2"
+                                                            className={tableStyle.editButton}
                                                             onClick={() => {
                                                                 return handleDeleteClick(item.id)
                                                             }}
@@ -249,45 +249,41 @@ export default function TestTable() {
                                 </tbody>
                             </table>
                         </div>
-                        <div className="mt-5 md:col-span-2 md:mt-1">
-                            <div className="shadow sm:overflow-hidden sm:rounded-md">
-                                <div className="bg-gray-50 dark:bg-neutral-800 px-1 py-3 text-left sm:px-3">
-                                    {previousURL != null ? (
-                                        <button
-                                            type="button"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                                            onClick={previousPage}
-                                        >
-                                            Previous
-                                        </button>
-                                    ) : (
-                                        <button
-                                            type="button"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
-                                            disabled
-                                        >
-                                            Previous
-                                        </button>
-                                    )}
-                                    {nextURL != null ? (
-                                        <button
-                                            type="button"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                                            onClick={nextPage}
-                                        >
-                                            Next
-                                        </button>
-                                    ) : (
-                                        <button
-                                            type="button"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
-                                            disabled
-                                        >
-                                            Next
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
+                        <div className={pageMenuStyle.container}>
+                            {previousURL != null ? (
+                                <button
+                                    type="button"
+                                    className={buttonStyle.activ}
+                                    onClick={previousPage}
+                                >
+                                    Previous
+                                </button>
+                            ) : (
+                                <button
+                                    type="button"
+                                    className={buttonStyle.inactiv}
+                                    disabled
+                                >
+                                    Previous
+                                </button>
+                            )}
+                            {nextURL != null ? (
+                                <button
+                                    type="button"
+                                    className={buttonStyle.activ}
+                                    onClick={nextPage}
+                                >
+                                    Next
+                                </button>
+                            ) : (
+                                <button
+                                    type="button"
+                                    className={buttonStyle.inactiv}
+                                    disabled
+                                >
+                                    Next
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>

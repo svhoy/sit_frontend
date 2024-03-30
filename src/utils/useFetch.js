@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import jwtDecode from "jwt-decode"
+import { jwtDecode } from "jwt-decode"
 import dayjs from "dayjs"
 import AuthContext from "../context/AuthContext"
 

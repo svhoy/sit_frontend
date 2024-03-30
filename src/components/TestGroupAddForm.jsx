@@ -3,9 +3,11 @@ import { Link, useNavigate } from "react-router-dom"
 import useFetch from "../utils/useFetch"
 import AuthContext from "../context/AuthContext"
 import StaticSelect from "./Selects/StaticSelect"
+import StyleContex from "../context/StyleContex"
 
 export default function TestGroupAddForm() {
     const { user } = useContext(AuthContext)
+    const { containerStyle, headerStyle, buttonStyle, formStyle } = useContext(StyleContex)
     const [addTestGroupForm, setAddTestGroupForm] = useState({
         owner: 0,
         testName: "",
@@ -44,6 +46,12 @@ export default function TestGroupAddForm() {
         setAddTestGroupForm(newFormData)
     }
 
+    let handleTestTypeChange = (value) => {
+        const newFormData = { ...addTestGroupForm }
+        newFormData.testType = value
+        setAddTestGroupForm(newFormData)
+    }
+
     let sendTestAdd = async (addForm) => {
         let { response } = await api("/api/tests/groups", "POST", JSON.stringify(addForm))
         console.log("Test:", response.status)
@@ -69,159 +77,130 @@ export default function TestGroupAddForm() {
     }
 
     return (
-        <div className="md:grid md:grid-cols-3 md:gap-6">
-            <div className="md:col-span-1">
-                <div className="px-4 sm:px-0">
-                    <h3 className="font-bold leading-tight mt-3 mb-5 text-m md:text-l lg:text-xl">
-                        Add Test Group
-                    </h3>
-                    <div className="grid grid-cols-2 gap-0">
-                        <Link
-                            to="/tests/groups"
-                            replace
-                        >
-                            <button
-                                type="button"
-                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                            >
-                                Back
-                            </button>
-                        </Link>
-                    </div>
-                    <div className="grid grid-cols-2 gap-0" />
-                    <div className="grid grid-cols-2 gap-0" />
-                </div>
+        <div className={containerStyle.component}>
+            <div className={containerStyle.left}>
+                <h3 className={headerStyle.h3}>
+                    Add Test Group
+                </h3>
+                <Link
+                    to="/tests/groups"
+                    replace
+                >
+                    <button
+                        type="button"
+                        className={buttonStyle.activ}
+                    >
+                        Back
+                    </button>
+                </Link>
             </div>
             <form
-                className="mt-5 md:col-span-2 md:mt-0 md:w-full"
+                className={formStyle.form}
                 onSubmit={handleAddFormSubmit}
             >
-                <div className="shadow sm:overflow-hidden sm:rounded-md">
-                    <div className="bg-gray-50 px-1 py-3 text-right sm:px-3">
-                        <button
-                            type="submit"
-                            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
+                <div className={formStyle.header}>
+                    <button
+                        type="submit"
+                        className={buttonStyle.activ}
+                    >
+                        Add
+                    </button>
+                </div>
+                <div className={formStyle.container}>
+                    <div className={formStyle.fullComponent}>
+                        <label
+                            htmlFor="testName"
+                            className={formStyle.label}
                         >
-                            Add
-                        </button>
-                    </div>
-                    <div className="mt-2 mb-4 px-3 grid grid-cols-1 gap-y-8 gap-x-6 sm:grid-cols-6">
-                        <div className="col-span-6">
-                            <label
-                                htmlFor="testName"
-                                className="block text-sm font-medium leading-6"
-                            >
-                                Test Group Name
-                                <div className="mt-1">
-                                    <input
-                                        className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                        type="text"
-                                        id="testName"
-                                        label="Test Name"
-                                        onChange={handleEditFormChange}
-                                    />
-                                </div>
-                            </label>
-                        </div>
-                        <div className="sm:col-span-6">
-                            <StaticSelect
-                                label="Measurement Type"
-                                handleSelectedValue={handleMeasurementTypeChange}
-                                options={measurementTypeOptions}
+                            Test Group Name
+                            <input
+                                className={formStyle.input}
+                                type="text"
+                                id="testName"
+                                label="Test Name"
+                                onChange={handleEditFormChange}
                             />
-                        </div>
-                        <div className="col-span-6">
-                            <label
-                                htmlFor="testType"
-                                className="block text-sm font-medium leading-6"
-                            >
-                                Test Type
-                                <div className="mt-1">
-                                    <select
-                                        className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                        id="testType"
-                                        label="Test Type"
-                                        onChange={handleEditFormChange}
-                                    >
-                                        <option>Static Distance</option>
-                                    </select>
-                                </div>
-                            </label>
-                        </div>
-                        <div className="col-span-5">
-                            <label
-                                htmlFor="testDistance"
-                                className="block text-sm font-medium leading-6"
-                            >
-                                Real Distance
-                                <div className="mt-1">
-                                    <input
-                                        className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                        type="number"
-                                        id="testDistance"
-                                        label="Test reale distance"
-                                        min="0"
-                                        step="0.001"
-                                        onChange={handleEditFormChange}
-                                    />
-                                </div>
-                            </label>
-                        </div>
-                        <div className="col-span-1">
-                            <label
-                                htmlFor="testUnit"
-                                className="block text-sm font-medium leading-6"
-                            >
-                                Unit
-                                <div className="mt-1">
-                                    <input
-                                        className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                        type="text"
-                                        id="testUnit"
-                                        label="Test Einheit"
-                                        value="m"
-                                        onChange={handleEditFormChange}
-                                        readOnly
-                                    />
-                                </div>
-                            </label>
-                        </div>
-                        <div className="col-span-6 sm:col-span-3">
-                            <label
-                                htmlFor="testMinMeasurements"
-                                className="block text-sm font-medium leading-6"
-                            >
-                                Min. Measurements
-                                <div className="mt-1">
-                                    <input
-                                        className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                        type="number"
-                                        id="testMinMeasurements"
-                                        label="Test Measurements"
-                                        min="0"
-                                        onChange={handleEditFormChange}
-                                    />
-                                </div>
-                            </label>
-                        </div>
-                        <div className="col-span-6 mb-4 sm:col-span-3 sm:mb-0">
-                            <label
-                                htmlFor="testMaxMeasurements"
-                                className="block text-sm font-medium leading-6"
-                            >
-                                Max Measurements
-                                <div className="mt-1">
-                                    <input
-                                        className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                        type="number"
-                                        id="testMaxMeasurements"
-                                        label="Test Max Measurements"
-                                        min="0"
-                                        onChange={handleEditFormChange}
-                                    />
-                                </div>
-                            </label>
-                        </div>
+                        </label>
+                    </div>
+                    <div className={formStyle.fullComponent}>
+                        <StaticSelect
+                            label="Measurement Type"
+                            handleSelectedValue={handleMeasurementTypeChange}
+                            options={measurementTypeOptions}
+                        />
+                    </div>
+                    <div className={formStyle.fullComponent}>
+                        <StaticSelect
+                            label="Test Type"
+                            handleSelectedValue={handleTestTypeChange}
+                            options={["Static Distance"]}
+                        />
+                    </div>
+                    <div className="col-span-5">
+                        <label
+                            htmlFor="testDistance"
+                            className={formStyle.label}
+                        >
+                            Real Distance
+                            <input
+                                className={formStyle.input}
+                                type="number"
+                                id="testDistance"
+                                label="Test reale distance"
+                                min="0"
+                                step="0.001"
+                                onChange={handleEditFormChange}
+                            />
+                        </label>
+                    </div>
+                    <div className="col-span-1">
+                        <label
+                            htmlFor="testUnit"
+                            className={formStyle.label}
+                        >
+                            Unit
+                            <input
+                                className={formStyle.input}
+                                type="text"
+                                id="testUnit"
+                                label="Test Einheit"
+                                value="m"
+                                onChange={handleEditFormChange}
+                                readOnly
+                            />
+                        </label>
+                    </div>
+                    <div className={formStyle.fullSMhalf}>
+                        <label
+                            htmlFor="testMinMeasurements"
+                            className={formStyle.label}
+                        >
+                            Min. Measurements
+                            <input
+                                className={formStyle.input}
+                                type="number"
+                                id="testMinMeasurements"
+                                label="Test Measurements"
+                                min="0"
+                                onChange={handleEditFormChange}
+                            />
+                        </label>
+                    </div>
+                    <div className={formStyle.fullSMhalf}>
+                        <label
+                            htmlFor="testMaxMeasurements"
+                            className={formStyle.label}
+                        >
+                            Max Measurements
+                            <input
+                                className={formStyle.input}
+                                type="number"
+                                id="testMaxMeasurements"
+                                label="Test Max Measurements"
+                                min="0"
+                                onChange={handleEditFormChange}
+                            />
+                        </label>
                     </div>
                 </div>
             </form>

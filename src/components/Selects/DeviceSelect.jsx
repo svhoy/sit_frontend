@@ -1,12 +1,13 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable operator-linebreak */
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import PropTypes from "prop-types"
 import useFetch from "../../utils/useFetch"
+import StyleContex from "../../context/StyleContex"
 
 export default function DeviceSelect({ handleSelectedValue, lableName, uwbList, couldEmpty }) {
     let api = useFetch()
-
+    const { formStyle } = useContext(StyleContex)
     const [deviceList, setDeviceList] = useState([])
 
     let getDeviceList = async () => {
@@ -53,30 +54,28 @@ export default function DeviceSelect({ handleSelectedValue, lableName, uwbList, 
     return (
         <label
             htmlFor="device"
-            className="block text-sm font-medium leading-6"
+            className={formStyle.label}
         >
             {lableName}
-            <div className="mt-1">
-                <select
-                    className="block w-full rounded-md border-0 px-2 py-1.5 dark:bg-neutral-600 text-gray-700 dark:text-neutral-300 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-500 placeholder:text-gray-400 dark:placeholder:text-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    id="device"
-                    label="Device"
-                    onChange={handleSelectChange}
-                    required
-                >
-                    {deviceList &&
-                        deviceList.map((item) => {
-                            return (
-                                <option
-                                    key={item.device_id}
-                                    value={item.id}
-                                >
-                                    {item.device_name} ({item.device_id})
-                                </option>
-                            )
-                        })}
-                </select>
-            </div>
+            <select
+                className={formStyle.select}
+                id="device"
+                label="Device"
+                onChange={handleSelectChange}
+                required
+            >
+                {deviceList &&
+                    deviceList.map((item) => {
+                        return (
+                            <option
+                                key={item.device_id}
+                                value={item.id}
+                            >
+                                {item.device_name} ({item.device_id})
+                            </option>
+                        )
+                    })}
+            </select>
         </label>
     )
 }

@@ -3,7 +3,8 @@ import React, { useEffect, useContext } from "react"
 import PropTypes from "prop-types"
 import StyleContex from "../../context/StyleContex"
 
-export default function DistanceTable({ headers, distanceData }) {
+
+export default function DistanceTable({ headers, data }) {
     const { tableStyle } = useContext(StyleContex)
     useEffect(() => {}, [])
 
@@ -25,31 +26,21 @@ export default function DistanceTable({ headers, distanceData }) {
                             })}
                     </thead>
                     <tbody>
-                        {distanceData &&
-                            distanceData.map((item) => {
+                        {data &&
+                            data.map((item) => {
                                 return (
                                     <tr
                                         key={item.id}
                                         className={tableStyle.tr}
                                     >
-                                        <td className={tableStyle.td}>
-                                            {item.sequence}
-                                        </td>
-                                        <td className={tableStyle.td}>
-                                            {item.distance}
-                                        </td>
-                                        <td className={tableStyle.td}>
-                                            {item.error_distance}
-                                        </td>
-                                        <td className={tableStyle.td}>
-                                            {item.RecivedSignalStrengthIndex}
-                                        </td>
-                                        <td className={tableStyle.td}>
-                                            {item.firstPathIndex}
-                                        </td>
-                                        <td className={tableStyle.td}>
-                                            {item.nlos}
-                                        </td>
+                                        {Object.entries(item).map(([key, value]) => {
+                                            return (
+                                                <td key={key} className={tableStyle.td}>
+                                                    {value}
+                                                </td>
+                                            )
+                                        })
+                                        }
                                     </tr>
                                 )
                             })}
@@ -61,7 +52,7 @@ export default function DistanceTable({ headers, distanceData }) {
 }
 
 DistanceTable.propTypes = {
-    distanceData: PropTypes.arrayOf(
+    data: PropTypes.arrayOf(
         PropTypes.shape({
             RecivedSignalStrengthIndex: PropTypes.number,
             distance: PropTypes.number,

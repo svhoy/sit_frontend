@@ -1,10 +1,12 @@
 /* eslint-disable operator-linebreak */
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons"
 import useFetch from "../utils/useFetch"
+import StyleContex from "../context/StyleContex"
 
 export default function DistancesTable() {
+    const { containerStyle, tableStyle, headerStyle, pageMenuStyle, buttonStyle } = useContext(StyleContex)
     const [distanceMeasurementsList, setdistanceMeasurementsList] = useState([])
     const [baseURL] = useState("/api/measurement-list/")
     const [nextURL, setNextURL] = useState(null)
@@ -61,71 +63,72 @@ export default function DistancesTable() {
     }
 
     return (
-        <div className="shadow sm:overflow-x-auto sm:rounded-md">
-            <div className="overflow-x-auto">
-                <table className="table-auto">
-                    <thead className="border-b">
-                        <tr>
-                            <th className="text-sm font-medium px-6 py-4 text-left">ID</th>
-                            <th className="text-sm font-medium px-6 py-4 text-left">Created</th>
-                            <th className="text-sm font-medium px-6 py-4 text-left">Distance</th>
-                            <th
-                                aria-label="Button"
-                                className="text-sm font-medium px-6 py-4 text-left"
-                            />
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {distanceMeasurementsList &&
-                            distanceMeasurementsList.map((item) => {
-                                return (
-                                    <tr
-                                        key={item.id}
-                                        className="border-b odd:bg-gray-100 dark:odd:bg-neutral-700"
-                                    >
-                                        <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
-                                            {item.id}
-                                        </td>
-                                        <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
-                                            {item.created}
-                                        </td>
-                                        <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
-                                            {item.distance}
-                                        </td>
-                                        <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
-                                            <button
-                                                type="button"
-                                                className="mx-2"
-                                                onClick={() => {
-                                                    return handleDeleteClick(item.id)
-                                                }}
-                                                title="Löschen"
-                                            >
-                                                <FontAwesomeIcon icon={faTrashCan} />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                )
-                            })}
-                    </tbody>
-                </table>
+        <div className={containerStyle.component}>
+            <div className={containerStyle.left}>
+                <div className={containerStyle.leftComponent}>
+                    <h3 className={headerStyle.h3}>Distance Measurements</h3>
+                </div>
             </div>
-            <div className="mt-5 md:mt-2">
-                <div className="shadow sm:overflow-hidden sm:rounded-md">
-                    <div className="bg-white-50 dark:bg-neutral-800 px-1 py-3 text-left sm:px-3">
+            <div className={containerStyle.right}>
+                <div className={tableStyle.container}>
+                    <div className={tableStyle.overflow}>
+                        <table className={tableStyle.table}>
+                            <thead className={tableStyle.head}>
+                                <th className={tableStyle.th}>ID</th>
+                                <th className={tableStyle.th}>Created</th>
+                                <th className={tableStyle.th}>Distance</th>
+                                <th
+                                    aria-label="Button"
+                                    className={tableStyle.th}
+                                />
+                            </thead>
+                            <tbody>
+                                {distanceMeasurementsList &&
+                                    distanceMeasurementsList.map((item) => {
+                                        return (
+                                            <tr
+                                                key={item.id}
+                                                className={tableStyle.tr}
+                                            >
+                                                <td className={tableStyle.td}>
+                                                    {item.id}
+                                                </td>
+                                                <td className={tableStyle.td}>
+                                                    {item.created}
+                                                </td>
+                                                <td className={tableStyle.td}>
+                                                    {item.distance}
+                                                </td>
+                                                <td className={tableStyle.td}>
+                                                    <button
+                                                        type="button"
+                                                        className={tableStyle.editButton}
+                                                        onClick={() => {
+                                                            return handleDeleteClick(item.id)
+                                                        }}
+                                                        title="Löschen"
+                                                    >
+                                                        <FontAwesomeIcon icon={faTrashCan} />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className={pageMenuStyle.container}>
                         {previousURL != null ? (
                             <button
                                 type="button"
-                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                                onClick={previousPage}
+                                className={buttonStyle.activ}
                             >
                                 Previous
                             </button>
                         ) : (
                             <button
                                 type="button"
-                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
-                                disabled
+                                className={buttonStyle.inactiv}
                             >
                                 Previous
                             </button>
@@ -133,7 +136,7 @@ export default function DistancesTable() {
                         {nextURL != null ? (
                             <button
                                 type="button"
-                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
+                                className={buttonStyle.activ}
                                 onClick={nextPage}
                             >
                                 Next
@@ -141,7 +144,7 @@ export default function DistancesTable() {
                         ) : (
                             <button
                                 type="button"
-                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
+                                className={buttonStyle.inactiv}
                                 disabled
                             >
                                 Next

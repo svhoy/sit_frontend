@@ -1,11 +1,13 @@
 /* eslint-disable operator-linebreak */
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashCan, faCircleInfo } from "@fortawesome/free-solid-svg-icons"
 import InfoModal from "../Modals/InfoModal"
 import useFetch from "../../utils/useFetch"
+import StyleContex from "../../context/StyleContex"
 
 export default function DeviceTable() {
+    const { tableStyle, buttonStyle, pageMenuStyle } = useContext(StyleContex)
     const [deviceList, setDeviceList] = useState([])
     const [baseURL] = useState("/api/device/")
     const [nextURL, setNextURL] = useState(null)
@@ -66,24 +68,22 @@ export default function DeviceTable() {
 
     return (
         <>
-            <div className="shadow sm:overflow-x-auto sm:rounded-md">
-                <div className="overflow-x-auto">
-                    <table className="table-auto w-full">
-                        <thead className="border-b">
-                            <tr>
-                                <th className="text-sm font-medium px-6 py-4 text-left">ID</th>
-                                <th className="text-sm font-medium px-6 py-4 text-left">Created</th>
-                                <th className="text-sm font-medium px-6 py-4 text-left">
-                                    Device Name
-                                </th>
-                                <th className="text-sm font-medium px-6 py-4 text-left">
-                                    Device ID
-                                </th>
-                                <th
-                                    aria-label="Button"
-                                    className="text-sm font-medium px-6 py-4 text-left"
-                                />
-                            </tr>
+            <div className={tableStyle.container}>
+                <div className={tableStyle.overflow}>
+                    <table className={tableStyle.table}>
+                        <thead className={tableStyle.head}>
+                            <th className={tableStyle.th}>ID</th>
+                            <th className={tableStyle.th}>Created</th>
+                            <th className={tableStyle.th}>
+                                Device Name
+                            </th>
+                            <th className={tableStyle.th}>
+                                Device ID
+                            </th>
+                            <th
+                                aria-label="Button"
+                                className={tableStyle.th}
+                            />
                         </thead>
                         <tbody>
                             {deviceList &&
@@ -91,25 +91,25 @@ export default function DeviceTable() {
                                     return (
                                         <tr
                                             key={item.id}
-                                            className="border-b odd:bg-gray-100 dark:odd:bg-neutral-700"
+                                            className={tableStyle.tr}
                                         >
-                                            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                            <td className={tableStyle.td}>
                                                 {item.id}
                                             </td>
-                                            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                            <td className={tableStyle.td}>
                                                 {item.created}
                                             </td>
-                                            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                            <td className={tableStyle.td}>
                                                 {item.device_name}
                                             </td>
-                                            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                            <td className={tableStyle.td}>
                                                 {item.device_id}
                                             </td>
-                                            <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                            <td className={tableStyle.td}>
                                                 {item.comments && (
                                                     <button
                                                         type="button"
-                                                        className="mx-2"
+                                                        className={tableStyle.editButton}
                                                         onClick={() => {
                                                             setShowModal(true)
                                                             setModalTitle(
@@ -124,7 +124,7 @@ export default function DeviceTable() {
                                                 )}
                                                 <button
                                                     type="button"
-                                                    className="mx-2"
+                                                    className={tableStyle.editButton}
                                                     onClick={() => {
                                                         return handleDeleteClick(item.id)
                                                     }}
@@ -139,45 +139,42 @@ export default function DeviceTable() {
                         </tbody>
                     </table>
                 </div>
-                <div className="mt-5 md:mt-2">
-                    <div className="shadow sm:overflow-hidden sm:rounded-md">
-                        <div className="bg-gray-50 dark:bg-neutral-800 px-1 py-3 text-left sm:px-3">
-                            {previousURL != null ? (
-                                <button
-                                    type="button"
-                                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                                    onClick={previousPage}
-                                >
-                                    Previous
-                                </button>
-                            ) : (
-                                <button
-                                    type="button"
-                                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
-                                    disabled
-                                >
-                                    Previous
-                                </button>
-                            )}
-                            {nextURL != null ? (
-                                <button
-                                    type="button"
-                                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                                    onClick={nextPage}
-                                >
-                                    Next
-                                </button>
-                            ) : (
-                                <button
-                                    type="button"
-                                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
-                                    disabled
-                                >
-                                    Next
-                                </button>
-                            )}
-                        </div>
-                    </div>
+
+                <div className={pageMenuStyle.container}>
+                    {previousURL != null ? (
+                        <button
+                            type="button"
+                            className={buttonStyle.activ}
+                            onClick={previousPage}
+                        >
+                            Previous
+                        </button>
+                    ) : (
+                        <button
+                            type="button"
+                            className={buttonStyle.inactiv}
+                            disabled
+                        >
+                            Previous
+                        </button>
+                    )}
+                    {nextURL != null ? (
+                        <button
+                            type="button"
+                            className={buttonStyle.activ}
+                            onClick={nextPage}
+                        >
+                            Next
+                        </button>
+                    ) : (
+                        <button
+                            type="button"
+                            className={buttonStyle.inactiv}
+                            disabled
+                        >
+                            Next
+                        </button>
+                    )}
                 </div>
             </div>
             <InfoModal

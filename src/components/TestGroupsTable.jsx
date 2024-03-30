@@ -1,11 +1,13 @@
 /* eslint-disable operator-linebreak */
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashCan, faPlay } from "@fortawesome/free-solid-svg-icons"
 import { Link, useNavigate } from "react-router-dom"
 import useFetch from "../utils/useFetch"
+import StyleContex from "../context/StyleContex"
 
 export default function TestGroupsTable() {
+    const { containerStyle, headerStyle, buttonStyle, tableStyle, pageMenuStyle } = useContext(StyleContex)
     const [testGroupList, setTestGroupList] = useState([])
     const [baseURL] = useState("/api/tests/groups")
     const [nextURL, setNextURL] = useState(null)
@@ -78,84 +80,81 @@ export default function TestGroupsTable() {
         deleteDistance(settingId)
     }
     return (
-        <div className="md:grid md:grid-cols-3 md:gap-6">
-            <div className="md:col-span-1">
-                <div className="px-4 sm:px-0">
-                    <h3 className="font-bold leading-tight mt-3 mb-5 text-m md:text-l lg:text-xl">
-                        Test Groups
-                    </h3>
-                    <div className="grid grid-cols-2 gap-0">
-                        <Link to="/tests/groups/add">
-                            <button
-                                type="button"
-                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                            >
-                                Add Test Group
-                            </button>
-                        </Link>
-                    </div>
-                    <div className="mt-5 grid grid-cols-2 gap-0" />
-                    {checkTest != null ? (
+        <div className={containerStyle.component}>
+            <div className={containerStyle.left}>
+                <h3 className={headerStyle.h3}>
+                    Test Groups
+                </h3>
+                <div className={containerStyle.leftComponent}>
+                    <Link to="/tests/groups/add">
                         <button
                             type="button"
-                            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                            onClick={startTest}
+                            className={buttonStyle.activ}
                         >
-                            Start Test
-                            <span className="ml-2">
-                                <FontAwesomeIcon icon={faPlay} />
-                            </span>
+                            Add Test Group
                         </button>
-                    ) : (
-                        <button
-                            type="button"
-                            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
-                            disabled
-                        >
-                            Start Test
-                            <span className="ml-2">
-                                <FontAwesomeIcon icon={faPlay} />
-                            </span>
-                        </button>
-                    )}
-                    <div className="grid grid-cols-2 gap-0" />
+                    </Link>
                 </div>
+                <div className={containerStyle.leftComponent} />
+                {checkTest != null ? (
+                    <button
+                        type="button"
+                        className={buttonStyle.activ}
+                        onClick={startTest}
+                    >
+                        Start Test
+                        <span className={buttonStyle.icon}>
+                            <FontAwesomeIcon icon={faPlay} />
+                        </span>
+                    </button>
+                ) : (
+                    <button
+                        type="button"
+                        className={buttonStyle.inactiv}
+                        disabled
+                    >
+                        Start Test
+                        <span className={buttonStyle.icon}>
+                            <FontAwesomeIcon icon={faPlay} />
+                        </span>
+                    </button>
+                )}
             </div>
-            <div className="mt-5 md:col-span-2 md:mt-0 md:w-full">
-                <div className="shadow min-w-full sm:overflow-x-auto sm:rounded-md">
-                    <div className="overflow-x-auto">
-                        <table className="table-auto overflow-scroll min-w-full ">
-                            <thead className="border-b">
+            <div className={containerStyle.right}>
+                <div className={tableStyle.container}>
+                    <div className={tableStyle.overflow}>
+                        <table className={tableStyle.table}>
+                            <thead className={tableStyle.head}>
                                 <tr>
                                     <th
                                         aria-label="Checkbox"
-                                        className="text-sm font-medium px-3 py-4 text-left"
+                                        className={tableStyle.th}
                                     />
-                                    <th className="text-sm font-medium px-6 py-4 text-left">ID</th>
-                                    <th className="text-sm font-medium px-6 py-4 text-left">
+                                    <th className={tableStyle.th}>ID</th>
+                                    <th className={tableStyle.th}>
                                         Test Name
                                     </th>
-                                    <th className="text-sm font-mediu px-6 py-4 text-left">
+                                    <th className={tableStyle.th}>
                                         Test Typ
                                     </th>
-                                    <th className="text-sm font-medium px-6 py-4 text-left">
+                                    <th className={tableStyle.th}>
                                         Distanz
                                     </th>
-                                    <th className="text-sm font-medium px-6 py-4 text-left">
+                                    <th className={tableStyle.th}>
                                         Einheit
                                     </th>
-                                    <th className="text-sm font-medium px-6 py-4 text-left">
+                                    <th className={tableStyle.th}>
                                         Minimum Messungen
                                     </th>
-                                    <th className="text-sm font-medium px-6 py-4 text-left">
+                                    <th className={tableStyle.th}>
                                         Maximum Messungen
                                     </th>
-                                    <th className="text-sm font-medium px-6 py-4 text-left">
+                                    <th className={tableStyle.th}>
                                         Owner
                                     </th>
                                     <th
                                         aria-label="Buttons"
-                                        className="text-sm font-medium px-6 py-4 text-left"
+                                        className={tableStyle.th}
                                     />
                                 </tr>
                             </thead>
@@ -165,9 +164,9 @@ export default function TestGroupsTable() {
                                         return (
                                             <tr
                                                 key={item.id}
-                                                className="border-b odd:bg-gray-100 dark:odd:bg-neutral-700"
+                                                className={tableStyle.tr}
                                             >
-                                                <td className="text-sm font-light px-3 py-4 whitespace-nowrap">
+                                                <td className={tableStyle.td}>
                                                     <input
                                                         type="checkbox"
                                                         id={item.id}
@@ -175,31 +174,31 @@ export default function TestGroupsTable() {
                                                         onChange={toggleSelected(item.id)}
                                                     />
                                                 </td>
-                                                <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                                <td className={tableStyle.td}>
                                                     {item.id}
                                                 </td>
-                                                <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                                <td className={tableStyle.td}>
                                                     {item.test_name}
                                                 </td>
-                                                <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                                <td className={tableStyle.td}>
                                                     {item.test_type}
                                                 </td>
-                                                <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                                <td className={tableStyle.td}>
                                                     {item.test_distance}
                                                 </td>
-                                                <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                                <td className={tableStyle.td}>
                                                     {item.test_unit}
                                                 </td>
-                                                <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                                <td className={tableStyle.td}>
                                                     {item.test_min_measurements}
                                                 </td>
-                                                <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                                <td className={tableStyle.td}>
                                                     {item.test_max_measurements}
                                                 </td>
-                                                <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                                <td className={tableStyle.td}>
                                                     {item.user}
                                                 </td>
-                                                <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
+                                                <td className={tableStyle.td}>
                                                     <button
                                                         type="button"
                                                         className="mx-2"
@@ -217,48 +216,44 @@ export default function TestGroupsTable() {
                             </tbody>
                         </table>
                     </div>
-                    <div className="mt-5 md:col-span-2 md:mt-1">
-                        <div className="shadow sm:overflow-hidden sm:rounded-md">
-                            <div className="bg-gray-50 dark:bg-neutral-800 px-1 py-3 text-left sm:px-3">
-                                {previousURL != null ? (
-                                    <button
-                                        type="button"
-                                        className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                                        onClick={previousPage}
-                                    >
-                                        Previous
-                                    </button>
-                                ) : (
-                                    <button
-                                        type="button"
-                                        className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
-                                        disabled
-                                    >
-                                        Previous
-                                    </button>
-                                )}
-                                {nextURL != null ? (
-                                    <button
-                                        type="button"
-                                        className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                                        onClick={nextPage}
-                                    >
-                                        Next
-                                    </button>
-                                ) : (
-                                    <button
-                                        type="button"
-                                        className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-30"
-                                        disabled
-                                    >
-                                        Next
-                                    </button>
-                                )}
-                            </div>
-                        </div>
+                    <div className={pageMenuStyle.container}>
+                        {previousURL != null ? (
+                            <button
+                                type="button"
+                                className={buttonStyle.activ}
+                                onClick={previousPage}
+                            >
+                                Previous
+                            </button>
+                        ) : (
+                            <button
+                                type="button"
+                                className={buttonStyle.inactiv}
+                                disabled
+                            >
+                                Previous
+                            </button>
+                        )}
+                        {nextURL != null ? (
+                            <button
+                                type="button"
+                                className={buttonStyle.activ}
+                                onClick={nextPage}
+                            >
+                                Next
+                            </button>
+                        ) : (
+                            <button
+                                type="button"
+                                className={buttonStyle.inactiv}
+                                disabled
+                            >
+                                Next
+                            </button>
+                        )}
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }

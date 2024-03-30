@@ -1,74 +1,70 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useContext } from "react"
 import PropTypes from "prop-types"
+import StyleContex from "../../context/StyleContex"
 
 export default function TestGroupDescription({ testGroup, showTestGroupName }) {
+    const { descriptionStyle } = useContext(StyleContex)
     useEffect(() => {}, [testGroup])
 
     return (
-        <div>
-            <dl>
+        <div className={descriptionStyle.container}>
+            <dl className={descriptionStyle.dl}>
                 {showTestGroupName ? (
                     testGroup.test_name && (
-                        <div className="sm:grid sm:grid-cols-4 sm:gap-4">
-                            <div className="bg-white py-5 sm:col-span-4 ">
-                                <dt className="text-sm font-medium text-gray-500">Test Group</dt>
-                                <dd className="mt-1 text-sm text-gray-900 sm:mt-0">
-                                    {testGroup.test_name}
-                                </dd>
-                            </div>
+                        <div className={descriptionStyle.infoConatinerFull}>
+                            <dt className={descriptionStyle.dt}>Test Group</dt>
+                            <dd className={descriptionStyle.dd}>
+                                {testGroup.test_name}
+                            </dd>
                         </div>
                     )
                 ) : (
-                    <div />
+                    null
                 )}
-                <div className="sm:grid sm:grid-cols-4 sm:gap-4">
-                    <div className="bg-white py-5 sm:col-span-4 ">
-                        <dt className="text-sm font-medium text-gray-500">Test Type</dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0">
-                            {testGroup.test_type}
-                        </dd>
-                    </div>
+                <div className={descriptionStyle.infoConatinerFull}>
+                    <dt className={descriptionStyle.dt}>Test Type</dt>
+                    <dd className={descriptionStyle.dd}>
+                        {testGroup.test_type}
+                    </dd>
                 </div>
-                <div className="sm:grid sm:grid-cols-4 sm:gap-4">
-                    <div className="bg-white py-5 sm:col-span-4 ">
-                        <dt className="text-sm font-medium text-gray-500">Test Measurement Type</dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0">
-                            {testGroup.test_measurement_type}
-                        </dd>
-                    </div>
+                <div className={descriptionStyle.infoContainerFull}>
+                    <dt className={descriptionStyle.dt}>Test Measurement Type</dt>
+                    <dd className={descriptionStyle.dd}>
+                        {testGroup.test_measurement_type}
+                    </dd>
                 </div>
-                <div className="sm:grid sm:grid-cols-4 sm:gap-4">
-                    <div className="bg-white py-5 sm:col-span-3 ">
-                        <dt className="text-sm font-medium text-gray-500">Test Distance</dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0">
-                            {testGroup.test_distance}
-                        </dd>
-                    </div>
-                    <div className="bg-white py-5 sm:col-span-1 ">
-                        <dt className="text-sm font-medium text-gray-500">Unit</dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0">
-                            {testGroup.test_unit}
-                        </dd>
-                    </div>
+                <div className={descriptionStyle.infoContainerHalf}>
+                    <dt className={descriptionStyle.dt}>Test Distance</dt>
+                    <dd className={descriptionStyle.dd}>
+                        {testGroup.test_distance}
+                    </dd>
                 </div>
-                {(testGroup.test_min_measurements || testGroup.test_max_measurements) && (
-                    <div className="sm:grid sm:grid-cols-4 sm:gap-4">
-                        <div className="bg-white py-5 sm:col-span-2 ">
-                            <dt className="text-sm font-medium text-gray-500">Min. Measurements</dt>
-                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0">
-                                {testGroup.test_min_measurements}
-                            </dd>
-                        </div>
-                        <div className="bg-white py-5 sm:col-span-2 ">
-                            <dt className="text-sm font-medium text-gray-500">Max. Measurements</dt>
-                            <dd className="mt-1 text-sm text-gray-900 sm:col-span-4 sm:mt-0">
-                                {testGroup.test_max_measurements}
-                            </dd>
-                        </div>
-                    </div>
-                )}
+                <div className={descriptionStyle.infoContainerHalf}>
+                    <dt className={descriptionStyle.dt}>Unit</dt>
+                    <dd className={descriptionStyle.dd}>
+                        {testGroup.test_unit}
+                    </dd>
+                </div>
+                {
+                    (testGroup.test_min_measurements || testGroup.test_max_measurements) && (
+                        <>
+                            <div className={descriptionStyle.infoContainerHalf}>
+                                <dt className={descriptionStyle.dt}>Min. Measurements</dt>
+                                <dd className={descriptionStyle.dd}>
+                                    {testGroup.test_min_measurements}
+                                </dd>
+                            </div>
+                            <div className={descriptionStyle.infoContainerHalf}>
+                                <dt className={descriptionStyle.dt}>Max. Measurements</dt>
+                                <dd className="mt-1 text-sm sm:col-span-4 sm:mt-0">
+                                    {testGroup.test_max_measurements}
+                                </dd>
+                            </div>
+                        </>
+                    )
+                }
             </dl>
-        </div>
+        </div >
     )
 }
 
