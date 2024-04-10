@@ -16,7 +16,7 @@ export default function CalibrationStartForm() {
     const [informationLog, setInformationLog] = useState("")
     const [calibrationType, setCalibrationType] = useState("")
     const [measurementType, setMeasurementType] = useState("")
-    const [calibrationOptions] = useState(["Antenna Calibration (ASP014)"])
+    const [calibrationOptions] = useState(["Antenna Calibration (ASP014)", "Antenna Calibration (PSO) - EDM", "Antenna Calibration (PSO) - ADS",])
     const [measurementTypeOptions] = useState([["SS-TWR", "ss_twr"], ["DS-TWR", "ds_3_twr"]])
     const [calibrationDistances, setCalibrationDistances] = useState([])
     const informationTextarea = useRef()
@@ -35,6 +35,7 @@ export default function CalibrationStartForm() {
                     }
                 })
             )
+            console.log("Start Calibration:", calibrationType, measurementType, deviceList)
             setInformationLog([])
             setCalibrationIsRunning(true)
         } catch (error) {

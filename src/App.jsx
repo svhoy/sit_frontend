@@ -24,7 +24,9 @@ import TestReviewPage from "./pages/TestReviewPage";
 import BleDevices from "./components/BleDevices"
 import AddBleDeviceForm from "./components/Forms/AddBleDeviceForm"
 import DeviceOverview from "./components/DeviceOverview";
+import CalibrationOverview from "./components/CalibrationOverview";
 import CalibrationStartForm from "./components/Forms/CalibrationStartForm";
+import CalibrationCopieForm from "./components/Forms/CalibrationCopieForm";
 import DistancesTable from "./components/DistancesTable";
 import { StyleProvider } from "./context/StyleContex";
 
@@ -57,7 +59,9 @@ function App() {
                                             <Route element={<AddBleDeviceForm />} path="ble/add" />
                                         </Route>
                                         <Route element={<CalibrationPage />} path="/calibration" >
+                                            <Route element={<CalibrationOverview />} path="" />
                                             <Route element={<CalibrationStartForm />} path="start" />
+                                            <Route element={<CalibrationCopieForm />} path="copie/:calibrationID" />
                                         </Route>
                                     </Route>
                                 </Route>
