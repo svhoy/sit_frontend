@@ -2,7 +2,7 @@
 /* eslint-disable indent */
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect, useRef, useContext } from "react"
-
+import { useNavigate } from "react-router-dom"
 import PropTypes from "prop-types"
 import WebSocketContex from "../../context/WebSocketContex"
 import DeviceInformation from "../Informations/DeviceInformation"
@@ -17,6 +17,10 @@ export default function DistanceMeasurements({
     maxMeasurements,
     initiator,
     responder,
+    init_rx_ant_dly,
+    init_tx_ant_dly,
+    resp_rx_ant_dly,
+    resp_tx_ant_dly,
     measurementTypePre,
     devicePreSelected
 }) {
@@ -30,6 +34,7 @@ export default function DistanceMeasurements({
     const [measurementIsRunning, setMeasurementIsRunning] = useState(false)
     const [canStop, setCanStop] = useState(false)
     const distanceTextarea = useRef()
+    let navigate = useNavigate()
 
     const { uwbList, message, send } = useContext(WebSocketContex)
 
@@ -40,12 +45,17 @@ export default function DistanceMeasurements({
                     JSON.stringify({
                         type: "StartTestMeasurement",
                         data: {
-                            test_id: testID,
+                            test_id: parseInt(testID),
                             initiator,
                             responder: [responder],
                             measurement_type: measurementTypePre,
                             min_measurement: minMeasurements,
-                            max_measurement: maxMeasurements
+                            max_measurement: maxMeasurements,
+                            init_rx_ant_dly: init_rx_ant_dly,
+                            init_tx_ant_dly: init_tx_ant_dly,
+                            resp_rx_ant_dly: resp_rx_ant_dly,
+                            resp_tx_ant_dly: resp_tx_ant_dly,
+
                         }
                     })
                 )
@@ -130,6 +140,10 @@ export default function DistanceMeasurements({
             if (maxMeasurements !== 0 && maxMeasurements <= distancePoints) {
                 stopMeasurements()
             }
+        } else if (message.type === "TestFinished") {
+            message.type = "Broken"
+            setMeasurementIsRunning(false)
+            navigate(`/tests/review/${message.data.test_id}`)
         }
     }, [message])
 
@@ -263,7 +277,11 @@ DistanceMeasurements.propTypes = {
     initiator: PropTypes.string,
     responder: PropTypes.string,
     measurementTypePre: PropTypes.string,
-    devicePreSelected: PropTypes.bool
+    devicePreSelected: PropTypes.bool,
+    init_rx_ant_dly: PropTypes.number,
+    init_tx_ant_dly: PropTypes.number,
+    resp_rx_ant_dly: PropTypes.number,
+    resp_tx_ant_dly: PropTypes.number
 }
 
 DistanceMeasurements.defaultProps = {
@@ -274,5 +292,9 @@ DistanceMeasurements.defaultProps = {
     initiator: null,
     responder: null,
     measurementTypePre: null,
-    devicePreSelected: false
+    devicePreSelected: false,
+    init_rx_ant_dly: 2.630913330620677e-07,
+    init_tx_ant_dly: 2.630913330620677e-07,
+    resp_rx_ant_dly: 2.630913330620677e-07,
+    resp_tx_ant_dly: 2.630913330620677e-07
 }

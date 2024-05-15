@@ -29,6 +29,7 @@ import CalibrationStartForm from "./components/Forms/CalibrationStartForm";
 import CalibrationCopieForm from "./components/Forms/CalibrationCopieForm";
 import DistancesTable from "./components/DistancesTable";
 import { StyleProvider } from "./context/StyleContex";
+import DebugPage from "./components/DebugPage";
 
 
 function App() {
@@ -62,6 +63,7 @@ function App() {
                                             <Route element={<CalibrationOverview />} path="" />
                                             <Route element={<CalibrationStartForm />} path="start" />
                                             <Route element={<CalibrationCopieForm />} path="copie/:calibrationID" />
+                                            <Route element={<DebugPage />} path="debug" />
                                         </Route>
                                     </Route>
                                 </Route>

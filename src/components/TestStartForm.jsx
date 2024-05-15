@@ -14,6 +14,7 @@ import TestGroupSelect from "./Selects/TestGroupSelect"
 import DeviceInformation from "./Informations/DeviceInformation"
 import DeviceSelect from "./Selects/DeviceSelect"
 import LineDivider from "./Dividers/LineDivider"
+import AntennaDelaySelect from "./Selects/AntennaDelaySelect"
 
 export default function TestStartForm() {
     const { user } = useContext(AuthContext)
@@ -25,7 +26,8 @@ export default function TestStartForm() {
     const [addTestForm, setAddTestForm] = useState({
         owner: 0,
         realTestDistance: 0,
-        antennaDelay: 0,
+        antennaDelayInitiator: 0,
+        antennaDelayResponder: 0,
         testComment: ""
     })
     const [testGroup, setTestGroup] = useState({})
@@ -78,15 +80,17 @@ export default function TestStartForm() {
     let handleAddFormSubmit = (event) => {
         event.preventDefault()
         if (initiatorDevice !== "" && responderDevice !== "") {
-            ya
             let addForm = {
                 owner: user.user_id,
                 test_group: testGroupID,
                 real_test_distance: addTestForm.realTestDistance,
                 initiator_device: initiatorDevice[0],
                 responder_device: responderDevice[0],
+                antenna_delay_initator: addTestForm.antennaDelayInitiator,
+                antenna_delay_responder: addTestForm.antennaDelayResponder,
                 comments: addTestForm.testComment
             }
+            console.log(addForm)
             sendTestAdd(addForm)
         } else {
             console.error("Kein Device Verbunden, bitte erst UWB Device verbinden")
@@ -99,6 +103,15 @@ export default function TestStartForm() {
     }
     const handleResponderValue = (selectedDeviceID) => {
         setResponderDevice(selectedDeviceID)
+    }
+
+    const handleInitatorDelay = (selectedDelayID) => {
+        addTestForm.antennaDelayInitiator = parseInt(selectedDelayID);
+    }
+
+    const handleResponderDelay = (selectedDelayID) => {
+        console.log("Test: ", selectedDelayID)
+        addTestForm.antennaDelayResponder = parseInt(selectedDelayID)
     }
 
     let handleSelectValue = (groupID) => {
@@ -237,21 +250,18 @@ export default function TestStartForm() {
                         </label>
                     </div>
                     <div className={formStyle.fullComponent}>
-                        <label
-                            htmlFor="realTestDistance"
-                            className={formStyle.label}
-                        >
-                            Antenna Delay
-                            <input
-                                className={formStyle.input}
-                                type="number"
-                                id="antennaDelay"
-                                label="AntennaDelay"
-                                min="0"
-                                step="0.001"
-                                onChange={handleEditFormChange}
-                            />
-                        </label>
+                        <AntennaDelaySelect
+                            handleSelectedValue={handleInitatorDelay}
+                            lableName="Initiator Delay"
+                            id={initiatorDevice[0]}
+                        />
+                    </div>
+                    <div className={formStyle.fullComponent}>
+                        <AntennaDelaySelect
+                            handleSelectedValue={handleResponderDelay}
+                            lableName="Responder Delay"
+                            id={responderDevice[0]}
+                        />
                     </div>
                     <div className={formStyle.fullComponent}>
                         <label

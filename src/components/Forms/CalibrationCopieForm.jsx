@@ -20,7 +20,21 @@ export default function CalibrationCopieForm() {
     const [devices, setDevices] = useState([])
     const [calibrationIsRunning, setCalibrationIsRunning] = useState(false)
     const [calibrationType, setCalibrationType] = useState("")
-    const [calibrationOptions] = useState(["Antenna Calibration (ASP014)", "Antenna Calibration (PSO) - EDM", "Antenna Calibration (PSO) - ADS", "Antenna Calibration (GNA) - ADS"])
+    const [calibrationOptions] = useState([
+        "Antenna Calibration (ASP014) - SSTWR",
+        "Antenna Calibration (ASP014) - DSTWR",
+        "Antenna Calibration (PSO) - EDM SSTWR",
+        "Antenna Calibration (PSO) - EDM DSTWR",
+        "Antenna Calibration (PSO) - SSTWR",
+        "Antenna Calibration (PSO) - SDS",
+        "Antenna Calibration (PSO) - ADS",
+        "Antenna Calibration (GNA) - SSTWR",
+        "Antenna Calibration (GNA) - SDS",
+        "Antenna Calibration (GNA) - ADS",
+        "Antenna Calibration (Simple)",
+        "Antenna Calibration (Extended)",
+        "Antenna Calibration (Two Device)",
+    ])
     const [informationLog, setInformationLog] = useState("")
     const [calibrationUrl] = useState(`/api/calibration/${params.calibrationID}/`)
     const [calibrationDistanceUrl] = useState(`/api/calibration-distance?calibration=${params.calibrationID}`)
@@ -59,26 +73,29 @@ export default function CalibrationCopieForm() {
         }
     }
 
+    const handleTypeSelectChange = (value) => {
+        setCalibrationType(value)
+    }
+
     const copieCalibration = () => {
+        console.log("Copie Calibration")
+        let msg = {
+            type: "CopieSimpleCalibration",
+            data: {
+                copie_calibration_id: params.calibrationID,
+                calibration_type: calibrationType,
+            }
+        }
         try {
+
             send(
-                JSON.stringify({
-                    type: "CopieCalibration",
-                    data: {
-                        copie_calibration_id: params.calibrationID,
-                        calibration_type: calibrationType,
-                    }
-                })
+                JSON.stringify(msg)
             )
             setInformationLog([])
             setCalibrationIsRunning(true)
         } catch (error) {
             console.error(error)
         }
-    }
-
-    const handleTypeSelectChange = (value) => {
-        setCalibrationType(value)
     }
 
     useEffect(() => {
@@ -91,7 +108,7 @@ export default function CalibrationCopieForm() {
             try {
                 send(
                     JSON.stringify({
-                        type: "CalibrationMeasurementFinished",
+                        type: "CalibrationSimpleMeasurementFinished",
                         data: {
                             calibration_id: message.data.calibration_id,
                         }

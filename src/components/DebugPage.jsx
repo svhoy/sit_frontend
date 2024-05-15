@@ -3,35 +3,21 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect, useRef, useContext } from "react"
 
-import DeviceInformation from "../Informations/DeviceInformation"
-import WebSocketContex from "../../context/WebSocketContex"
-import LineDivider from "../Dividers/LineDivider"
-import DeviceCheckboxes from "../Checkboxes/DeviceCheckboxes"
-import StaticSelect from "../Selects/StaticSelect"
-import DistanceInput from "../Inputs/DistanceInput"
+import DeviceInformation from "./Informations/DeviceInformation"
+import WebSocketContex from "../context/WebSocketContex"
+import LineDivider from "./Dividers/LineDivider"
+import DeviceCheckboxes from "./Checkboxes/DeviceCheckboxes"
+import StaticSelect from "./Selects/StaticSelect"
+import DistanceInput from "./Inputs/DistanceInput"
 
-export default function CalibrationStartForm() {
+export default function DebugPage() {
     const [deviceList, setDeviceList] = useState([])
     const [calibrationIsRunning, setCalibrationIsRunning] = useState(false)
     const [informationLog, setInformationLog] = useState("")
     const [calibrationType, setCalibrationType] = useState("")
     const [measurementType, setMeasurementType] = useState("")
-    const [calibrationOptions] = useState([
-        "Antenna Calibration (ASP014) - SSTWR",
-        "Antenna Calibration (ASP014) - DSTWR",
-        "Antenna Calibration (PSO) - EDM SSTWR",
-        "Antenna Calibration (PSO) - EDM DSTWR",
-        "Antenna Calibration (PSO) - SSTWR",
-        "Antenna Calibration (PSO) - SDS",
-        "Antenna Calibration (PSO) - ADS",
-        "Antenna Calibration (GNA) - SSTWR",
-        "Antenna Calibration (GNA) - SDS",
-        "Antenna Calibration (GNA) - ADS",
-        "Antenna Calibration (Simple)",
-        "Antenna Calibration (Extended)",
-        "Antenna Calibration (Two Device)",
-    ])
-    const [measurementTypeOptions] = useState([["SS-TWR", "ss_twr"], ["DS-TWR", "ds_3_twr"], ["Two Device", "two_device"]])
+    const [calibrationOptions] = useState(["Antenna Calibration (ASP014)", "Antenna Calibration (PSO) - EDM", "Antenna Calibration (PSO) - ADS", "Simple Calibration"])
+    const [measurementTypeOptions] = useState([["SS-TWR", "ss_twr"], ["DS-TWR", "ds_3_twr"]])
     const [calibrationDistances, setCalibrationDistances] = useState([])
     const informationTextarea = useRef()
 
@@ -41,10 +27,11 @@ export default function CalibrationStartForm() {
         try {
             send(
                 JSON.stringify({
-                    type: "CreateCalibration",
+                    type: "StartDebugCalibration",
                     data: {
+                        calibration_id: 0,
                         calibration_type: calibrationType,
-                        measurement_type: measurementType,
+                        measurement_type: "simple",
                         devices: deviceList
                     }
                 })
@@ -185,7 +172,7 @@ export default function CalibrationStartForm() {
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
                                 onClick={startMeasurements}
                             >
-                                Start Calibration
+                                Start Debug
                             </button>
                         ) : (
                             <button
@@ -194,7 +181,7 @@ export default function CalibrationStartForm() {
                                 title="Select more devices or calibration is running"
                                 disabled
                             >
-                                Start Calibration
+                                Start Debug
                             </button>
                         )}
                     </div>

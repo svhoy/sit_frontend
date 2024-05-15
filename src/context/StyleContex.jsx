@@ -39,7 +39,7 @@ export const StyleProvider = ({ children }) => {
     const smSplit = "col-span-6 sm:col-span-3"
     const formStyle = {
         form: `mt-5 md:col-span-2 md:mt-0 md:w-full ${containerBox}`,
-        header: "bg-gray-50 dark:bg-neutral-700 px-1 py-3 text-right sm:px-3",
+        header: "bg-gray-50 dark:bg-neutral-700 px-1 py-3 min-h-14 text-right sm:px-3",
         container: "w-full mt-2 mb-4 px-3 sm:px-6 sm:grid sm:grid-cols-6 gap-y-8 gap-x-6",
         fullComponent: "sm:col-span-6",
         fullSMhalf: smSplit,
