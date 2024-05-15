@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react"
 
 import { Link } from "react-router-dom"
 import AuthContext from "../context/AuthContext"
+import DarkModeSwitcher from "./Switcher/darkModeSwitcher"
 
 export default function NavBar() {
     const [navbar, setNavbar] = useState(false)
@@ -9,13 +10,13 @@ export default function NavBar() {
     let { user, logoutUser } = useContext(AuthContext)
 
     return (
-        <nav className=" w-full bg-blue-600 shadow">
+        <nav className="w-full bg-blue-600 dark:bg-blue-900 shadow">
             <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8">
                 <div>
                     <div className="flex items-center justify-between py-3 md:py-5 md:block">
-                        <a href="/">
+                        <Link to="/">
                             <h2 className="text-2xl font-bold text-white">LOGO</h2>
-                        </a>
+                        </Link>
                         <div className="md:hidden">
                             <button
                                 type="button"
@@ -62,6 +63,9 @@ export default function NavBar() {
                     ${navbar ? "block" : "hidden"}`}
                 >
                     <ul className="items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0">
+                        <div className="text-gray-200 hover:text-gray-900 block md:hidden ">
+                            <DarkModeSwitcher />
+                        </div>
                         {user ? (
                             <>
                                 <li className="text-gray-200 hover:text-gray-900">
@@ -89,16 +93,43 @@ export default function NavBar() {
                                             </svg>
                                         </button>
                                     </Link>
-                                    <div className="dropdown-menu z-10 p-3 hidden bg-blue-500 rounded-lg shadow">
+                                    <div className="dropdown-menu z-10 p-3 hidden bg-blue-500 dark:bg-blue-900 rounded-lg shadow">
                                         <ul className="py-2 text-sm">
                                             <li className="text-gray-200 hover:text-gray-900">
                                                 <Link to="/devices/ble">Connection</Link>
                                             </li>
                                             <li className="text-gray-200 hover:text-gray-900">
-                                                <Link to="/devices/calibration">Calibration</Link>
-                                            </li>
-                                            <li className="text-gray-200 hover:text-gray-900">
                                                 <Link to="/devices/settings">Settings</Link>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li className="dropdown">
+                                    <Link to="/calibration/">
+                                        <button
+                                            type="button"
+                                            className="flex items-center justify-between w-full py-2 pl-3 pr-4 font-medium text-gray-200 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
+                                        >
+                                            Calibration
+                                            <svg
+                                                className="w-4 h-4 ml-1"
+                                                aria-hidden="true"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    fillRule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clipRule="evenodd"
+                                                />
+                                            </svg>
+                                        </button>
+                                    </Link>
+                                    <div className="dropdown-menu z-10 p-3 hidden bg-blue-500 dark:bg-blue-900 rounded-lg shadow">
+                                        <ul className="py-2 text-sm">
+                                            <li className="text-gray-200 hover:text-gray-900">
+                                                <Link to="/calibration/start">Start</Link>
                                             </li>
                                         </ul>
                                     </div>
@@ -125,7 +156,7 @@ export default function NavBar() {
                                             </svg>
                                         </button>
                                     </Link>
-                                    <div className="dropdown-menu z-10 p-3 hidden bg-blue-500 rounded-lg shadow">
+                                    <div className="dropdown-menu z-10 p-3 hidden bg-blue-500 dark:bg-blue-900 rounded-lg shadow">
                                         <ul className="py-2 text-sm">
                                             <li className="text-gray-200 hover:text-gray-900">
                                                 <Link to="/tests/groups">Groups</Link>
@@ -158,6 +189,9 @@ export default function NavBar() {
                             </>
                         )}
                     </ul>
+                </div>
+                <div className="text-gray-200 hover:text-gray-900 hidden md:block ">
+                    <DarkModeSwitcher />
                 </div>
             </div>
         </nav>

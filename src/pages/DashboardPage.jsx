@@ -1,8 +1,10 @@
-import React from "react"
+import React, { useContext } from "react"
+import StyleContex from "../context/StyleContex"
 
 export default function DashboardPage() {
+    const { headerStyle } = useContext(StyleContex)
     return (
-        <h2 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-l md:text-xl lg:text-2xl">
+        <h2 className={headerStyle.h2}>
             Dashboard
         </h2>
     )

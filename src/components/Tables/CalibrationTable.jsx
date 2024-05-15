@@ -1,15 +1,17 @@
 /* eslint-disable operator-linebreak */
 import React, { useState, useEffect, useContext } from "react"
+import PropTypes from "prop-types"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashCan, faCircleInfo } from "@fortawesome/free-solid-svg-icons"
 import InfoModal from "../Modals/InfoModal"
 import useFetch from "../../utils/useFetch"
 import StyleContex from "../../context/StyleContex"
 
-export default function DeviceTable() {
+export default function CalibrationTable({ handleSelectID }) {
     const { tableStyle, buttonStyle, pageMenuStyle } = useContext(StyleContex)
-    const [deviceList, setDeviceList] = useState([])
-    const [baseURL] = useState("/api/device/")
+    const [calibrationList, setCalibrationList] = useState([])
+    const [checkCalibration, setCheckCalibration] = useState(0)
+    const [baseURL] = useState("/api/calibration/")
     const [nextURL, setNextURL] = useState(null)
     const [previousURL, setPreviousURL] = useState(null)
     const [showModal, setShowModal] = useState(false)
@@ -19,7 +21,7 @@ export default function DeviceTable() {
 
     let api = useFetch()
 
-    let getDevices = async (url = baseURL) => {
+    let getCalibrations = async (url = baseURL) => {
         let { response, data } = await api(url)
         if (response.status === 200) {
             if (data.next) {
@@ -38,32 +40,44 @@ export default function DeviceTable() {
             } else {
                 setPreviousURL(null)
             }
-            setDeviceList(data.results)
+            setCalibrationList(data.results)
         }
     }
 
     useEffect(() => {
-        getDevices()
+        getCalibrations()
     }, [])
 
-    let deleteDistance = async (settingId) => {
-        let { response } = await api(`/api/device/${settingId}/`, "DELETE")
+    let deleteCalibration = async (caliID) => {
+        let { response } = await api(`/api/calibration/${caliID}/`, "DELETE")
 
         if (response.status === 204) {
-            getDevices()
+            getCalibrations()
         }
     }
 
     let nextPage = () => {
-        getDevices(nextURL)
+        getCalibrations(nextURL)
     }
 
     let previousPage = () => {
-        getDevices(previousURL)
+        getCalibrations(previousURL)
     }
 
-    let handleDeleteClick = (settingId) => {
-        deleteDistance(settingId)
+    let toggleSelected = (id) => {
+        return () => {
+            if (checkCalibration === id) {
+                setCheckCalibration(0)
+                handleSelectID(0)
+            } else {
+                setCheckCalibration(id)
+                handleSelectID(id)
+            }
+        }
+    }
+
+    let handleDeleteClick = (caliID) => {
+        deleteCalibration(caliID)
     }
 
     return (
@@ -72,27 +86,43 @@ export default function DeviceTable() {
                 <div className={tableStyle.overflow}>
                     <table className={tableStyle.table}>
                         <thead className={tableStyle.head}>
-                            <th className={tableStyle.th}>ID</th>
-                            <th className={tableStyle.th}>Created</th>
-                            <th className={tableStyle.th}>
-                                Device Name
-                            </th>
-                            <th className={tableStyle.th}>
-                                Device ID
-                            </th>
-                            <th
-                                aria-label="Button"
-                                className={tableStyle.th}
-                            />
+                            <tr>
+                                <th
+                                    aria-label="Checkbox"
+                                    className={tableStyle.th}
+                                />
+                                <th className={tableStyle.th}>ID</th>
+                                <th className={tableStyle.th}>Created</th>
+                                <th className={tableStyle.th}>Calibration Type</th>
+                                <th className={tableStyle.th}>
+                                    Measurement Type
+                                </th>
+                                <th className={tableStyle.th}>
+                                    iterations
+                                </th>
+                                <th
+                                    aria-label="Button"
+                                    className={tableStyle.th}
+                                />
+                            </tr>
+
                         </thead>
                         <tbody>
-                            {deviceList &&
-                                deviceList.map((item) => {
+                            {calibrationList &&
+                                calibrationList.map((item) => {
                                     return (
                                         <tr
                                             key={item.id}
                                             className={tableStyle.tr}
                                         >
+                                            <td className={tableStyle.td}>
+                                                <input
+                                                    type="checkbox"
+                                                    id={item.id}
+                                                    checked={checkCalibration === item.id}
+                                                    onChange={toggleSelected(item.id)}
+                                                />
+                                            </td>
                                             <td className={tableStyle.td}>
                                                 {item.id}
                                             </td>
@@ -100,10 +130,13 @@ export default function DeviceTable() {
                                                 {item.created}
                                             </td>
                                             <td className={tableStyle.td}>
-                                                {item.device_name}
+                                                {item.calibration_type}
                                             </td>
                                             <td className={tableStyle.td}>
-                                                {item.device_id}
+                                                {item.measurement_type}
+                                            </td>
+                                            <td className={tableStyle.td}>
+                                                {item.iterations}
                                             </td>
                                             <td className={tableStyle.td}>
                                                 {item.comments && (
@@ -187,4 +220,10 @@ export default function DeviceTable() {
             />
         </>
     )
+}
+
+
+CalibrationTable.propTypes = {
+    handleSelectID: PropTypes.func.isRequired,
+
 }

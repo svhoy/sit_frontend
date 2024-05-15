@@ -27,7 +27,7 @@ export default function DistanceInput({ handleInputValue, deviceList }) {
 
     return (
         <div>
-            <div className="text-sm font-semibold leading-6 text-gray-900">
+            <div className="text-sm font-semibold leading-6">
                 Device Distances
             </div>
             {deviceCombinations.length > 2 ? (
@@ -36,7 +36,7 @@ export default function DistanceInput({ handleInputValue, deviceList }) {
                     return (
                         <label
                             htmlFor={item}
-                            className="block text-sm font-medium leading-6 text-gray-900"
+                            className="block text-sm font-medium leading-6"
                         >
                             Distance
                             {" "}
@@ -65,7 +65,7 @@ export default function DistanceInput({ handleInputValue, deviceList }) {
                     )
                 })
             ) : (
-                <div className="col-span-2 text-sm font-medium leading-6 text-gray-900">
+                <div className="col-span-2 text-sm font-medium leading-6">
                     Not enough devices selected
                 </div>
             )}

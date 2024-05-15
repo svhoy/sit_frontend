@@ -3,21 +3,35 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect, useRef, useContext } from "react"
 
-import DeviceInformation from "./Informations/DeviceInformation"
-import WebSocketContex from "../context/WebSocketContex"
-import LineDivider from "./Dividers/LineDivider"
-import DeviceCheckboxes from "./Checkboxes/DeviceCheckboxes"
-import StaticSelect from "./Selects/StaticSelect"
-import DistanceInput from "./Inputs/DistanceInput"
+import DeviceInformation from "../Informations/DeviceInformation"
+import WebSocketContex from "../../context/WebSocketContex"
+import LineDivider from "../Dividers/LineDivider"
+import DeviceCheckboxes from "../Checkboxes/DeviceCheckboxes"
+import StaticSelect from "../Selects/StaticSelect"
+import DistanceInput from "../Inputs/DistanceInput"
 
-export default function Calibration() {
+export default function CalibrationStartForm() {
     const [deviceList, setDeviceList] = useState([])
     const [calibrationIsRunning, setCalibrationIsRunning] = useState(false)
     const [informationLog, setInformationLog] = useState("")
     const [calibrationType, setCalibrationType] = useState("")
     const [measurementType, setMeasurementType] = useState("")
-    const [calibrationOptions] = useState(["Antenna Calibration (ASP014)"])
-    const [measurementTypeOptions] = useState([["SS-TWR", "ss_twr"], ["DS-TWR", "ds_3_twr"]])
+    const [calibrationOptions] = useState([
+        "Antenna Calibration (ASP014) - SSTWR",
+        "Antenna Calibration (ASP014) - DSTWR",
+        "Antenna Calibration (PSO) - EDM SSTWR",
+        "Antenna Calibration (PSO) - EDM DSTWR",
+        "Antenna Calibration (PSO) - SSTWR",
+        "Antenna Calibration (PSO) - SDS",
+        "Antenna Calibration (PSO) - ADS",
+        "Antenna Calibration (GNA) - SSTWR",
+        "Antenna Calibration (GNA) - SDS",
+        "Antenna Calibration (GNA) - ADS",
+        "Antenna Calibration (Simple)",
+        "Antenna Calibration (Extended)",
+        "Antenna Calibration (Two Device)",
+    ])
+    const [measurementTypeOptions] = useState([["SS-TWR", "ss_twr"], ["DS-TWR", "ds_3_twr"], ["Two Device", "two_device"]])
     const [calibrationDistances, setCalibrationDistances] = useState([])
     const informationTextarea = useRef()
 
@@ -35,6 +49,7 @@ export default function Calibration() {
                     }
                 })
             )
+            console.log("Start Calibration:", calibrationType, measurementType, deviceList)
             setInformationLog([])
             setCalibrationIsRunning(true)
         } catch (error) {
@@ -142,7 +157,7 @@ export default function Calibration() {
         <div className="md:grid md:grid-cols-3 md:gap-6">
             <div className="md:col-span-1">
                 <div className="px-4 sm:px-0">
-                    <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
+                    <h3 className="font-bold leading-tight mt-3 mb-5 text-m md:text-l lg:text-xl">
                         System Calibration
                     </h3>
                     {uwbList
@@ -163,7 +178,7 @@ export default function Calibration() {
             </div>
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
-                    <div className="bg-gray-50 px-1 py-3 text-right sm:px-3">
+                    <div className="bg-gray-50 dark:bg-neutral-700 dark:border-b-2 dark:border-neutral-600 px-1 py-3 text-right sm:px-3">
                         {!calibrationIsRunning && checkDeviceList() ? (
                             <button
                                 type="button"
@@ -183,8 +198,8 @@ export default function Calibration() {
                             </button>
                         )}
                     </div>
-                    <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                        <legend className="text-sm font-semibold leading-6 text-gray-900">
+                    <div className="space-y-6 px-4 py-5 sm:p-6">
+                        <legend className="text-sm font-semibold leading-6">
                             Calibration Options
                         </legend>
                         <StaticSelect handleSelectedValue={handleTypeSelectChange} label="Calibration Type" options={calibrationOptions} />
@@ -202,12 +217,12 @@ export default function Calibration() {
                         <LineDivider />
                         <label
                             htmlFor="distanceMeasurementLog"
-                            className="block text-sm font-medium text-gray-700"
+                            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                         >
                             Calibration Information
                             <div className="mt-1">
                                 <textarea
-                                    className="mt-1 block w-full rounded-md border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    className="mt-1 block w-full rounded-md dark:bg-neutral-600 border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     rows="8"
                                     type="text"
                                     id="distanceMeasurementLog"

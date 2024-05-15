@@ -4,11 +4,13 @@ import React, { useState, useEffect, useContext } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import useFetch from "../utils/useFetch"
 import DistanceMeasurements from "./BleDevices/DistanceMeasurements"
+import StyleContex from "../context/StyleContex"
 import WebSocketContex from "../context/WebSocketContex"
 import TestGroupDescription from "./Descriptions/TestGroupDescription"
 import DeviceInformation from "./Informations/DeviceInformation"
 
 export default function TestStartForm() {
+    const { containerStyle, headerStyle, formStyle, buttonStyle } = useContext(StyleContex)
     const { isServerReady, isGatewayReady, uwbList } = useContext(WebSocketContex)
     const [testIDstate, setTestID] = useState(0)
     const [testGroupID, setTestGroupID] = useState(0)
@@ -54,101 +56,97 @@ export default function TestStartForm() {
 
     return (
         <>
-            <div className="md:grid md:grid-cols-3 md:gap-6">
-                <div className="md:col-span-1">
-                    <div className="px-4 sm:px-0">
-                        <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
-                            Start Test {testID}
-                        </h3>
-                        <div className="grid grid-cols-2 gap-0  mt-2">
-                            <button
-                                type="button"
-                                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
-                                onClick={() => {
-                                    navigate(-1, { replace: true })
-                                }}
-                            >
-                                Back
-                            </button>
-                        </div>
-                        <div className="grid grid-cols-2 gap-0 mt-2">
-                            <DeviceInformation
-                                deviceName="Server"
-                                deviceStatus={isServerReady}
-                            />
-                        </div>
-                        <div className="grid grid-cols-2 gap-0  mt-2">
-                            <DeviceInformation
-                                deviceName="Gateway"
-                                deviceStatus={isGatewayReady}
-                            />
-                        </div>
-                        <div className="grid grid-cols-2 gap-0  mt-2">
-                            {uwbList &&
-                                uwbList.map((item) => {
-                                    return (
-                                        <DeviceInformation
-                                            deviceName={item}
-                                            deviceStatus
-                                            key={item}
-                                        />
-                                    )
-                                })}
-                        </div>
+            <div className={containerStyle.component}>
+                <div className={containerStyle.left}>
+                    <h3 className={headerStyle.h3}>
+                        Start Test {testID}
+                    </h3>
+                    <div className={containerStyle.leftComponent}>
+                        <button
+                            type="button"
+                            className={buttonStyle.activ}
+                            onClick={() => {
+                                navigate(-1, { replace: true })
+                            }}
+                        >
+                            Back
+                        </button>
+                    </div>
+                    <div className={containerStyle.leftComponent}>
+                        <DeviceInformation
+                            deviceName="Server"
+                            deviceStatus={isServerReady}
+                        />
+                    </div>
+                    <div className={containerStyle.leftComponent}>
+                        <DeviceInformation
+                            deviceName="Gateway"
+                            deviceStatus={isGatewayReady}
+                        />
+                    </div>
+                    <div className={containerStyle.leftComponent}>
+                        {uwbList &&
+                            uwbList.map((item) => {
+                                return (
+                                    <DeviceInformation
+                                        deviceName={item}
+                                        deviceStatus
+                                        key={item}
+                                    />
+                                )
+                            })}
                     </div>
                 </div>
-                <div className="mt-5 md:col-span-2 md:mt-0 md:w-full">
-                    <div className="shadow sm:overflow-hidden sm:rounded-md">
-                        <div className="bg-gray-50 px-1 py-3 text-right sm:px-3 md:w-full" />
-                        <div className="w-full mt-2 mb-4 px-3 grid grid-cols-1 gap-y-8 gap-x-6 sm:grid-cols-6 sm:px-6">
-                            <div className="sm:col-span-6">
-                                <TestGroupDescription testGroup={testGroup} />
+                <div className={formStyle.form}>
+                    <div className={formStyle.header} />
+                    <div className="w-full mt-2 mb-4 px-3 grid grid-cols-1 gap-y-8 gap-x-6 sm:grid-cols-6 sm:px-6">
+                        <div className={formStyle.fullComponent}>
+                            <TestGroupDescription testGroup={testGroup} />
+                        </div>
+                        <div className="col-span-6 border-b border-gray-900/10 pb-1" />
+                        <div className="sm:col-span-6">
+                            <div className="font-bold leading-tight mt-1 text-m md:text-l lg:text-xl">
+                                Test Description
                             </div>
-                            <div className="col-span-6 border-b border-gray-900/10 pb-1" />
-                            <div className="sm:col-span-6">
-                                <div className="font-bold leading-tight text-gray-900 mt-1 text-m md:text-l lg:text-xl">
-                                    Test Description
+                        </div>
+                        <div className="sm:col-span-6">
+                            <label
+                                htmlFor="realTestDistance"
+                                className="block text-sm font-medium leading-6"
+                            >
+                                Real test distance
+                                <div className="mt-1">
+                                    <input
+                                        className="block w-full rounded-md border-0 px-2 py-1.5 dark:bg-neutral-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        type="number"
+                                        id="realTestDistance"
+                                        label="Test reale distance"
+                                        min="0"
+                                        step="0.001"
+                                        value={testInfo.real_test_distance}
+                                        disabled
+                                    />
                                 </div>
-                            </div>
-                            <div className="sm:col-span-6">
-                                <label
-                                    htmlFor="realTestDistance"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
-                                >
-                                    Real test distance
-                                    <div className="mt-1">
-                                        <input
-                                            className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            type="number"
-                                            id="realTestDistance"
-                                            label="Test reale distance"
-                                            min="0"
-                                            step="0.001"
-                                            value={testInfo.real_test_distance}
-                                            disabled
-                                        />
-                                    </div>
-                                </label>
-                            </div>
-                            <div className="sm:col-span-6">
-                                <label
-                                    htmlFor="testComment"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
-                                >
-                                    Test Comment
-                                    <div className="mt-1">
-                                        <textarea
-                                            className="block w-full resize-none rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            id="testComment"
-                                            label="Test Comment"
-                                            rows={6}
-                                            maxLength="300"
-                                            value={testInfo.comments}
-                                            disabled
-                                        />
-                                    </div>
-                                </label>
-                            </div>
+                            </label>
+                        </div>
+                        <div className="sm:col-span-6">
+                            <label
+                                htmlFor="testComment"
+                                className="block text-sm font-medium leading-6"
+                            >
+                                Test Comment
+                                <div className="mt-1">
+                                    <textarea
+                                        className="block w-full resize-none rounded-md border-0 px-2 py-1.5 dark:bg-neutral-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        id="testComment"
+                                        label="Test Comment"
+                                        rows={6}
+                                        maxLength="300"
+                                        value={testInfo.comments}
+                                        disabled
+                                    />
+                                </div>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -156,12 +154,20 @@ export default function TestStartForm() {
 
             <div className="mt-5">
                 <DistanceMeasurements
-                    testID={testID}
+                    testID={parseInt(testID)}
                     testDistance={testInfo.real_test_distance}
                     minMeasurements={testGroup.test_min_measurements}
                     maxMeasurements={testGroup.test_max_measurements}
                     initiator={testInfo.initiator_device_id}
                     responder={testInfo.responder_device_id}
+                    // init_rx_ant_dly={testInfo.antenna_delay_init_rx}
+                    // init_tx_ant_dly={testInfo.antenna_delay_init_tx}
+                    // resp_rx_ant_dly={testInfo.antenna_delay_resp_rx}
+                    // resp_tx_ant_dly={testInfo.antenna_delay_resp_tx}
+                    init_rx_ant_dly={2.630913330620677e-07}
+                    init_tx_ant_dly={2.630913330620677e-07}
+                    resp_rx_ant_dly={2.630913330620677e-07}
+                    resp_tx_ant_dly={2.630913330620677e-07}
                     measurementTypePre={testGroup.test_measurement_type}
                     devicePreSelected
                 />

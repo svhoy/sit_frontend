@@ -90,17 +90,17 @@ export default function ConnectingBleDevices() {
     return (
         <div className="md:grid md:grid-cols-3 md:gap-4">
             <div className="md:col-span-1 px-4 sm:px-0">
-                <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
+                <h3 className="font-bold leading-tight mt-3 mb-5 text-m md:text-l lg:text-xl">
                     Connect Device
                 </h3>
 
-                <div className="grid grid-cols-2 gap-10">
+                <div className="grid grid-cols-2 gap-10 mt-1">
                     <DeviceInformation
                         deviceName="Server Status"
                         deviceStatus={isServerReady}
                     />
                 </div>
-                <div className="grid grid-cols-2 gap-10">
+                <div className="grid grid-cols-2 gap-10 mt-1">
                     <DeviceInformation
                         deviceName="Gateway Status"
                         deviceStatus={isGatewayReady}
@@ -109,7 +109,7 @@ export default function ConnectingBleDevices() {
                 {uwbList &&
                     uwbList.map((item) => {
                         return (
-                            <div key={item} className="grid grid-cols-2 gap-10">
+                            <div key={item} className="grid grid-cols-2 gap-10 mt-1">
                                 <DeviceInformation
                                     deviceName={item}
                                     deviceStatus
@@ -130,7 +130,7 @@ export default function ConnectingBleDevices() {
             </div>
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
-                    <div className="bg-gray-50 px-1 py-3 text-right sm:px-3">
+                    <div className="bg-gray-50 dark:bg-neutral-700 px-1 py-3 text-right sm:px-3">
                         {isServerReady &&
                             isGatewayReady &&
                             !isScanning &&
@@ -172,16 +172,16 @@ export default function ConnectingBleDevices() {
                             </button>
                         )}
                     </div>
-                    <form className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                    <form className="space-y-6 px-4 py-5 sm:p-6">
                         <DeviceSelect handleSelectedValue={handleSelectedValue} lableName="Device" />
                         <label
                             htmlFor="connectionLog"
-                            className="block text-sm font-medium text-gray-700"
+                            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                         >
                             Connection Log
                             <div className="mt-1">
                                 <textarea
-                                    className="mt-1 block w-full rounded-md border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    className="mt-1 block w-full rounded-md dark:bg-neutral-600 border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     rows="8"
                                     type="text"
                                     id="connectionLog"

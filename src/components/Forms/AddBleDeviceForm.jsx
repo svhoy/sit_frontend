@@ -54,7 +54,7 @@ export default function AddBleDeviceForm() {
         <div className="md:grid md:grid-cols-3 md:gap-6">
             <div className="md:col-span-1">
                 <div className="px-4 sm:px-0">
-                    <h3 className="font-bold leading-tight text-gray-900 mt-3 mb-5 text-m md:text-l lg:text-xl">
+                    <h3 className="font-bold leading-tight mt-3 mb-5 text-m md:text-l lg:text-xl">
                         Add Bluetooth Device
                     </h3>
                     <div className="grid grid-cols-2 gap-0">
@@ -74,7 +74,7 @@ export default function AddBleDeviceForm() {
             >
                 <div className="mt-5 md:col-span-2 md:mt-0">
                     <div className="shadow sm:overflow-hidden sm:rounded-md">
-                        <div className="bg-gray-50 px-1 py-3 text-right sm:px-3">
+                        <div className="bg-gray-50 dark:bg-neutral-700 px-1 py-3 text-right sm:px-3">
                             <button
                                 type="submit"
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 mx-3 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 opacity-100"
@@ -86,12 +86,12 @@ export default function AddBleDeviceForm() {
                             <div className="col-span-6">
                                 <label
                                     htmlFor="deviceName"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                    className="block text-sm font-medium leading-6"
                                 >
                                     Device Name
                                     <div className="mt-1">
                                         <input
-                                            className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 dark:text-neutral-300 dark:bg-neutral-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                             type="text"
                                             id="deviceName"
                                             label="Device Name"
@@ -103,12 +103,12 @@ export default function AddBleDeviceForm() {
                             <div className="col-span-6">
                                 <label
                                     htmlFor="deviceId"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                    className="block text-sm font-medium leading-6"
                                 >
                                     Device ID
                                     <div className="mt-1">
                                         <input
-                                            className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-700 dark:text-neutral-300 dark:bg-neutral-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                             type="text"
                                             id="deviceId"
                                             label="Device ID"
@@ -120,12 +120,12 @@ export default function AddBleDeviceForm() {
                             <div className="sm:col-span-6">
                                 <label
                                     htmlFor="deviceComment"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                    className="block text-sm font-medium leading-6"
                                 >
                                     Comment
                                     <div className="mt-1">
                                         <textarea
-                                            className="block w-full resize-none rounded-md border-0 px-2 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            className="block w-full resize-none rounded-md border-0 px-2 py-1.5 text-gray-700 dark:text-neutral-300 dark:bg-neutral-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                             id="deviceComment"
                                             label="Device Comment"
                                             rows={6}

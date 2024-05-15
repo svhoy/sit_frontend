@@ -1,66 +1,50 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useContext } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import PropTypes from "prop-types"
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons"
+import StyleContex from "../../context/StyleContex"
 
 const ReadOnlyRow = ({ item, handleEditClick, handleDeleteClick }) => {
+    const { tableStyle } = useContext(StyleContex)
     useEffect(() => {}, [item])
     return (
         <tr
             key={item.id}
-            className="bg-white border-b odd:bg-gray-100"
+            className={tableStyle.tr}
         >
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                {item.name}
-            </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                {item.owner}
-            </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                {item.channel_num}
-            </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className={tableStyle.td}>{item.name}</td>
+            <td className={tableStyle.td}>{item.owner}</td>
+            <td className={tableStyle.td}>{item.channel_num}</td>
+            <td className={tableStyle.td}>
                 {item.pulse_rep_freq}
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className={tableStyle.td}>
                 {item.premable_length_tx}
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className={tableStyle.td}>
                 {item.tx_preamble_code}
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className={tableStyle.td}>
                 {item.rx_preamble_code}
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                {item.sfd_mode}
-            </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                {item.data_rate}
-            </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className={tableStyle.td}>{item.sfd_mode}</td>
+            <td className={tableStyle.td}>{item.data_rate}</td>
+            <td className={tableStyle.td}>
                 {item.phy_header_mode}
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className={tableStyle.td}>
                 {item.preamble_chunk_size}
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                {item.sfd_timeout}
-            </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                {item.sts_mode}
-            </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                {item.sts_length}
-            </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                {item.pdoa_mode}
-            </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className={tableStyle.td}>{item.sfd_timeout}</td>
+            <td className={tableStyle.td}>{item.sts_mode}</td>
+            <td className={tableStyle.td}>{item.sts_length}</td>
+            <td className={tableStyle.td}>{item.pdoa_mode}</td>
+            <td className={tableStyle.td}>
                 <button
                     onClick={(event) => {
                         return handleEditClick(event, item)
                     }}
-                    className="mx-2"
+                    className={tableStyle.editButton}
                     title="Bearbeiten"
                     type="button"
                 >
@@ -68,7 +52,7 @@ const ReadOnlyRow = ({ item, handleEditClick, handleDeleteClick }) => {
                 </button>
                 <button
                     type="button"
-                    className="mx-2"
+                    className={tableStyle.editButton}
                     onClick={() => {
                         return handleDeleteClick(item.id)
                     }}
